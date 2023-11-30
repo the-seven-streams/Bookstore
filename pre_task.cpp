@@ -83,11 +83,11 @@ public:
 class Element {
 private:
   int value;
-  char index[64];
   int size; // 当为索引块时，size为块内元素的个数
   int block_place;
 
 public:
+  char index[64];
   Element() = default;
   void Initial() {
     cin >> index;
@@ -141,7 +141,7 @@ void Ins(Element x) {
   int total;
   Data.get_info(total, 1);
   if (!total) {
-    Data.write_info(2, 1);
+    Data.write_info(1, 1);
     Data.write(x, 4 + sizeof(Element) * largest); // 写入数据块。
     x.Setsize(1);
     x.Setplace(1);
@@ -154,28 +154,28 @@ void Ins(Element x) {
   if (!number) {
     number = 1;
   } // 说明这是最小的元素。
-  Data.read(res2[1], 4 + sizeof(Element) * (res1[number].Getplace() - 1),
+  Data.read(res2[1], 4 + sizeof(Element) * res1[number].Getplace(),
             res1[number].Getsize()); // 将数据块所有信息读入。
   int number2 = upper_bound(res2, res2 + res1[number].Getsize(), x) -
                 res2; // 记录第一个比x大的元素。
   if (!number2) {
     res2[0] = x;
     Data.write(res2[0],
-               4 + sizeof(Element) * largest * (res1[number].Getplace() - 1),
+               4 + sizeof(Element) * largest * res1[number].Getplace(),
                res1[number].Getsize() + 1);
     res2[0].Setsize(res1[number].Getsize() + 1);
     res2[0].Setplace(1); // 准备将res0替换原因索引块。
     Data.write(res2[0], 4);
   } else { // 插入元素是该索引链中最小的元素。
     Data.write(res2[1],
-               4 + sizeof(Element) * largest * (res1[number].Getplace() - 1),
+               4 + sizeof(Element) * largest * res1[number].Getplace(),
                number2); // 插入小于其的元素。
     Data.write(x,
-               4 + sizeof(Element) * (largest * (res1[number].Getplace() - 1) +
+               4 + sizeof(Element) * (largest * res1[number].Getplace() +
                                       number2)); // 插入元素。
     Data.write(res2[number2 + 1],
                4 + sizeof(Element) *
-                       (largest * (res1[number].Getplace() - 1) + number2 + 1),
+                       (largest * res1[number].Getplace()+ number2 + 1),
                res1[number].Getsize() - number2); // 插入大于其的元素。
     int res_size = res1[number].Getsize();
     res1[number].Setsize(res_size + 1); // 修改索引大小。
@@ -204,31 +204,43 @@ void Ins(Element x) {
   return;
 }
 
-void find(Element x) {
+void Find(Element x) {
   int total;
   Data.get_info(total, 1);
   if (!total) {
+    cout << "F1";
     cout << "null" << '\n';
     return;
-  }
+  } // 说明啥也没有。
   Data.read(res1[1], 4, total);
-  int number = (upper_bound(res1, res1 + total, x)) - res1;
+  int number = (upper_bound(res1 + 1, res1 + total + 1, x)) - res1 - 1;
   if (!number) {
     cout << "null" << '\n';
     return;
-  }
+  } // 说明查询索引太小了。
+  bool flag = 0;
   for (int i = number; i <= total; i++) {
-    Data.read(res2[1], 4 + sizeof(Element) * largest * (res1[i].Getplace() - 1),
+    Data.read(res2[1], 4 + sizeof(Element) * largest * res1[i].Getplace(),
               res1[i].Getsize());
     for (int j = 1; j <= res1[i].Getsize(); j++) {
-      if (res2[j] == x) {
-        cout << res2[j].Getvalue() << ' ';
+      cout << res1[i].Getsize();
+      if (res2[j].index == x.index) {
+        flag = 1;
+        cout << res2[j].Getvalue() << ' ';//找到了。
       }
-      if (res2[j] > x) {
+      if (res2[j].index < x.index) {
+        if (!flag) {
+          cout << "F2";
+          cout << "null";
+        }
         cout << '\n';
         return;
       }
     }
+  }
+  if (!flag) {
+    cout << "F3";
+    cout << "null";
   }
   cout << '\n';
   return;
@@ -237,7 +249,10 @@ void find(Element x) {
 int main() {
   cin >> n;
   Data.initialise("Data.txt");
+  int tmp;
+  Data.get_info(tmp, 1);
   largest = 500;
+  limit = 480;
   for (int i = 1; i <= n; ++i) {
     string op;
     cin >> op;
@@ -245,8 +260,12 @@ int main() {
     case 'I': {
       res_element.Initial();
       Ins(res_element);
+      break;
     }
     case 'F': {
+      res_element.SpecialInitial();
+      Find(res_element);
+      break;
     }
     }
   }
