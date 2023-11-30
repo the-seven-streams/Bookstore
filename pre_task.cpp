@@ -1,8 +1,11 @@
 #include <algorithm>
 #include <bits/stdc++.h>
+#include <iostream>
 #include <ostream>
 #include <unistd.h>
 using namespace std;
+
+const int minus_inf = -2147483648;
 template <class T, int info_len = 2> class MemoryRiver {
 private:
   fstream file;
@@ -110,6 +113,11 @@ public:
     cout << value << ' ' << endl;
     return;
   }
+  void SpecialInitial() {
+    value = minus_inf;
+    cin >> index;
+    return;
+  }
   bool operator<(const Element &a) const {
     if (index != a.index)
       return index < a.index;
@@ -146,25 +154,28 @@ void Ins(Element x) {
   if (!number) {
     number = 1;
   } // 说明这是最小的元素。
-  Data.read(res2[1], 4 + sizeof(Element) * res1[number].Getplace(),
+  Data.read(res2[1], 4 + sizeof(Element) * (res1[number].Getplace() - 1),
             res1[number].Getsize()); // 将数据块所有信息读入。
   int number2 = upper_bound(res2, res2 + res1[number].Getsize(), x) -
                 res2; // 记录第一个比x大的元素。
   if (!number2) {
     res2[0] = x;
-    Data.write(res2[0], 4 + sizeof(Element) * largest * res1[number].Getplace(),
+    Data.write(res2[0],
+               4 + sizeof(Element) * largest * (res1[number].Getplace() - 1),
                res1[number].Getsize() + 1);
     res2[0].Setsize(res1[number].Getsize() + 1);
     res2[0].Setplace(1); // 准备将res0替换原因索引块。
     Data.write(res2[0], 4);
   } else { // 插入元素是该索引链中最小的元素。
-    Data.write(res2[1], 4 + sizeof(Element) * largest * res1[number].Getplace(),
+    Data.write(res2[1],
+               4 + sizeof(Element) * largest * (res1[number].Getplace() - 1),
                number2); // 插入小于其的元素。
-    Data.write(x, 4 + sizeof(Element) * (largest * res1[number].Getplace() +
-                                         number2)); // 插入元素。
+    Data.write(x,
+               4 + sizeof(Element) * (largest * (res1[number].Getplace() - 1) +
+                                      number2)); // 插入元素。
     Data.write(res2[number2 + 1],
                4 + sizeof(Element) *
-                       (largest * res1[number].Getplace() + number2 + 1),
+                       (largest * (res1[number].Getplace() - 1) + number2 + 1),
                res1[number].Getsize() - number2); // 插入大于其的元素。
     int res_size = res1[number].Getsize();
     res1[number].Setsize(res_size + 1); // 修改索引大小。
@@ -178,17 +189,48 @@ void Ins(Element x) {
     for (int i = mid + 1; i <= res1[number].Getsize(); i++) {
       res3[i - mid - 1] = res2[i];
     } // 将之后的所有内容存储到res3中。
-    Data.write(res1[1], 4, number);//之前number的内容正常写入。
-    Data.write_info(total + 1, 1);//索引块的总数加一。
+    Data.write(res1[1], 4, number); // 之前number的内容正常写入。
+    Data.write_info(total + 1, 1);  // 索引块的总数加一。
     total++;
     Data.write(res3[0], 4 + sizeof(Element) * largest * (total),
                (res1[number].Getsize() - mid)); // 写入新的数据块。
     res3[0].Setsize(res1[number].Getsize() - mid);
-    res3[0].Setplace(total);//准备写入新的索引块。
+    res3[0].Setplace(total); // 准备写入新的索引块。
     Data.write(res1[1], 4, number);
     Data.write(res3[0], 4 + sizeof(Element) * (number));
-    Data.write(res1[number + 1],4 + sizeof(Element) * (number + 1), total - number - 1);//写入新的索引块。
+    Data.write(res1[number + 1], 4 + sizeof(Element) * (number + 1),
+               total - number - 1); // 写入新的索引块。
   }
+  return;
+}
+
+void find(Element x) {
+  int total;
+  Data.get_info(total, 1);
+  if (!total) {
+    cout << "null" << '\n';
+    return;
+  }
+  Data.read(res1[1], 4, total);
+  int number = (upper_bound(res1, res1 + total, x)) - res1;
+  if (!number) {
+    cout << "null" << '\n';
+    return;
+  }
+  for (int i = number; i <= total; i++) {
+    Data.read(res2[1], 4 + sizeof(Element) * largest * (res1[i].Getplace() - 1),
+              res1[i].Getsize());
+    for (int j = 1; j <= res1[i].Getsize(); j++) {
+      if (res2[j] == x) {
+        cout << res2[j].Getvalue() << ' ';
+      }
+      if (res2[j] > x) {
+        cout << '\n';
+        return;
+      }
+    }
+  }
+  cout << '\n';
   return;
 }
 
@@ -203,6 +245,8 @@ int main() {
     case 'I': {
       res_element.Initial();
       Ins(res_element);
+    }
+    case 'F': {
     }
     }
   }
