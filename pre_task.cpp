@@ -125,7 +125,7 @@ public:
   }
 } res_element;
 
-Element res1[1000], res2[1000];//所有res1用于索引块操作。res2用于数据块操作。
+Element res1[1000], res2[1000]; // 所有res1用于索引块操作。res2用于数据块操作。
 MemoryRiver<Element, 1> Data;
 int n, largest, limit;
 
@@ -141,18 +141,21 @@ void Ins(Element x) {
     return;
   } // 说明一个元素也没有。直接写入索引块。
   Data.read(res1[1], 4, total); // 将索引块所有信息读入。
-  int number = (upper_bound(res1, res1 + total, x)) - res1;// 找到第一个大于x的元素的索引的位置。
+  int number = (upper_bound(res1, res1 + total, x)) -
+               res1; // 找到第一个大于x的元素的索引的位置。
   if (!number) {
     number = 1;
   } // 说明这是最小的元素。
   Data.read(res2[1], 4 + sizeof(Element) * res1[number].Getplace(),
             res1[number].Getsize()); // 将数据块所有信息读入。
-  int number2 = upper_bound(res2,res2 + res1[number].Getsize(),x) - res2;//记录第一个比x大的元素。
+  int number2 = upper_bound(res2, res2 + res1[number].Getsize(), x) -
+                res2; // 记录第一个比x大的元素。
   if (!number2) {
     res2[0] = x;
-    Data.write(res2[0], 4 + sizeof(Element) * largest, res1[number].Getsize() + 1);
+    Data.write(res2[0], 4 + sizeof(Element) * largest * res1[number].Getplace(),
+               res1[number].Getsize() + 1);
     res2[0].Setsize(res1[number].Getsize() + 1);
-    res2[0].Setplace(1);//准备将res0替换原因索引块。
+    res2[0].Setplace(1); // 准备将res0替换原因索引块。
     Data.write(res2[0], 4);
   } else { // 插入元素是该索引链中最小的元素。
     Data.write(res2[1], 4 + sizeof(Element) * largest * res1[number].Getplace(),
@@ -164,15 +167,27 @@ void Ins(Element x) {
                        (largest * res1[number].Getplace() + number2 + 1),
                res1[number].Getsize() - number2); // 插入大于其的元素。
     int res_size = res1[number].Getsize();
-    res1[number].Setsize(res_size + 1);//修改索引大小。
-    Data.write(res1[number], 4 + sizeof(Element) * (number - 1));//修改索引。
+    res1[number].Setsize(res_size + 1); // 修改索引大小。
+    Data.write(res1[number], 4 + sizeof(Element) * (number - 1)); // 修改索引。
   }
-  if(res1[number].Getsize() > limit) {//开始裂块操作。
+  if (res1[number].Getsize() > limit) { // 开始裂块操作。
     int mid = res1[number].Getsize() / 2;
-    res1[number].Setsize(mid);//直接修改索引就可以了。但是下一个块的位置需要考虑。
-    for(int i = mid + 1; i <= res1[number].Getsize(); i++) {
-      
-    }
+    res1[number].Setsize(
+        mid); // 直接修改索引就可以了。但是下一个块的位置需要考虑。
+    Element res3[mid + 5];
+    for (int i = mid + 1; i <= res1[number].Getsize(); i++) {
+      res3[i - mid - 1] = res2[i];
+    } // 将之后的所有内容存储到res3中。
+    Data.write(res1[1], 4, number);//之前number的内容正常写入。
+    Data.write_info(total + 1, 1);//索引块的总数加一。
+    total++;
+    Data.write(res3[0], 4 + sizeof(Element) * largest * (total),
+               (res1[number].Getsize() - mid)); // 写入新的数据块。
+    res3[0].Setsize(res1[number].Getsize() - mid);
+    res3[0].Setplace(total);//准备写入新的索引块。
+    Data.write(res1[1], 4, number);
+    Data.write(res3[0], 4 + sizeof(Element) * (number));
+    Data.write(res1[number + 1],4 + sizeof(Element) * (number + 1), total - number - 1);//写入新的索引块。
   }
   return;
 }
