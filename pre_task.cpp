@@ -86,7 +86,8 @@ private:
   int value;
   int size; // 当为索引块时，size为块内元素的个数
   int block_place;
-
+  int nxt;
+  int start;
 public:
   char index[64];
   Element() {
@@ -124,6 +125,20 @@ public:
     cin >> index;
     return;
   }
+  int Getstart() {
+    return start;
+  }
+  void Setstart(int x) {
+    start = x;
+    return;
+  }
+  int Getnxt() {
+    return nxt;
+  }
+  void Setnxt(int x) {
+    nxt = x;
+    return;
+  }
   bool operator<(const Element &a) const {
     if (index != a.index)
       return index < a.index;
@@ -140,8 +155,40 @@ public:
 } res_element;
 
 Element res1[1000], res2[1000]; // 所有res1用于索引块操作。res2用于数据块操作。
-MemoryRiver<Element, 1> Data;
+MemoryRiver<Element, 2> Data;s
 int n, largest, limit;
+
+bool LinkInsert(Element to_insert, int num, int start, int size) {
+  Data.read(res2[1], num * largest * sizeof(Element) + 8, size);//读出数据块
+  bool flag = 0;
+  int i;
+  int last = 0;
+  for(i = start; i; i = res2[i].Getnxt()) {
+    if(to_insert < res2[i]) {
+      flag = 1;
+      to_insert.Setnxt(i);
+      res2[last].Setnxt(size + 1);
+      if(last) {
+        Data.write(res2[last], num * largest * sizeof(Element) + 8 + (last - 1) * sizeof(Element));
+      }//如果last为0，说明插入在了头结点。不需要修改前置节点。
+      Data.write(to_insert, num * largest * sizeof(Element) + 8 + size * sizeof(Element));
+      break;
+    }
+    last = i;
+  }
+  if(!flag) {
+    res2[last].Setnxt(size + 1);
+    if(last) {
+      Data.write(res2[last], num * largest * sizeof(Element) + 8 + (last - 1) * sizeof(Element));
+    }
+      Data.write(to_insert, num * largest * sizeof(Element) + 8 + size * sizeof(Element));
+  }//修改前一个数值和后一个。
+  if(last) {
+    return 0;
+  } else {
+    return 1;//插入在了第一个位置上。提醒修改开头。
+  }
+}
 
 int main() {
   cin >> n;
