@@ -89,6 +89,7 @@ private:
   int nxt;
   int start;
   int block_nxt;
+
 public:
   char index[64];
   Element() {
@@ -127,23 +128,17 @@ public:
     cin >> index;
     return;
   }
-  int Getstart() {
-    return start;
-  }
+  int Getstart() { return start; }
   void Setstart(int x) {
     start = x;
     return;
   }
-  int Getnxt() {
-    return nxt;
-  }
+  int Getnxt() { return nxt; }
   void Setnxt(int x) {
     nxt = x;
     return;
   }
-  int Getblock_nxt() {
-    return block_nxt;
-  }
+  int Getblock_nxt() { return block_nxt; }
   void Setblock_nxt(int x) {
     block_nxt = x;
     return;
@@ -168,45 +163,49 @@ MemoryRiver<Element, 2> Data;
 int n, largest, limit;
 
 bool LinkInsert(Element to_insert, int num, int start, int size) {
-  Data.read(res2[1], num * largest * sizeof(Element) + 8, size);//读出数据块
+  Data.read(res2[1], num * largest * sizeof(Element) + 8, size); // 读出数据块
   bool flag = 0;
   int last = 0;
-  for(int i = start; i; i = res2[i].Getnxt()) {
-    if(to_insert < res2[i]) {
+  for (int i = start; i; i = res2[i].Getnxt()) {
+    if (to_insert < res2[i]) {
       flag = 1;
       to_insert.Setnxt(i);
       res2[last].Setnxt(size + 1);
-      if(last) {
-        Data.write(res2[last], num * largest * sizeof(Element) + 8 + (last - 1) * sizeof(Element));
-      }//如果last为0，说明插入在了头结点。不需要修改前置节点。
-      Data.write(to_insert, num * largest * sizeof(Element) + 8 + size * sizeof(Element));
+      if (last) {
+        Data.write(res2[last], num * largest * sizeof(Element) + 8 +
+                                   (last - 1) * sizeof(Element));
+      } // 如果last为0，说明插入在了头结点。不需要修改前置节点。
+      Data.write(to_insert,
+                 num * largest * sizeof(Element) + 8 + size * sizeof(Element));
       break;
     }
     last = i;
   }
-  if(!flag) {
+  if (!flag) {
     res2[last].Setnxt(size + 1);
-    if(last) {
-      Data.write(res2[last], num * largest * sizeof(Element) + 8 + (last - 1) * sizeof(Element));
+    if (last) {
+      Data.write(res2[last], num * largest * sizeof(Element) + 8 +
+                                 (last - 1) * sizeof(Element));
     }
-      Data.write(to_insert, num * largest * sizeof(Element) + 8 + size * sizeof(Element));
-  }//修改前一个数值和后一个。
-  if(last) {
+    Data.write(to_insert,
+               num * largest * sizeof(Element) + 8 + size * sizeof(Element));
+  } // 修改前一个数值和后一个。
+  if (last) {
     return 0;
   } else {
-    return 1;//插入在了第一个位置上。提醒修改开头。
+    return 1; // 插入在了第一个位置上。提醒修改开头。
   }
 }
 
 bool LinkFind(const Element &to_find, int num, int start, int size) {
   Data.read(res2[1], num * largest * sizeof(Element) + 8, size);
-  for(int i = start; i; i = res2[i].Getnxt()) {
-    if(to_find == res2[i]) {
+  for (int i = start; i; i = res2[i].Getnxt()) {
+    if (to_find == res2[i]) {
       cout << res2[i].Getvalue() << ' ';
     }
-    if(to_find > res2[i]) {
+    if (to_find > res2[i]) {
       return 0;
-    }//如果大于，说明后面的都不用找了。
+    } // 如果大于，说明后面的都不用找了。
   }
   return 1;
 }
@@ -215,32 +214,34 @@ int LinkDel(const Element &to_del, int num, int start, int size) {
   Data.read(res2[1], num * largest * sizeof(Element) + 8, size);
   int del = 0;
   int last = 0;
-  for(int i = start; i; i = res2[i].Getnxt()) {
-    if(to_del == res2[i]) {
-      del = i;//找到了要删除的元素的序号。
-      res2[last].Setnxt(res2[i].Getnxt());//修改前置节点的指针
+  for (int i = start; i; i = res2[i].Getnxt()) {
+    if (to_del == res2[i]) {
+      del = i; // 找到了要删除的元素的序号。
+      res2[last].Setnxt(res2[i].Getnxt()); // 修改前置节点的指针
       break;
     }
     last = i;
   }
-  if(del) {
-    for(int i = start; i; i = res2[i].Getnxt()) {
-      if(res2[i].Getnxt() == size) {
+  if (del) {
+    for (int i = start; i; i = res2[i].Getnxt()) {
+      if (res2[i].Getnxt() == size) {
         res2[i].Setnxt(del);
-        Data.write(res2[size], num * largest * sizeof(Element) + 8 + (del - 1) * sizeof(Element));
-        //覆写，空间重用。
+        Data.write(res2[size], num * largest * sizeof(Element) + 8 +
+                                   (del - 1) * sizeof(Element));
+        // 覆写，空间重用。
         break;
       }
     }
-    if(last) {
-      Data.write(res2[last], num * largest * sizeof(Element) + 8 + (last - 1) * sizeof(Element));
-      //修改前置节点。
-      return -1;//普通删除
+    if (last) {
+      Data.write(res2[last], num * largest * sizeof(Element) + 8 +
+                                 (last - 1) * sizeof(Element));
+      // 修改前置节点。
+      return -1; // 普通删除
     } else {
-      return res2[del].Getnxt();//删除了头结点。指示新的头结点。
-    } 
-  } 
-  return 114514;//没有找到。
+      return res2[del].Getnxt(); // 删除了头结点。指示新的头结点。
+    }
+  }
+  return 114514; // 没有找到。
 }
 
 int IndexFind(const Element &x) {
@@ -249,13 +250,48 @@ int IndexFind(const Element &x) {
   Data.get_info(total, 1);
   Data.read(res1[1], 8, total);
   int last = start;
-  for(int i = start; i; i = res1[i].Getblock_nxt()) {
-    if(x < res1[i]) {
+  for (int i = start; i; i = res1[i].Getblock_nxt()) {
+    if (x < res1[i]) {
       return last;
     }
     last = i;
   }
-  return last;//找到目标块。
+  return last; // 找到目标块。
+}
+
+void SplitBlock(int place,int start, int size) {
+  int mid = size / 2;
+  Element res3[500];
+  Element res4[500];
+  Data.read(res2[1], place * largest * sizeof(Element) + 8, size);
+  int count;
+  int i = start;
+  for(count = 1; count <= mid; i = res2[i].Getnxt()){
+    res3[count] = res2[i];
+    res3[count].Setnxt(count + 1);
+  }
+  res3[mid].Setnxt(0);//将原有块的一半存入res3中。
+  for(count = 1; i; i = res2[i].Getnxt()){
+    res4[count] = res2[i];
+    res4[count].Setnxt(count + 1);
+  }
+  res4[count].Setnxt(0);
+  Data.write(res3[1], place * largest * sizeof(Element) + 8, mid);
+  //将res3写入原有块的位置。
+  int total;
+  Data.get_info(total, 1);
+  total++;
+  Data.write_info(total, 1);//将裂得块放到最后。
+  res4[1].Setsize(size - mid);
+  Element origin;
+  Data.read(origin, (place - 1) * sizeof(Element) + 8);//取出原有索引节点。
+  res4[1].Setblock_nxt(origin.Getblock_nxt());
+  origin.Setblock_nxt(total);
+  origin.Setsize(mid);
+  Data.write(origin, (place - 1) * sizeof(Element) + 8);
+  Data.write(res4[1], total * largest * sizeof(Element) + 8, size - mid);
+  Data.write(res4[1], (total - 1) * sizeof(Element) + 8);
+  return;
 }
 
 int main() {
@@ -269,16 +305,22 @@ int main() {
     string op;
     cin >> op;
     switch (op[0]) {
-    case 'I': {
-      res_element.Initial();
-      Ins(res_element);
-      break;
-    }
-    case 'F': {
-      res_element.SpecialInitial();
-      Fin(res_element);
-      break;
-    }
+      case 'I': {
+        res_element.Initial();
+        Ins(res_element);
+        break;
+      }
+      case 'F': {
+        res_element.SpecialInitial();
+        Fin(res_element);
+        break;
+      }
+      case 'D': {
+        res_element.SpecialInitial();
+        Del(res_element);
+        break;
+      }
     }
   }
+  return 0;
 }
