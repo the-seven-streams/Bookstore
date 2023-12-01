@@ -126,6 +126,8 @@ public:
   void SpecialInitial() {
     value = minus_inf;
     cin >> index;
+    int len = strlen(index);
+    memset(index + len, '\0', sizeof(index) - len);
     return;
   }
   int Getstart() { return start; }
@@ -144,13 +146,13 @@ public:
     return;
   }
   bool operator<(const Element &a) const {
-    if (index != a.index)
-      return index < a.index;
+    if (strcmp(index, a.index) != 0)
+      return strcmp(index, a.index) < 0 ? 1 : 0;
     return value < a.value;
   }
   bool operator>(const Element &a) const {
-    if (index != a.index)
-      return index > a.index;
+    if (strcmp(index, a.index) != 0)
+      return strcmp(index, a.index) > 0 ? 1 : 0;
     return value > a.value;
   }
   bool operator==(const Element &a) const {
@@ -197,13 +199,14 @@ bool LinkInsert(Element to_insert, int num, int start, int size) {
   }
 }
 
-bool LinkFind(const Element &to_find, int num, int start, int size) {
+bool LinkFind(const Element &to_find, int num, int start, int size, bool &flag) {
   Data.read(res2[1], num * largest * sizeof(Element) + 8, size);
   for (int i = start; i; i = res2[i].Getnxt()) {
-    if (to_find == res2[i]) {
+    if (strcmp(to_find.index, res2[i].index) == 0) {
+      flag = 1;
       cout << res2[i].Getvalue() << ' ';
     }
-    if (to_find > res2[i]) {
+    if (strcmp(to_find.index, res2[i].index) < 0) {
       return 0;
     } // 如果大于，说明后面的都不用找了。
   }
@@ -256,8 +259,8 @@ int IndexFind(const Element &x) {
     }
     last = i;
   }
-  return last; // 找到目标块。
-}
+  return last;
+}//这个函数的目的是找到目标块。
 
 void SplitBlock(int place,int start, int size) {
   int mid = size / 2;
@@ -336,6 +339,64 @@ void MergeBlock(int a,int b,int size_a, int size_b, int start_a, int start_b) {/
   return;
 } 
 
+void Ins(Element to_insert) {
+  int total, start;
+  Data.get_info(total, 1);
+  Data.get_info(start, 2);
+  if(total == 0) {
+    total++;
+    to_insert.Setstart(1);
+    to_insert.Setplace(1);
+    to_insert.Setsize(1);
+    Data.write_info(total, 1);
+    Data.write_info(total, 2);
+    Data.write(to_insert, 8, 1);
+    Data.write(to_insert, 8 + largest * sizeof(Element));
+    return;
+  }
+  Element tmp;
+  int target = IndexFind(to_insert);
+  Data.read(tmp, 8 + (target - 1) * sizeof(Element));
+  int flag = LinkInsert(to_insert, target, tmp.Getstart(), tmp.Getsize());
+  int size = tmp.Getsize();
+  if(flag) {//指示需要修改索引块。
+    int n = size + 1;
+    to_insert.Setstart(n);
+    to_insert.Setblock_nxt(tmp.Getblock_nxt());
+    to_insert.Setnxt(tmp.Getstart());
+    tmp = to_insert;
+  }
+  tmp.Setsize(size + 1);
+  Data.write(tmp, 8 + (target - 1) * sizeof(Element));
+  if(size + 1 > limit) {
+  SplitBlock(target, tmp.Getstart(), size + 1);
+  }
+  return;
+}
+
+void Fin(Element to_find) {
+  int total, start;
+  int target = IndexFind(to_find);
+  Data.get_info(total, 1);
+  Data.get_info(start, 2);
+  Element tmp;
+  int flag = 1;
+  bool found = 0;
+  while(flag) {
+  Data.read(tmp, 8 + (target - 1) * sizeof(Element));
+  flag = LinkFind(to_find, target, tmp.Getstart(), tmp.Getsize(), found);
+  target = tmp.Getblock_nxt();
+    if(!target) {
+    break;
+    }
+  }
+  if(!found) {
+    cout << "null";
+  }
+  cout << '\n';
+  return;
+}
+
 int main() {
   cin >> n;
   Data.initialise("Data.txt");
@@ -358,8 +419,8 @@ int main() {
         break;
       }
       case 'D': {
-        res_element.SpecialInitial();
-        Del(res_element);
+        res_element.Initial();
+        //Del(res_element);
         break;
       }
     }
