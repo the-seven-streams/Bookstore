@@ -266,25 +266,25 @@ void SplitBlock(int place,int start, int size) {
   int mid = size / 2;
   Element res3[500];
   Element res4[500];
-  Data.read(res2[1], place * largest * sizeof(Element) + 8, size);
+  Data.read(res2[1], place * largest * sizeof(Element) + 8, size);//读入原有数据块。
   int count;
   int i = start;
-  for(count = 1; count <= mid; i = res2[i].Getnxt()){
+  for(count = 1; count <= mid; i = res2[i].Getnxt(), count++){
     res3[count] = res2[i];
     res3[count].Setnxt(count + 1);
   }
   res3[mid].Setnxt(0);//将原有块的一半存入res3中。
-  for(count = 1; i; i = res2[i].Getnxt()){
+  for(count = 1; i; i = res2[i].Getnxt(), count++){
     res4[count] = res2[i];
     res4[count].Setnxt(count + 1);
   }
-  res4[count].Setnxt(0);
+  res4[size - mid].Setnxt(0);
   Data.write(res3[1], place * largest * sizeof(Element) + 8, mid);
   //将res3写入原有块的位置。
   int total;
   Data.get_info(total, 1);
   total++;
-  Data.write_info(total, 1);//将裂得块放到最后。
+  Data.write_info(total, 1);//修改total。
   res4[1].Setsize(size - mid);
   res4[1].Setstart(1);
   Element origin;
@@ -369,7 +369,7 @@ void Ins(Element to_insert) {
   tmp.Setsize(size + 1);
   Data.write(tmp, 8 + (target - 1) * sizeof(Element));
   if(size + 1 > limit) {
-  SplitBlock(target, tmp.Getstart(), size + 1);
+    SplitBlock(target, tmp.Getstart(), size + 1);
   }
   return;
 }
