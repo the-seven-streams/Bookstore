@@ -84,11 +84,11 @@ public:
 class Element {
 private:
   int value;
-  int size; // 当为索引块时，size为块内元素的个数
-  int block_place;
-  int nxt;
-  int start;
-  int block_nxt;
+  int size; //当为索引块时，size为块内元素的个数
+  int block_place;//指示是第几个块。1_base
+  int nxt;//块内后继。1_base
+  int start;//指示块内头结点的位置。1_base
+  int block_nxt;//索引块内后继。1_base
 
 public:
   char index[64];
@@ -283,6 +283,7 @@ void SplitBlock(int place,int start, int size) {
   total++;
   Data.write_info(total, 1);//将裂得块放到最后。
   res4[1].Setsize(size - mid);
+  res4[1].Setstart(1);
   Element origin;
   Data.read(origin, (place - 1) * sizeof(Element) + 8);//取出原有索引节点。
   res4[1].Setblock_nxt(origin.Getblock_nxt());
@@ -293,6 +294,47 @@ void SplitBlock(int place,int start, int size) {
   Data.write(res4[1], (total - 1) * sizeof(Element) + 8);
   return;
 }
+
+void MergeBlock(int a,int b,int size_a, int size_b, int start_a, int start_b) {//a中的元素全部小于b中的元素。
+  Data.read(res1[1], a * largest * sizeof(Element) + 8, size_a);
+  Data.read(res2[1], b * largest * sizeof(Element) + 8, size_b);
+  int last;
+  for(int i = start_a; i; i = res1[i].Getnxt()) {
+    last = i;
+  }
+  res1[last].Setnxt(start_b + size_a);//修改第一个块中的尾指针。
+  last = 0;
+  for(int i = start_a;i; i = res2[i].Getnxt()) {
+    res1[i + size_a] = res2[i];
+    res1[i + size_a].Setnxt(res2[i].Getnxt() + size_a);
+    last = i;
+  }
+  res1[last + size_a].Setnxt(0);
+  Data.write(res1[1],a * largest * sizeof(Element) + 8, size_a + size_b);
+  Element x, y;
+  Data.read(x, 8 + (a - 1) *sizeof(Element));
+  Data.read(y, 8 + (b - 1) * sizeof(Element));
+  x.Setblock_nxt(y.Getblock_nxt());//将b并吞。
+  Data.write(x, 8 + (a - 1) * sizeof(Element));
+  int total;
+  Data.get_info(total, 1);
+  int start;
+  Data.get_info(start, 2);
+  Element tmp[1000];
+  Data.read(tmp[1], 8, total);
+  int end;
+  for(int i = start; i; i = tmp[i].Getblock_nxt()) {
+    if(tmp[i].Getblock_nxt() == total) {
+      tmp[i].Setblock_nxt(b);
+      end = i;
+      break;
+    }
+  }
+  Data.write(tmp[end], 8 + (end - 1) * sizeof(Element));//修改。
+  Data.write(tmp[total], 8 + (b - 1) * sizeof(Element));//覆写空间。
+  Data.write_info(total - 1, 1);//修改总数。
+  return;
+} 
 
 int main() {
   cin >> n;
