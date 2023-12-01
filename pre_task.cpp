@@ -155,15 +155,14 @@ public:
 } res_element;
 
 Element res1[1000], res2[1000]; // 所有res1用于索引块操作。res2用于数据块操作。
-MemoryRiver<Element, 2> Data;s
+MemoryRiver<Element, 2> Data;
 int n, largest, limit;
 
 bool LinkInsert(Element to_insert, int num, int start, int size) {
   Data.read(res2[1], num * largest * sizeof(Element) + 8, size);//读出数据块
   bool flag = 0;
-  int i;
   int last = 0;
-  for(i = start; i; i = res2[i].Getnxt()) {
+  for(int i = start; i; i = res2[i].Getnxt()) {
     if(to_insert < res2[i]) {
       flag = 1;
       to_insert.Setnxt(i);
@@ -190,6 +189,52 @@ bool LinkInsert(Element to_insert, int num, int start, int size) {
   }
 }
 
+bool LinkFind(const Element &to_find, int num, int start, int size) {
+  Data.read(res2[1], num * largest * sizeof(Element) + 8, size);
+  for(int i = start; i; i = res2[i].Getnxt()) {
+    if(to_find == res2[i]) {
+      cout << res2[i].Getvalue() << ' ';
+    }
+    if(to_find > res2[i]) {
+      return 0;
+    }//如果大于，说明后面的都不用找了。
+  }
+  return 1;
+}
+
+int LinkDel(const Element &to_del, int num, int start, int size) {
+  Data.read(res2[1], num * largest * sizeof(Element) + 8, size);
+  int del = 0;
+  int last = 0;
+  for(int i = start; i; i = res2[i].Getnxt()) {
+    if(to_del == res2[i]) {
+      del = i;//找到了要删除的元素的序号。
+      res2[last].Setnxt(res2[i].Getnxt());//修改前置节点的指针
+      break;
+    }
+    last = i;
+  }
+  if(del) {
+    for(int i = start; i; i = res2[i].Getnxt()) {
+      if(res2[i].Getnxt() == size) {
+        res2[i].Setnxt(del);
+        Data.write(res2[size], num * largest * sizeof(Element) + 8 + (del - 1) * sizeof(Element));
+        //覆写，空间重用。
+        break;
+      }
+    }
+    if(last) {
+      Data.write(res2[last], num * largest * sizeof(Element) + 8 + (last - 1) * sizeof(Element));
+      //修改前置节点。
+      return -1;//普通删除
+    } else {
+      return res2[del].Getnxt();//删除了头结点。指示新的头结点。
+    } 
+  } 
+  return 0;//没有找到。
+}
+
+
 int main() {
   cin >> n;
   Data.initialise("Data.txt");
@@ -208,7 +253,7 @@ int main() {
     }
     case 'F': {
       res_element.SpecialInitial();
-      Find(res_element);
+      Fin(res_element);
       break;
     }
     }
