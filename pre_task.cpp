@@ -88,12 +88,14 @@ private:
   int block_place;
   int nxt;
   int start;
+  int block_nxt;
 public:
   char index[64];
   Element() {
     value = 0;
     size = 0;
     block_place = 0;
+    block_nxt = 0;
     memset(index, '\0', sizeof(index));
   }
   void Initial() {
@@ -137,6 +139,13 @@ public:
   }
   void Setnxt(int x) {
     nxt = x;
+    return;
+  }
+  int Getblock_nxt() {
+    return block_nxt;
+  }
+  void Setblock_nxt(int x) {
+    block_nxt = x;
     return;
   }
   bool operator<(const Element &a) const {
@@ -231,9 +240,23 @@ int LinkDel(const Element &to_del, int num, int start, int size) {
       return res2[del].Getnxt();//删除了头结点。指示新的头结点。
     } 
   } 
-  return 0;//没有找到。
+  return 114514;//没有找到。
 }
 
+int IndexFind(const Element &x) {
+  int start, total;
+  Data.get_info(start, 2);
+  Data.get_info(total, 1);
+  Data.read(res1[1], 8, total);
+  int last = start;
+  for(int i = start; i; i = res1[i].Getblock_nxt()) {
+    if(x < res1[i]) {
+      return last;
+    }
+    last = i;
+  }
+  return last;//找到目标块。
+}
 
 int main() {
   cin >> n;
