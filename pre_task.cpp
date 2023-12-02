@@ -161,11 +161,11 @@ public:
 } res_element;
 
 Element res1[1000], res2[1000]; // 所有res1用于索引块操作。res2用于数据块操作。
-MemoryRiver<Element, 2> Data;
+MemoryRiver<Element, 3> Data;//三个参数：总块数，开头，当前数据块位置。
 int n, largest, limit;
 
 bool LinkInsert(Element to_insert, int num, int start, int size) {
-  Data.read(res2[1], num * largest * sizeof(Element) + 8, size); // 读出数据块
+  Data.read(res2[1], num * largest * sizeof(Element) + 12, size); // 读出数据块
   bool flag = 0;
   int last = 0;
   for (int i = start; i; i = res2[i].Getnxt()) {
@@ -174,11 +174,11 @@ bool LinkInsert(Element to_insert, int num, int start, int size) {
       to_insert.Setnxt(i);
       res2[last].Setnxt(size + 1);
       if (last) {
-        Data.write(res2[last], num * largest * sizeof(Element) + 8 +
+        Data.write(res2[last], num * largest * sizeof(Element) + 12 +
                                    (last - 1) * sizeof(Element));
       } // 如果last为0，说明插入在了头结点。不需要修改前置节点。
       Data.write(to_insert,
-                 num * largest * sizeof(Element) + 8 + size * sizeof(Element));
+                 num * largest * sizeof(Element) + 12 + size * sizeof(Element));
       break;
     }
     last = i;
@@ -186,11 +186,11 @@ bool LinkInsert(Element to_insert, int num, int start, int size) {
   if (!flag) {
     res2[last].Setnxt(size + 1);
     if (last) {
-      Data.write(res2[last], num * largest * sizeof(Element) + 8 +
+      Data.write(res2[last], num * largest * sizeof(Element) + 12 +
                                  (last - 1) * sizeof(Element));
     }
     Data.write(to_insert,
-               num * largest * sizeof(Element) + 8 + size * sizeof(Element));
+               num * largest * sizeof(Element) + 12 + size * sizeof(Element));
   } // 修改前一个数值和后一个。
   if (last) {
     return 0;
@@ -200,7 +200,7 @@ bool LinkInsert(Element to_insert, int num, int start, int size) {
 }
 
 bool LinkFind(const Element &to_find, int num, int start, int size, bool &flag) {
-  Data.read(res2[1], num * largest * sizeof(Element) + 8, size);
+  Data.read(res2[1], num * largest * sizeof(Element) + 12, size);
   for (int i = start; i; i = res2[i].Getnxt()) {
     if (strcmp(to_find.index, res2[i].index) == 0) {
       flag = 1;
@@ -214,7 +214,7 @@ bool LinkFind(const Element &to_find, int num, int start, int size, bool &flag) 
 }
 
 int LinkDel(const Element &to_del, int num, int start, int size) {
-  Data.read(res2[1], num * largest * sizeof(Element) + 8, size);
+  Data.read(res2[1], num * largest * sizeof(Element) + 12, size);
   int del = 0;
   int last = 0;
   for (int i = start; i; i = res2[i].Getnxt()) {
@@ -229,14 +229,14 @@ int LinkDel(const Element &to_del, int num, int start, int size) {
     for (int i = start; i; i = res2[i].Getnxt()) {
       if (res2[i].Getnxt() == size) {
         res2[i].Setnxt(del);
-        Data.write(res2[size], num * largest * sizeof(Element) + 8 +
+        Data.write(res2[size], num * largest * sizeof(Element) + 12 +
                                    (del - 1) * sizeof(Element));
         // 覆写，空间重用。
         break;
       }
     }
     if (last) {
-      Data.write(res2[last], num * largest * sizeof(Element) + 8 +
+      Data.write(res2[last], num * largest * sizeof(Element) + 12 +
                                  (last - 1) * sizeof(Element));
       // 修改前置节点。
       return -1; // 普通删除
@@ -251,7 +251,7 @@ int IndexFind(const Element &x) {
   int start, total;
   Data.get_info(start, 2);
   Data.get_info(total, 1);
-  Data.read(res1[1], 8, total);
+  Data.read(res1[1], 12, total);
   int last = start;
   for (int i = start; i; i = res1[i].Getblock_nxt()) {
     if (x < res1[i]) {
@@ -266,7 +266,7 @@ void SplitBlock(int place,int start, int size) {
   int mid = size / 2;
   Element res3[500];
   Element res4[500];
-  Data.read(res2[1], place * largest * sizeof(Element) + 8, size);//读入原有数据块。
+  Data.read(res2[1], place * largest * sizeof(Element) + 12, size);//读入原有数据块。
   int count;
   int i = start;
   for(count = 1; count <= mid; i = res2[i].Getnxt(), count++){
@@ -274,33 +274,38 @@ void SplitBlock(int place,int start, int size) {
     res3[count].Setnxt(count + 1);
   }
   res3[mid].Setnxt(0);//将原有块的一半存入res3中。
+  
   for(count = 1; i; i = res2[i].Getnxt(), count++){
     res4[count] = res2[i];
     res4[count].Setnxt(count + 1);
   }
   res4[size - mid].Setnxt(0);
-  Data.write(res3[1], place * largest * sizeof(Element) + 8, mid);
+  Data.write(res3[1], place * largest * sizeof(Element) + 12, mid);
   //将res3写入原有块的位置。
-  int total;
+  int total, current;
   Data.get_info(total, 1);
+  Data.get_info(current, 3);
   total++;
+  current++;
   Data.write_info(total, 1);//修改total。
   res4[1].Setsize(size - mid);
   res4[1].Setstart(1);
   Element origin;
-  Data.read(origin, (place - 1) * sizeof(Element) + 8);//取出原有索引节点。
+  Data.read(origin, (place - 1) * sizeof(Element) + 12);//取出原有索引节点。
   res4[1].Setblock_nxt(origin.Getblock_nxt());
+  res4[1].Setplace(current);
   origin.Setblock_nxt(total);
   origin.Setsize(mid);
-  Data.write(origin, (place - 1) * sizeof(Element) + 8);
-  Data.write(res4[1], total * largest * sizeof(Element) + 8, size - mid);
-  Data.write(res4[1], (total - 1) * sizeof(Element) + 8);
+  Data.write(origin, (place - 1) * sizeof(Element) + 12);
+  Data.write(res4[1], current * largest * sizeof(Element) + 12, size - mid);
+  //写入数据块。位置应当为current。指示当前已经写了多少个数据块。
+  Data.write(res4[1], (total - 1) * sizeof(Element) + 12);
   return;
 }
 
 void MergeBlock(int a,int b,int size_a, int size_b, int start_a, int start_b) {//a中的元素全部小于b中的元素。
-  Data.read(res1[1], a * largest * sizeof(Element) + 8, size_a);
-  Data.read(res2[1], b * largest * sizeof(Element) + 8, size_b);
+  Data.read(res1[1], a * largest * sizeof(Element) + 12, size_a);
+  Data.read(res2[1], b * largest * sizeof(Element) + 12, size_b);
   int last;
   for(int i = start_a; i; i = res1[i].Getnxt()) {
     last = i;
@@ -313,18 +318,18 @@ void MergeBlock(int a,int b,int size_a, int size_b, int start_a, int start_b) {/
     last = i;
   }
   res1[last + size_a].Setnxt(0);
-  Data.write(res1[1],a * largest * sizeof(Element) + 8, size_a + size_b);
+  Data.write(res1[1],a * largest * sizeof(Element) + 12, size_a + size_b);
   Element x, y;
-  Data.read(x, 8 + (a - 1) *sizeof(Element));
-  Data.read(y, 8 + (b - 1) * sizeof(Element));
+  Data.read(x, 12 + (a - 1) *sizeof(Element));
+  Data.read(y, 12 + (b - 1) * sizeof(Element));
   x.Setblock_nxt(y.Getblock_nxt());//将b并吞。
-  Data.write(x, 8 + (a - 1) * sizeof(Element));
+  Data.write(x, 12 + (a - 1) * sizeof(Element));
   int total;
   Data.get_info(total, 1);
   int start;
   Data.get_info(start, 2);
   Element tmp[1000];
-  Data.read(tmp[1], 8, total);
+  Data.read(tmp[1], 12, total);
   int end;
   for(int i = start; i; i = tmp[i].Getblock_nxt()) {
     if(tmp[i].Getblock_nxt() == total) {
@@ -333,30 +338,32 @@ void MergeBlock(int a,int b,int size_a, int size_b, int start_a, int start_b) {/
       break;
     }
   }
-  Data.write(tmp[end], 8 + (end - 1) * sizeof(Element));//修改。
-  Data.write(tmp[total], 8 + (b - 1) * sizeof(Element));//覆写空间。
+  Data.write(tmp[end], 12 + (end - 1) * sizeof(Element));//修改。
+  Data.write(tmp[total], 12 + (b - 1) * sizeof(Element));//覆写空间。
   Data.write_info(total - 1, 1);//修改总数。
   return;
 } 
 
 void Ins(Element to_insert) {
-  int total, start;
+  int total, start, current;
   Data.get_info(total, 1);
   Data.get_info(start, 2);
+  Data.get_info(current, 3);
   if(total == 0) {
     total++;
+    current++;
     to_insert.Setstart(1);
-    to_insert.Setplace(1);
+    to_insert.Setplace(current);
     to_insert.Setsize(1);
     Data.write_info(total, 1);
     Data.write_info(total, 2);
-    Data.write(to_insert, 8, 1);
-    Data.write(to_insert, 8 + largest * sizeof(Element));
+    Data.write(to_insert, 12, 1);
+    Data.write(to_insert, 12 + largest * sizeof(Element));
     return;
   }
   Element tmp;
   int target = IndexFind(to_insert);
-  Data.read(tmp, 8 + (target - 1) * sizeof(Element));
+  Data.read(tmp, 12 + (target - 1) * sizeof(Element));
   int flag = LinkInsert(to_insert, target, tmp.Getstart(), tmp.Getsize());
   int size = tmp.Getsize();
   if(flag) {//指示需要修改索引块。
@@ -367,7 +374,7 @@ void Ins(Element to_insert) {
     tmp = to_insert;
   }
   tmp.Setsize(size + 1);
-  Data.write(tmp, 8 + (target - 1) * sizeof(Element));
+  Data.write(tmp, 12 + (target - 1) * sizeof(Element));
   if(size + 1 > limit) {
     SplitBlock(target, tmp.Getstart(), size + 1);
   }
@@ -383,7 +390,7 @@ void Fin(Element to_find) {
   int flag = 1;
   bool found = 0;
   while(flag) {
-  Data.read(tmp, 8 + (target - 1) * sizeof(Element));
+  Data.read(tmp, 12 + (target - 1) * sizeof(Element));
   flag = LinkFind(to_find, target, tmp.Getstart(), tmp.Getsize(), found);
   target = tmp.Getblock_nxt();
     if(!target) {
@@ -394,6 +401,72 @@ void Fin(Element to_find) {
     cout << "null";
   }
   cout << '\n';
+  return;
+}
+
+void Del(Element to_del) {
+  int total, start;
+  int target = IndexFind(to_del);//找到目标块。
+  Data.get_info(total, 1);
+  Data.get_info(start, 2);
+  Element tmp;
+  int size = res1[target].Getsize();
+  int x = LinkDel(to_del, target, res1[target].Getstart(), res1[target].Getsize());
+  if(x == 114514) {
+    return;
+  }//如删。
+  if(size - 1) {//说明这个块还没有被删干净。
+    res1[target].Setsize(size - 1);//说明删除成功，修改块大小。
+    if(x > 0) {
+      tmp = res2[x];//指示新的头结点。
+      tmp.Setblock_nxt(res1[target].Getblock_nxt());
+      tmp.Setsize(size - 1);
+      tmp.Setstart(x);
+    } else {
+      tmp = res1[target];
+    }
+    Data.write(tmp, 12 + (target - 1) * sizeof(Element));
+    return;
+  } else {
+    if(target == start) {//说明第一个块被删空了。
+      start = res1[target].Getblock_nxt();
+      Element tmp2;
+      Data.read(tmp2, 12 + (total - 1) * sizeof(Element));//取出最后一个块。
+      for(int i = start; i; i = res1[i].Getblock_nxt()) {
+        if(res1[i].Getblock_nxt() == total) {
+          res1[i].Setblock_nxt(target);
+          Data.write(res1[i], 12 + (i - 1) * sizeof(Element));
+          Data.write(res1[total], 12 + (target - 1) * sizeof(Element));
+          //覆写，空间重用。
+          break;
+        }
+      }
+      total--;
+      Data.write_info(total, 1);//写入最新的总数。
+      Data.write_info(start, 2);//写入最新的开头。
+    } else {
+      int i;
+      for(i = start; i; i = res1[i].Getblock_nxt()) {
+        if(res1[i].Getblock_nxt() == target) {
+          res1[i].Setblock_nxt(res1[target].Getblock_nxt());//删除这个块。因为这里没有东西了。
+          break;
+        }
+      }
+      int last = i;
+      for(int i = start; i; i = res1[i].Getblock_nxt()) {
+        if(res1[i].Getblock_nxt() == total) {
+          res1[i].Setblock_nxt(target);
+          Data.write(res1[i], 12 + (i - 1) * sizeof(Element));
+          Data.write(res1[total], 12 + (target - 1) * sizeof(Element));
+          //覆写，空间重用。
+          break;
+        }
+      }
+      Data.write(res1[last], 12 + (last - 1) * sizeof(Element));
+      total--;
+      Data.write_info(total, 1);//写入最新的总数。
+    }
+  }
   return;
 }
 
@@ -420,7 +493,7 @@ int main() {
       }
       case 'D': {
         res_element.Initial();
-        //Del(res_element);
+        Del(res_element);
         break;
       }
     }
