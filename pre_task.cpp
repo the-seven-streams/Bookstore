@@ -82,7 +82,7 @@ private:
   int block_nxt;   // 索引块内后继。1_base
 
 public:
-  char index[64];
+  char index[65];
   Element() {
     value = 0;
     size = 0;
@@ -141,11 +141,15 @@ Element res1[1000], res2[1000]; // 所有res1用于索引块操作。res2用于�
 MemoryRiver<Element, 3> Data; // 三个参数：总块数，开头，当前数据块存放位置。
 int n, largest, limit;
 
-Element ArrayInsert(Element &to_insert, int place, int size) {
+Element ArrayInsert(Element &to_insert, int place, int size,bool &flag) {
   Data.read(res2[1], place * largest * sizeof(Element) + 12, size);
   // 读出原有数据块。
-  int num = upper_bound(res2 + 1, res2 + size + 1, to_insert) - res2 -
+  int num = lower_bound(res2 + 1, res2 + size + 1, to_insert) - res2 -
             1; // 找到数据位置
+  if((num <= size) && (res2[num + 1] == to_insert)) {
+    flag = 1;
+    return to_insert;
+  }
   if (!num) {
     Data.write(to_insert, place * largest * sizeof(Element) + 12);
     Data.write(res2[1],
@@ -181,7 +185,7 @@ bool ArrayFind(const Element &to_find, int place, int size, bool &found) {
 
 bool ArrayDel(Element &to_del, int place, int size) {
   Data.read(res2[1], place * largest * sizeof(Element) + 12, size);
-  int num = lower_bound(res2 + 1, res2 + size + 1, to_del) - res2;
+  int num = lower_bound(res2 + 1, res2 + size + 1, to_del) - res2 - 1;
   if (!(to_del == res2[num + 1])) {
     return 0; // 没有删除成功。
   }
@@ -256,7 +260,11 @@ void Ins(Element to_insert) {
   Element tmp, tmp2;
   int target = IndexFind(to_insert); // 目标链
   Data.read(tmp, 12 + (target - 1) * sizeof(Element));
-  tmp2 = ArrayInsert(to_insert, tmp.Getplace(), tmp.Getsize());
+  bool bad = 0;
+  tmp2 = ArrayInsert(to_insert, tmp.Getplace(), tmp.Getsize(),bad);
+  if(bad) {
+    return;
+  }
   tmp2.Setsize(tmp.Getsize() + 1);
   tmp2.Setblock_nxt(tmp.Getblock_nxt());
   tmp2.Setplace(tmp.Getplace());
@@ -343,7 +351,7 @@ void Del(Element to_del) {
     int tmp;
     Data.get_info(tmp, 1);
     largest = 500;
-    limit = 2;
+    limit = 480;
     for (int i = 1; i <= n; ++i) {
       string op;
       cin >> op;
@@ -360,7 +368,7 @@ void Del(Element to_del) {
       }
       case 'd': {
         res_element.Initial();
-        // Del(res_element);
+        Del(res_element);
         break;
       }
       case 'c': {
