@@ -56,14 +56,14 @@ public:
   // 在文件合适位置写入类对象t，并返回写入的位置索引index
   // 位置索引意味着当输入正确的位置索引index，在以下三个函数中都能顺利的找到目标对象进行操作
   // 位置索引index可以取为对象写入的起始位置
-  void write(const T &t, int place, int size = 1) {
+  void write(T &t, int place, int size = 1) {
     file.open(file_name);
     file.seekp(place);
     file.write(reinterpret_cast<char *>(&t), sizeofT * size);
     file.close();
     return;
   }
-  void read(const T &t, const int index, int size = 1) {
+  void read(T &t, const int index, int size = 1) {
     file.open(file_name);
     file.seekg(index);
     file.read(reinterpret_cast<char *>(&t), sizeofT * size);
@@ -140,7 +140,7 @@ Element res1[1000], res2[1000]; // 所有res1用于索引块操作。res2用于�
 MemoryRiver<Element, 3> Data;//三个参数：总块数，开头，当前数据块存放位置。
 int n, largest, limit;
 
-void ArrayInsert(const Element &to_insert, int place, int size) {
+void ArrayInsert(Element &to_insert, int place, int size) {
   Data.read(res2[1], place * largest * sizeof(Element) + 12, size);
   //读出原有数据块。
   int num = upper_bound(res2 + 1, res2 + size + 1, to_insert) - res2;//找到数据位置
@@ -170,7 +170,7 @@ bool ArrayFind(const Element &to_find, int place, int size, bool &found) {
   return 1;
 }
 
-bool ArrayDel(const Element &to_del, int place, int size) {
+bool ArrayDel(Element &to_del, int place, int size) {
   Data.read(res2[1], place * largest * sizeof(Element) + 12, size);
   int num = lower_bound(res2 + 1, res2 + size + 1, to_del) - res2;
   if(!(to_del == res2[num + 1])) {
@@ -200,90 +200,30 @@ int IndexFind(const Element &x) {
   return last;
 }//这个函数的目的是找到目标块。
 
-void SplitBlock(int place,int start, int size) {
+void SplitBlock(int num,int start, int size) {
   int mid = size / 2;
-  Element res3[500];
-  Element res4[500];
-  Data.read(res2[1], place * largest * sizeof(Element) + 12, size);//读入原有数据块。
-  int count;
-  int i = start;
-  for(count = 1; count <= mid; i = res2[i].Getnxt(), count++){
-    res3[count] = res2[i];
-    res3[count].Setnxt(count + 1);
-    cout << res3[count].index << "I3" <<endl;
-  }
-  res3[mid].Setnxt(0);//将原有块的一半存入res3中。
-  count = 1;
-  for(count = 1; i; i = res2[i].Getnxt(), count++){
-    res4[count] = res2[i];
-    res4[count].Setnxt(count + 1);
-    cout << res4[count].index << " " << res4[count].Getnxt() <<"I4" <<endl;
-  }
-  res4[size - mid].Setnxt(0);
+  Element origin, new_block;
+  Data.read(origin, 12 + (num - 1) * sizeof(Element));
+  Data.read(res2[1], origin.Getplace() * largest * sizeof(Element) + 12, size);//读入原有数据块。
   int total, current;
   Data.get_info(total, 1);
   Data.get_info(current, 3);
   total++;
   current++;
-  Data.write_info(total, 1);//修改total。
+  Data.write_info(total, 1);
   Data.write_info(current, 3);
-  res4[1].Setsize(size - mid);
-  res4[1].Setstart(1);
-  Element origin;
-  Data.read(origin, (place - 1) * sizeof(Element) + 12);//取出原有索引节点。
-  res4[1].Setblock_nxt(origin.Getblock_nxt());
-  res4[1].Setplace(current);
-  origin.Setblock_nxt(total);
+  Data.write(res2[mid], current * largest * sizeof(Element) + 12, size - mid);//写入新的数据块。
+  origin = res2[1];
   origin.Setsize(mid);
-  origin.Setstart(1);
-  Data.write(res3[1], place * largest * sizeof(Element) + 12, mid);
-  Data.write(origin, (place - 1) * sizeof(Element) + 12);
-  Data.write(res4[1], current * largest * sizeof(Element) + 12, size - mid);
-  //写入数据块。位置应当为current。指示当前已经写了多少个数据块。
-  Data.write(res4[1], (total - 1) * sizeof(Element) + 12);
+  origin.Setblock_nxt(total);
+  Data.write(origin,  (num - 1) * sizeof(Element)+ 12);//修改原有索引块。
+  new_block = res2[mid + 1];
+  new_block.Setsize(size - mid);
+  new_block.Setblock_nxt(origin.Getblock_nxt());
+  new_block.Setplace(current);
+  Data.write(new_block, (total - 1) * sizeof(Element) + 12);//新的索引块
   return;
 }
-
-void MergeBlock(int a,int b,int size_a, int size_b, int start_a, int start_b) {//a中的元素全部小于b中的元素。
-  Data.read(res1[1], a * largest * sizeof(Element) + 12, size_a);
-  Data.read(res2[1], b * largest * sizeof(Element) + 12, size_b);
-  int last;
-  for(int i = start_a; i; i = res1[i].Getnxt()) {
-    last = i;
-  }
-  res1[last].Setnxt(start_b + size_a);//修改第一个块中的尾指针。
-  last = 0;
-  for(int i = start_a;i; i = res2[i].Getnxt()) {
-    res1[i + size_a] = res2[i];
-    res1[i + size_a].Setnxt(res2[i].Getnxt() + size_a);
-    last = i;
-  }
-  res1[last + size_a].Setnxt(0);
-  Data.write(res1[1],a * largest * sizeof(Element) + 12, size_a + size_b);
-  Element x, y;
-  Data.read(x, 12 + (a - 1) *sizeof(Element));
-  Data.read(y, 12 + (b - 1) * sizeof(Element));
-  x.Setblock_nxt(y.Getblock_nxt());//将b并吞。
-  Data.write(x, 12 + (a - 1) * sizeof(Element));
-  int total;
-  Data.get_info(total, 1);
-  int start;
-  Data.get_info(start, 2);
-  Element tmp[1000];
-  Data.read(tmp[1], 12, total);
-  int end;
-  for(int i = start; i; i = tmp[i].Getblock_nxt()) {
-    if(tmp[i].Getblock_nxt() == total) {
-      tmp[i].Setblock_nxt(b);
-      end = i;
-      break;
-    }
-  }
-  Data.write(tmp[end], 12 + (end - 1) * sizeof(Element));//修改。
-  Data.write(tmp[total], 12 + (b - 1) * sizeof(Element));//覆写空间。
-  Data.write_info(total - 1, 1);//修改总数。
-  return;
-} 
 
 void Ins(Element to_insert) {
   int total, start, current;
