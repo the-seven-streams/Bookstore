@@ -57,14 +57,14 @@ public:
   // 在文件合适位置写入类对象t，并返回写入的位置索引index
   // 位置索引意味着当输入正确的位置索引index，在以下三个函数中都能顺利的找到目标对象进行操作
   // 位置索引index可以取为对象写入的起始位置
-  void write(T &t, int place, int size = 1) {
+  void write(T &t, long long place, int size = 1) {
     file.open(file_name);
     file.seekp(place);
     file.write(reinterpret_cast<char *>(&t), sizeofT * size);
     file.close();
     return;
   }
-  void read(T &t, const int index, int size = 1) {
+  void read(T &t, const long long index, int size = 1) {
     file.open(file_name);
     file.seekg(index);
     file.read(reinterpret_cast<char *>(&t), sizeofT * size);
@@ -82,7 +82,7 @@ private:
   int block_nxt;   // 索引块内后继。1_base
 
 public:
-  char index[65];
+  char index[66];
   Element() {
     value = 0;
     size = 0;
@@ -100,10 +100,6 @@ public:
     return;
   }
   int Getsize() { return size; }
-  void Getindex(char *x) {
-    strcpy(x, index);
-    return;
-  }
   int Getvalue() { return value; }
   int Getplace() { return block_place; }
   void Setplace(int x) {
@@ -113,8 +109,6 @@ public:
   void SpecialInitial() {
     value = minus_inf;
     cin >> index;
-    int len = strlen(index);
-    memset(index + len, '\0', sizeof(index) - len);
     return;
   }
   int Getblock_nxt() { return block_nxt; }
@@ -146,7 +140,7 @@ Element ArrayInsert(Element &to_insert, int place, int size,bool &flag) {
   // 读出原有数据块。
   int num = lower_bound(res2 + 1, res2 + size + 1, to_insert) - res2 -
             1; // 找到数据位置
-  if((num <= size) && (res2[num + 1] == to_insert)) {
+  if((num < size) && (res2[num + 1] == to_insert)) {
     flag = 1;
     return to_insert;
   }
@@ -280,6 +274,10 @@ void Fin(Element to_find) {
   int target = IndexFind(to_find);
   Data.get_info(total, 1);
   Data.get_info(start, 2);
+  if(!total) {
+    cout << "null\n";
+    return;
+  }
   Element tmp;
   int flag = 1;
   bool found = 0;
@@ -317,17 +315,19 @@ void Del(Element to_del) {
   int target = IndexFind(to_del);
   Data.get_info(total, 1);
   Data.get_info(start, 2);
+  if(total == 0) {
+    return;
+  }
   Element tmp;
   Data.read(tmp, 12 + (target - 1) * sizeof(Element));
   bool flag = ArrayDel(to_del, tmp.Getplace(), tmp.Getsize());
-  if (flag) {
+  if (flag) {//删除成功
     int size = tmp.Getsize();
     tmp.Setsize(size - 1);
     Data.write(tmp, 12 + (target - 1) * sizeof(Element));
-    if (!(size - 1)) {
-      total--;
+    if (!(size - 1)) {//删除后为空
       Data.write_info(total, 1);
-      if (start == target) {
+      if (start == target) {//删除块为开头
         start = tmp.Getblock_nxt();
         Data.write_info(start, 2);
       } else {
@@ -338,7 +338,15 @@ void Del(Element to_del) {
             break;
           }
         }
+        for(int i = start; i; i = res1[i].Getblock_nxt()) {
+          if(res1[i].Getblock_nxt() == total) {
+            res1[i].Setblock_nxt(target);
+            Data.write(res1[total], 12 + (target - 1) * sizeof(Element));
+            break;
+          }
+        }//空间重用。
       }
+      total--;
     }
   }
   return;
