@@ -56,14 +56,14 @@ public:
   // 在文件合适位置写入类对象t，并返回写入的位置索引index
   // 位置索引意味着当输入正确的位置索引index，在以下三个函数中都能顺利的找到目标对象进行操作
   // 位置索引index可以取为对象写入的起始位置
-  void write(T &t, int place, int size = 1) {
+  void write(const T &t, int place, int size = 1) {
     file.open(file_name);
     file.seekp(place);
     file.write(reinterpret_cast<char *>(&t), sizeofT * size);
     file.close();
     return;
   }
-  void read(T &t, const int index, int size = 1) {
+  void read(const T &t, const int index, int size = 1) {
     file.open(file_name);
     file.seekg(index);
     file.read(reinterpret_cast<char *>(&t), sizeofT * size);
@@ -71,14 +71,6 @@ public:
     return;
   }
 
-  // 用t的值更新位置索引index对应的对象，保证调用的index都是由write函数产生
-  void update(T &t, const int index) {
-    file.open(file_name);
-    file.seekp(index);
-    file.write(reinterpret_cast<char *>(&t), sizeofT);
-    file.close();
-    return;
-  }
 }; // 第一个数据记录了索引块的总个数。
 
 class Element {
@@ -86,8 +78,6 @@ private:
   int value;
   int size; //当为索引块时，size为块内元素的个数
   int block_place;//指示是第几个块。1_base
-  int nxt;//块内后继。1_base
-  int start;//指示块内头结点的位置。1_base
   int block_nxt;//索引块内后继。1_base
 
 public:
@@ -126,16 +116,6 @@ public:
     memset(index + len, '\0', sizeof(index) - len);
     return;
   }
-  int Getstart() { return start; }
-  void Setstart(int x) {
-    start = x;
-    return;
-  }
-  int Getnxt() { return nxt; }
-  void Setnxt(int x) {
-    nxt = x;
-    return;
-  }
   int Getblock_nxt() { return block_nxt; }
   void Setblock_nxt(int x) {
     block_nxt = x;
@@ -157,93 +137,52 @@ public:
 } res_element;
 
 Element res1[1000], res2[1000]; // 所有res1用于索引块操作。res2用于数据块操作。
-MemoryRiver<Element, 3> Data;//三个参数：总块数，开头，当前数据块位置。
+MemoryRiver<Element, 3> Data;//三个参数：总块数，开头，当前数据块存放位置。
 int n, largest, limit;
 
-bool LinkInsert(Element to_insert, int num, int start, int size) {
-  Data.read(res2[1], num * largest * sizeof(Element) + 12, size); // 读出数据块
-  bool flag = 0;
-  int last = 0;
-  for (int i = start; i; i = res2[i].Getnxt()) {
-    if (to_insert < res2[i]) {
-      flag = 1;
-      to_insert.Setnxt(i);
-      res2[last].Setnxt(size + 1);
-      if (last) {
-        Data.write(res2[last], num * largest * sizeof(Element) + 12 +
-                                   (last - 1) * sizeof(Element));
-      } // 如果last为0，说明插入在了头结点。不需要修改前置节点。
-      Data.write(to_insert,
-                 num * largest * sizeof(Element) + 12 + size * sizeof(Element));
-      break;
-    }
-    last = i;
-  }
-  if (!flag) {
-    res2[last].Setnxt(size + 1);
-    if (last) {
-      Data.write(res2[last], num * largest * sizeof(Element) + 12 +
-                                 (last - 1) * sizeof(Element));
-    }
-    Data.write(to_insert,
-               num * largest * sizeof(Element) + 12 + size * sizeof(Element));
-  } // 修改前一个数值和后一个。
-  for(int i = start; i; i = res2[i].Getnxt()) {
-    cout << res2[i].index << " " << res2[i].Getnxt() << " " << res2[i].Getvalue() << endl;
-  }
-  if (last) {
-    return 0;
-  } else {
-    return 1; // 插入在了第一个位置上。提醒修改开头。
-  }
+void ArrayInsert(const Element &to_insert, int place, int size) {
+  Data.read(res2[1], place * largest * sizeof(Element) + 12, size);
+  //读出原有数据块。
+  int num = upper_bound(res2 + 1, res2 + size + 1, to_insert) - res2;//找到数据位置
+  if(!num) {
+    Data.write(to_insert, place * largest * sizeof(Element) + 12);
+    Data.write(res2[1], place * largest * sizeof(Element) + 12 + sizeof(Element), size);
+    return;
+  }//说明写入的元素最小
+  Data.write(res2[1], place * largest * sizeof(Element) + 12, num);
+  Data.write(to_insert, place * largest * sizeof(Element) + 12 + num * sizeof(Element));
+  Data.write(res2[num + 1], place * largest * sizeof(Element) + 12 + (num + 1) * sizeof(Element), size - num);
+  return;
 }
 
-bool LinkFind(const Element &to_find, int num, int start, int size, bool &flag) {
-  Data.read(res2[1], num * largest * sizeof(Element) + 12, size);
-  for (int i = start; i; i = res2[i].Getnxt()) {
-    if (strcmp(to_find.index, res2[i].index) == 0) {
-      flag = 1;
+bool ArrayFind(const Element &to_find, int place, int size, bool &found) {
+  Data.read(res2[1], place * largest * sizeof(Element) + 12, size);
+  int num = lower_bound(res2 + 1, res2 + size + 1, to_find) - res2;
+  for(int i = num; i <= size; i++) {
+    if(strcmp(res2[i].index, to_find.index) == 0) {
+      found = 1;
       cout << res2[i].Getvalue() << ' ';
     }
-    if (strcmp(to_find.index, res2[i].index) < 0) {
+    if(strcmp(res2[i].index, to_find.index) != 0) {
       return 0;
-    } // 如果大于，说明后面的都不用找了。
+    }
   }
   return 1;
 }
 
-int LinkDel(const Element &to_del, int num, int start, int size) {
-  Data.read(res2[1], num * largest * sizeof(Element) + 12, size);
-  int del = 0;
-  int last = 0;
-  for (int i = start; i; i = res2[i].Getnxt()) {
-    if (to_del == res2[i]) {
-      del = i; // 找到了要删除的元素的序号。
-      res2[last].Setnxt(res2[i].Getnxt()); // 修改前置节点的指针
-      break;
-    }
-    last = i;
+bool ArrayDel(const Element &to_del, int place, int size) {
+  Data.read(res2[1], place * largest * sizeof(Element) + 12, size);
+  int num = lower_bound(res2 + 1, res2 + size + 1, to_del) - res2;
+  if(!(to_del == res2[num + 1])) {
+    return 0;//没有删除成功。
   }
-  if (del) {
-    for (int i = start; i; i = res2[i].Getnxt()) {
-      if (res2[i].Getnxt() == size) {
-        res2[i].Setnxt(del);
-        Data.write(res2[size], num * largest * sizeof(Element) + 12 +
-                                   (del - 1) * sizeof(Element));
-        // 覆写，空间重用。
-        break;
-      }
-    }
-    if (last) {
-      Data.write(res2[last], num * largest * sizeof(Element) + 12 +
-                                 (last - 1) * sizeof(Element));
-      // 修改前置节点。
-      return -1; // 普通删除
-    } else {
-      return res2[del].Getnxt(); // 删除了头结点。指示新的头结点。
-    }
+  if(!num) {
+    Data.write(res2[2], place * largest * sizeof(Element) + 12, size - 1);
+  } else {
+    Data.write(res2[1], place * largest * sizeof(Element) + 12, num);
+    Data.write(res2[num + 2], place * largest * sizeof(Element) + 12 + num * sizeof(Element), size - num - 1);
   }
-  return 114514; // 没有找到。
+  return 1;
 }
 
 int IndexFind(const Element &x) {
