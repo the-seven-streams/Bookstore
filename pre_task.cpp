@@ -77,9 +77,9 @@ public:
 class Element {
 private:
   int value;
-  int size; //当为索引块时，size为块内元素的个数
-  int block_place;//指示是第几个块。1_base
-  int block_nxt;//索引块内后继。1_base
+  int size;        // 当为索引块时，size为块内元素的个数
+  int block_place; // 指示是第几个块。1_base
+  int block_nxt;   // 索引块内后继。1_base
 
 public:
   char index[64];
@@ -138,22 +138,28 @@ public:
 } res_element;
 
 Element res1[1000], res2[1000]; // 所有res1用于索引块操作。res2用于数据块操作。
-MemoryRiver<Element, 3> Data;//三个参数：总块数，开头，当前数据块存放位置。
+MemoryRiver<Element, 3> Data; // 三个参数：总块数，开头，当前数据块存放位置。
 int n, largest, limit;
 
 Element ArrayInsert(Element &to_insert, int place, int size) {
   Data.read(res2[1], place * largest * sizeof(Element) + 12, size);
-  //读出原有数据块。
-  int num = upper_bound(res2 + 1, res2 + size + 1, to_insert) - res2 - 1;//找到数据位置
-  if(!num) {
+  // 读出原有数据块。
+  int num = upper_bound(res2 + 1, res2 + size + 1, to_insert) - res2 -
+            1; // 找到数据位置
+  if (!num) {
     Data.write(to_insert, place * largest * sizeof(Element) + 12);
-    Data.write(res2[1], place * largest * sizeof(Element) + 12 + sizeof(Element), size);
+    Data.write(res2[1],
+               place * largest * sizeof(Element) + 12 + sizeof(Element), size);
     return to_insert;
-  }//说明写入的元素最小
+  } // 说明写入的元素最小
   Data.write(res2[1], place * largest * sizeof(Element) + 12, num);
-  Data.write(to_insert, place * largest * sizeof(Element) + 12 + num * sizeof(Element));
-  if(size != num) {
-    Data.write(res2[num + 1], place * largest * sizeof(Element) + 12 + (num + 1) * sizeof(Element), size - num);
+  Data.write(to_insert,
+             place * largest * sizeof(Element) + 12 + num * sizeof(Element));
+  if (size != num) {
+    Data.write(res2[num + 1],
+               place * largest * sizeof(Element) + 12 +
+                   (num + 1) * sizeof(Element),
+               size - num);
   }
   return res2[1];
 }
@@ -161,12 +167,12 @@ Element ArrayInsert(Element &to_insert, int place, int size) {
 bool ArrayFind(const Element &to_find, int place, int size, bool &found) {
   Data.read(res2[1], place * largest * sizeof(Element) + 12, size);
   int num = lower_bound(res2 + 1, res2 + size + 1, to_find) - res2;
-  for(int i = num; i <= size; i++) {
-    if(strcmp(res2[i].index, to_find.index) == 0) {
+  for (int i = num; i <= size; i++) {
+    if (strcmp(res2[i].index, to_find.index) == 0) {
       found = 1;
       cout << res2[i].Getvalue() << ' ';
     }
-    if(strcmp(res2[i].index, to_find.index) != 0) {
+    if (strcmp(res2[i].index, to_find.index) != 0) {
       return 0;
     }
   }
@@ -176,14 +182,16 @@ bool ArrayFind(const Element &to_find, int place, int size, bool &found) {
 bool ArrayDel(Element &to_del, int place, int size) {
   Data.read(res2[1], place * largest * sizeof(Element) + 12, size);
   int num = lower_bound(res2 + 1, res2 + size + 1, to_del) - res2;
-  if(!(to_del == res2[num + 1])) {
-    return 0;//没有删除成功。
+  if (!(to_del == res2[num + 1])) {
+    return 0; // 没有删除成功。
   }
-  if(!num) {
+  if (!num) {
     Data.write(res2[2], place * largest * sizeof(Element) + 12, size - 1);
   } else {
     Data.write(res2[1], place * largest * sizeof(Element) + 12, num);
-    Data.write(res2[num + 2], place * largest * sizeof(Element) + 12 + num * sizeof(Element), size - num - 1);
+    Data.write(res2[num + 2],
+               place * largest * sizeof(Element) + 12 + num * sizeof(Element),
+               size - num - 1);
   }
   return 1;
 }
@@ -201,29 +209,31 @@ int IndexFind(const Element &x) {
     last = i;
   }
   return last;
-}//这个函数的目的是找到目标块。
+} // 这个函数的目的是找到目标块。
 
 void SplitBlock(int num, int size) {
   int mid = size / 2;
   Element origin, new_block;
   Data.read(origin, 12 + (num - 1) * sizeof(Element));
-  Data.read(res2[1], origin.Getplace() * largest * sizeof(Element) + 12, size);//读入原有数据块。
+  Data.read(res2[1], origin.Getplace() * largest * sizeof(Element) + 12,
+            size); // 读入原有数据块。
   int total, current;
   Data.get_info(total, 1);
   Data.get_info(current, 3);
   total++;
   current++;
   Data.write_info(total, 1);
-  Data.write_info(current, 3);//修改总数据。
-  Data.write(res2[mid + 1], current * largest * sizeof(Element) + 12, size - mid);//写入新的数据块。
+  Data.write_info(current, 3); // 修改总数据。
+  Data.write(res2[mid + 1], current * largest * sizeof(Element) + 12,
+             size - mid); // 写入新的数据块。
   new_block = res2[mid + 1];
   new_block.Setsize(size - mid);
   new_block.Setblock_nxt(origin.Getblock_nxt());
   new_block.Setplace(current);
-  Data.write(new_block, (total - 1) * sizeof(Element) + 12);//新的索引块
+  Data.write(new_block, (total - 1) * sizeof(Element) + 12); // 新的索引块
   origin.Setsize(mid);
   origin.Setblock_nxt(total);
-  Data.write(origin,  (num - 1) * sizeof(Element) + 12);//修改原有索引块。
+  Data.write(origin, (num - 1) * sizeof(Element) + 12); // 修改原有索引块。
   return;
 }
 
@@ -232,9 +242,9 @@ void Ins(Element to_insert) {
   Data.get_info(total, 1);
   Data.get_info(start, 2);
   Data.get_info(current, 3);
-  if(total == 0) {
+  if (total == 0) {
     total++;
-    to_insert.Setplace(current);
+    to_insert.Setplace(1);
     to_insert.Setsize(1);
     Data.write_info(total, 1);
     Data.write_info(total, 2);
@@ -242,16 +252,16 @@ void Ins(Element to_insert) {
     Data.write(to_insert, 12, 1);
     Data.write(to_insert, 12 + largest * sizeof(Element));
     return;
-  }//说明没有元素。
+  } // 说明没有元素。
   Element tmp, tmp2;
-  int target = IndexFind(to_insert);//目标链
+  int target = IndexFind(to_insert); // 目标链
   Data.read(tmp, 12 + (target - 1) * sizeof(Element));
   tmp2 = ArrayInsert(to_insert, tmp.Getplace(), tmp.Getsize());
   tmp2.Setsize(tmp.Getsize() + 1);
   tmp2.Setblock_nxt(tmp.Getblock_nxt());
   tmp2.Setplace(tmp.Getplace());
   Data.write(tmp2, 12 + (target - 1) * sizeof(Element));
-  if(tmp2.Getsize() > limit) {
+  if (tmp2.Getsize() > limit) {
     SplitBlock(target, tmp2.Getsize());
   }
   return;
@@ -265,15 +275,15 @@ void Fin(Element to_find) {
   Element tmp;
   int flag = 1;
   bool found = 0;
-  while(flag) {
-  Data.read(tmp, 12 + (target - 1) * sizeof(Element));
-  flag = ArrayFind(to_find, tmp.Getplace(), tmp.Getsize(), found);
-  target = tmp.Getblock_nxt();
-    if(!target) {
-    break;
+  while (flag) {
+    Data.read(tmp, 12 + (target - 1) * sizeof(Element));
+    flag = ArrayFind(to_find, tmp.Getplace(), tmp.Getsize(), found);
+    target = tmp.Getblock_nxt();
+    if (!target) {
+      break;
     }
   }
-  if(!found) {
+  if (!found) {
     cout << "null";
   }
   cout << '\n';
@@ -281,33 +291,63 @@ void Fin(Element to_find) {
 }
 
 void check() {
-  int start, total,current;
+  int start, total, current;
   Data.get_info(start, 2);
   Data.get_info(total, 1);
   Data.get_info(current, 3);
   cout << total << ' ' << start << ' ' << current << endl;
   Data.read(res1[1], 12, total);
-  for(int i = start; i; i = res1[i].Getblock_nxt()) {
-    cout << res1[i].index << " "<<  res1[i].Getvalue()
-    <<" " <<res1[i].Getsize() << " "<< res1[i].Getblock_nxt() <<endl;
+  for (int i = start; i; i = res1[i].Getblock_nxt()) {
+    cout << res1[i].index << " " << res1[i].Getvalue() << " "
+         << res1[i].Getsize() << " " << res1[i].Getblock_nxt() << endl;
   }
   return;
 }
-int main() {
-  cin >> n;
-  Data.initialise("Data.txt");
-  /*Element test;
-  Data.read(test, 12 + sizeof(Element));
-  cout << test.Getblock_nxt() << endl;
-  assert(0);*/
-  int tmp;
-  Data.get_info(tmp, 1);
-  largest = 500;
-  limit = 2;
-  for (int i = 1; i <= n; ++i) {
-    string op;
-    cin >> op;
-    switch (op[0]) {
+
+void Del(Element to_del) {
+  int total, start;
+  int target = IndexFind(to_del);
+  Data.get_info(total, 1);
+  Data.get_info(start, 2);
+  Element tmp;
+  Data.read(tmp, 12 + (target - 1) * sizeof(Element));
+  bool flag = ArrayDel(to_del, tmp.Getplace(), tmp.Getsize());
+  if (flag) {
+    int size = tmp.Getsize();
+    tmp.Setsize(size - 1);
+    Data.write(tmp, 12 + (target - 1) * sizeof(Element));
+    if (!(size - 1)) {
+      total--;
+      Data.write_info(total, 1);
+      if (start == target) {
+        start = tmp.Getblock_nxt();
+        Data.write_info(start, 2);
+      } else {
+        for (int i = start; i; i = res1[i].Getblock_nxt()) {
+          if (res1[i].Getblock_nxt() == target) {
+            res1[i].Setblock_nxt(tmp.Getblock_nxt());
+            Data.write(res1[i], 12 + (i - 1) * sizeof(Element));
+            break;
+          }
+        }
+      }
+    }
+  }
+  return;
+}
+  int main() {
+    cin >> n;
+    Data.initialise("Data.txt");
+    Element test;
+    Data.read(test, 12 + sizeof(Element));
+    int tmp;
+    Data.get_info(tmp, 1);
+    largest = 500;
+    limit = 2;
+    for (int i = 1; i <= n; ++i) {
+      string op;
+      cin >> op;
+      switch (op[0]) {
       case 'i': {
         res_element.Initial();
         Ins(res_element);
@@ -320,14 +360,14 @@ int main() {
       }
       case 'd': {
         res_element.Initial();
-        //Del(res_element);
+        // Del(res_element);
         break;
       }
       case 'c': {
         check();
         break;
       }
+      }
     }
+    return 0;
   }
-  return 0;
-}
