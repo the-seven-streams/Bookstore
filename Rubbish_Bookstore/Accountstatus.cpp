@@ -1,16 +1,17 @@
 #include"Accountstatus.hpp"
 #include"Account.hpp"
 #include"Rubbishaccountstore.hpp"
-using std::cout;
 using std::string;
 
 std::stack<Account> status;
+std::multiset<Account> used;
 extern int current_power;
 
 void Logout() {
   if(status.empty()) {
-    cout << "Invalid\n";//没有任何账户可以登出。
+    throw(0);//说明没有登录。
   } else {
+    used.erase(used.find(status.top()));
     status.pop();
     if(status.empty()) {
       current_power = 0;
@@ -37,6 +38,7 @@ void Login(char* id, char* pwd = nullptr) {
     }
   }
   status.push(to_check);
+  used.insert(to_check);
   current_power = to_check.Getpower();
   return;
 }

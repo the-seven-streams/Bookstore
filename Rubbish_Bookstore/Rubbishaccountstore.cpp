@@ -81,13 +81,13 @@ public:
   }
 
 }; // 第一个数据记录了索引块的总个数。
-bool ElementAccount::operator<(const ElementAccount &b) {
+bool ElementAccount::operator<(const ElementAccount &b) const{
   return user < b.user;
 }
-bool ElementAccount::operator>(const ElementAccount &b) {
+bool ElementAccount::operator>(const ElementAccount &b) const{
   return user > b.user;
 }
-bool ElementAccount::operator==(const ElementAccount &b) {
+bool ElementAccount::operator==(const ElementAccount &b) const{
   return user == b.user;
 }
 int ElementAccount::Getsize() { return size; }
