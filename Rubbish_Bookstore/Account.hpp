@@ -10,6 +10,7 @@ private:
   bool used;
 public:
   Account();
+  Account(std::string);
   ~Account();
   void Register();
   void ChangePassword();
@@ -18,6 +19,9 @@ public:
   bool Isusing();
   void Setroot();
   int Getpower();
+  friend bool operator<(const Account &, const Account &);
+  friend bool operator>(const Account &,const Account &);
+  friend bool operator==(const Account &,const Account &);  
 };
 void Initital();
 #endif

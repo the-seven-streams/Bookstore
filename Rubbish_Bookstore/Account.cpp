@@ -1,4 +1,5 @@
 #include"Account.hpp"
+#include"Rubbishaccountstore.hpp"
 #include<bits/stdc++.h>
 using std::fstream;
 using std::string;
@@ -30,20 +31,29 @@ void Account::Setroot() {
 
 
 void Initital() {
-  fstream file;
-  string txt = "Account.txt";
-  if (access(txt.c_str(), F_OK) == 0) {//文件已经被创建。
-      return;
-    }
   Account root;
   root.Setroot();  
-  file.open(txt);
-  int num = 1;
-  file.write(reinterpret_cast<char *>(&num), sizeof(int));//记录已经有多少账号
-  file.seekp(4);
-  file.write(reinterpret_cast<char *>(&root), sizeof(Account));
-  status.push(root);
-  file.close();
-  current_power = 7;
+  RubbishAccount::Insert(root);
   return;
+}
+void Account::Register() {
+  fstream file;
+  string txt = "Account.txt";
+  file.open(txt);
+  file.seekg(0);
+  int total;
+  file.read(reinterpret_cast<char *>(&total), sizeof(int));//当前账号写入总数。
+}
+
+bool operator<(const Account &a, const Account &b) {
+  return strcmp(a.userid, b.userid) < 0;
+}
+bool operator>(const Account &a, const Account &b) {
+  return strcmp(a.userid, b.userid) > 0;
+}
+bool operator==(const Account &a, const Account &b) {
+  return strcmp(a.userid, b.userid) == 0;
+}
+int main() {
+  return 0;
 }
