@@ -1,6 +1,8 @@
 #include"Account.hpp"
 #include"Rubbishaccountstore.hpp"
 #include<bits/stdc++.h>
+#include <cstring>
+#include"Check.hpp"
 using std::fstream;
 using std::string;
 
@@ -42,9 +44,27 @@ int Account::Getpower() {
   return power;
 }
 
-bool Account::Right(char *pwd) {
-  return strcmp(password, pwd) == 0;
+void Account::Right(char *pwd) {
+  if(strcmp(password, pwd) != 0) {
+    throw(0);
+  }
+  return;
 }
+
+void Account::Register(char *id, char *pwd, char *name) {
+  CheckNLU(id);
+  CheckNLU(pwd);
+  this->SetuserID(id);
+  if(RubbishAccount::Find(*this) == *this) {
+    throw(0);
+  }//说明该账户已经被注册。
+  this->Setpassword(pwd);
+  this->power = 1;
+  strcpy(username, name);
+  RubbishAccount::Insert(*this);
+  return;
+}
+
 
 void Initital() {
   Account root;
@@ -52,19 +72,7 @@ void Initital() {
   RubbishAccount::Insert(root);
   return;
 }
-void Account::Register() {
-  fstream file;
-  std::cin >> userid >> password >> username;
-  power = 1;
-  Account tmp = *this;
-  RubbishAccount::Insert(tmp);
-  return;
-}
 
-void ChangePassword(char*, char*) {
-  Account to_find;
-  to_find.SetuserID(userid);
-}
 
 bool Account::operator<(const Account &b) {
   return strcmp(userid, b.userid) < 0;

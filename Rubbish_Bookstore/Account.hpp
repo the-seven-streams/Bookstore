@@ -11,21 +11,20 @@ public:
   Account();
   Account(std::string);
   ~Account();
-  void Register();
+  void Register(char*, char*, char*);//done.
   //This function is to register a new account.
   void ChangePassword(char*, char*);
   void DeleteAccount();
-  void SignUp();
-  void Setroot();
+  void Addaccount();
+  void Setroot();//done.
   //This function is to set the root account.
-  void SetuserID(char*);
+  void SetuserID(char*);//done.
   //This function is to set the user id.
-  void Setpassword(char*);
+  void Setpassword(char*);//done.
   //This function is to set the password.
-  int Getpower();
+  int Getpower();//done.
   //This function is to get the power of the account.
-  std::string Getuserid();
-  bool Right(char*);
+  void Right(char*);//done.
   //This function is to check whether the password is right.
   bool operator<(const Account &);
   bool operator>(const Account &);

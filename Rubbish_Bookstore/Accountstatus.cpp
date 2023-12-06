@@ -2,7 +2,6 @@
 #include"Account.hpp"
 #include"Rubbishaccountstore.hpp"
 using std::cout;
-using std::cin;
 using std::string;
 
 std::stack<Account> status;
@@ -22,8 +21,22 @@ void Logout() {
   return;
 }
 
-void Login() {
-  string txt;
-  string id, pwd;
-  std::getline(cin, txt);
+void Login(char* id, char* pwd = nullptr) {
+  Account tmp;
+  tmp.SetuserID(id);
+  Account to_check;
+  to_check = RubbishAccount::Find(tmp);
+  if(!(to_check == tmp)) {
+    throw(0);//说明没有找到。
+  }
+  if(pwd != nullptr) {
+    to_check.Right(pwd);//如果密码错误，即退出。
+  } else {
+    if(current_power != 7) {
+      throw(0);//说明没有权限。
+    }
+  }
+  status.push(to_check);
+  current_power = to_check.Getpower();
+  return;
 }
