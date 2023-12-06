@@ -12,7 +12,6 @@ Account::Account() {
   memset(password, 0, sizeof(password));
   memset(username, 0, sizeof(username));
   power = 0;
-  used = false;
 }
 Account::~Account() = default;
 
@@ -26,9 +25,26 @@ void Account::Setroot() {
   password[2] = 't';
   password[3] = 'u';
   power = 7;
-  used = true;
+  return;
 }
 
+void Account::SetuserID(char *id) {
+  strcpy(userid, id);
+  return;
+}
+
+void Account::Setpassword(char *pwd) {
+  strcpy(password, pwd);
+  return;
+}
+
+int Account::Getpower() {
+  return power;
+}
+
+bool Account::Right(char *pwd) {
+  return strcmp(password, pwd) == 0;
+}
 
 void Initital() {
   Account root;
@@ -38,22 +54,33 @@ void Initital() {
 }
 void Account::Register() {
   fstream file;
-  string txt = "Account.txt";
-  file.open(txt);
-  file.seekg(0);
-  int total;
-  file.read(reinterpret_cast<char *>(&total), sizeof(int));//当前账号写入总数。
+  std::cin >> userid >> password >> username;
+  power = 1;
+  Account tmp = *this;
+  RubbishAccount::Insert(tmp);
+  return;
 }
 
-bool operator<(const Account &a, const Account &b) {
-  return strcmp(a.userid, b.userid) < 0;
+bool Account::operator<(const Account &b) {
+  return strcmp(userid, b.userid) < 0;
 }
-bool operator>(const Account &a, const Account &b) {
-  return strcmp(a.userid, b.userid) > 0;
+bool Account::operator>(const Account &b) {
+  return strcmp(userid, b.userid) > 0;
 }
-bool operator==(const Account &a, const Account &b) {
-  return strcmp(a.userid, b.userid) == 0;
+bool Account::operator==(const Account &b) {
+  return strcmp(userid, b.userid) == 0;
 }
+
+
+
 int main() {
+  int n;
+  std::cin>>n;
+  for(int i = 0; i < n; ++i) {
+    Account tmp;
+    tmp.Register();
+    Account w = RubbishAccount::Find(tmp);
+    std::cout << (w == tmp);
+  }
   return 0;
 }

@@ -14,6 +14,8 @@ using std::lower_bound;
 using std::string;
 
 const int minus_inf = -2147483648;
+const int largest = 500;
+const int limit = 480;
 template <class T, int info_len = 2> class MemoryRiver {
 private:
   fstream file;
@@ -80,7 +82,15 @@ public:
   }
 
 }; // 第一个数据记录了索引块的总个数。
-
+bool ElementAccount::operator<(const ElementAccount &b) {
+  return user < b.user;
+}
+bool ElementAccount::operator>(const ElementAccount &b) {
+  return user > b.user;
+}
+bool ElementAccount::operator==(const ElementAccount &b) {
+  return user == b.user;
+}
 int ElementAccount::Getsize() { return size; }
 void ElementAccount::Setsize(int x) {
   size = x;
@@ -96,21 +106,10 @@ void ElementAccount::Setblock_nxt(int x) {
   block_nxt = x;
   return;
 }
-bool operator<(const ElementAccount &a, const ElementAccount &b) {
-  return a.user < b.user;
-}
-bool operator>(const ElementAccount &a, const ElementAccount &b) {
-  return a.user > b.user;
-}
-bool operator==(const ElementAccount &a, const ElementAccount &b) {
-  return a.user == b.user;
-}
 ElementAccount res1[1000], res2[1000],
     res_ElementAccount; // 所有res1用于索引块操作。res2用于数据块操作。
 MemoryRiver<ElementAccount, 3>
     Data("Account.txt"); // 三个参数：总块数，开头，当前数据块存放位置。
-int largest = 500;
-int limit = 480;
 
 ElementAccount ArrayInsert(ElementAccount &to_insert, int place, int size,
                            bool &flag) {
@@ -174,7 +173,7 @@ bool ArrayDel(ElementAccount &to_del, int place, int size) {
   return 1;
 }
 
-int IndexFind(const ElementAccount &x) {
+int IndexFind(ElementAccount &x) {
   int start, total;
   Data.get_info(start, 2);
   Data.get_info(total, 1);
@@ -217,7 +216,7 @@ void SplitBlock(int num, int size) {
   return;
 }
 
-int Ins(ElementAccount to_insert) {
+bool Ins(ElementAccount to_insert) {
   int total, start, current;
   Data.get_info(total, 1);
   Data.get_info(start, 2);
@@ -235,6 +234,7 @@ int Ins(ElementAccount to_insert) {
   } // 说明没有元素。
   ElementAccount tmp, tmp2;
   int target = IndexFind(to_insert); // 目标链
+  assert(0);
   Data.read(tmp, 12 + (target - 1) * sizeof(ElementAccount));
   bool bad = 0;
   tmp2 = ArrayInsert(to_insert, tmp.Getplace(), tmp.Getsize(), bad);

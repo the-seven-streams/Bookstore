@@ -17,9 +17,9 @@ public:
   void Setplace(int);
   int Getblock_nxt();
   void Setblock_nxt(int);
-  friend bool operator<(const ElementAccount &, const ElementAccount &);
-  friend bool operator>(const ElementAccount &, const ElementAccount &);
-  friend bool operator==(const ElementAccount &, const ElementAccount &);
+  bool operator<(const ElementAccount &);
+  bool operator>(const ElementAccount &);
+  bool operator==(const ElementAccount &);
 };
 namespace RubbishAccount{
 bool Insert(Account);//该函数插入成功为1，失败为0。
