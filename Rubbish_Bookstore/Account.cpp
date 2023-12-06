@@ -61,6 +61,11 @@ void Account::Register() {
   return;
 }
 
+void ChangePassword(char*, char*) {
+  Account to_find;
+  to_find.SetuserID(userid);
+}
+
 bool Account::operator<(const Account &b) {
   return strcmp(userid, b.userid) < 0;
 }
@@ -69,18 +74,4 @@ bool Account::operator>(const Account &b) {
 }
 bool Account::operator==(const Account &b) {
   return strcmp(userid, b.userid) == 0;
-}
-
-
-
-int main() {
-  int n;
-  std::cin>>n;
-  for(int i = 0; i < n; ++i) {
-    Account tmp;
-    tmp.Register();
-    Account w = RubbishAccount::Find(tmp);
-    std::cout << (w == tmp);
-  }
-  return 0;
 }
