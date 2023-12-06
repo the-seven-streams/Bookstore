@@ -10,7 +10,11 @@ private:
 
 public:
   Account user;
-  ElementAccount() = default;
+  ElementAccount() {
+    size = 0;
+    block_place = 0;
+    block_nxt = 0;
+  }
   void Setsize(int);
   int Getsize();
   int Getplace();

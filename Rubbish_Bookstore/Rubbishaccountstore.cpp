@@ -12,7 +12,6 @@ using std::cout;
 using std::fstream;
 using std::lower_bound;
 using std::string;
-
 const int minus_inf = -2147483648;
 const int largest = 500;
 const int limit = 480;
@@ -234,7 +233,6 @@ bool Ins(ElementAccount to_insert) {
   } // 说明没有元素。
   ElementAccount tmp, tmp2;
   int target = IndexFind(to_insert); // 目标链
-  assert(0);
   Data.read(tmp, 12 + (target - 1) * sizeof(ElementAccount));
   bool bad = 0;
   tmp2 = ArrayInsert(to_insert, tmp.Getplace(), tmp.Getsize(), bad);
