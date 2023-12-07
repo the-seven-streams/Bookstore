@@ -1,25 +1,25 @@
-#include<bits/stdc++.h>
-template<class T>
-class Element {//这一部分不需要在意。存储所需。
-private:
-  int size;        
-  int block_place; 
-  int block_nxt;  
-
-public:
-  T element;
-  Element() {
-    size = 0;
-    block_place = 0;
-    block_nxt = 0;
-  }
-  void Setsize(int);
-  int Getsize();
-  int Getplace();
-  void Setplace(int);
-  int Getblock_nxt();
-  void Setblock_nxt(int);
-  bool operator<(const T &) const;
-  bool operator>(const T &) const;
-  bool operator==(const T &) const;
-};
+#include"Store.hpp"
+bool Element::operator<(const Element &b) const{
+  return user < b.user;
+}
+bool Element::operator>(const Element &b) const{
+  return user > b.user;
+}
+bool Element::operator==(const Element &b) const{
+  return user == b.user;
+}
+int Element::Getsize() { return size; }
+void Element::Setsize(int x) {
+  size = x;
+  return;
+}
+int Element::Getplace() { return block_place; }
+void Element::Setplace(int x) {
+  block_place = x;
+  return;
+}
+int Element::Getblock_nxt() { return block_nxt; }
+void Element::Setblock_nxt(int x) {
+  block_nxt = x;
+  return;
+}
