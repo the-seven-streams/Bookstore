@@ -5,6 +5,7 @@
 using std::string;
 
 std::stack<Account> status;
+std::stack<string> selected;
 std::multiset<Account> used;
 extern int current_power;
 
@@ -14,6 +15,7 @@ void Logout() {
   } else {
     used.erase(used.find(status.top()));
     status.pop();
+    selected.pop();
     if(status.empty()) {
       current_power = 0;
     } else {
@@ -39,6 +41,7 @@ void Login(char* id, char* pwd = nullptr) {
     }
   }
   status.push(to_check);
+  selected.push("");
   used.insert(to_check);
   current_power = to_check.Getpower();
   return;

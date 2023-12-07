@@ -9,7 +9,9 @@ using std::fstream;
 
 class BookISBN: public Book{
 public:
-  friend bool operator<(const BookISBN& lhs, const BookISBN& rhs);
+  bool operator<(const BookISBN &) const;
+  bool operator>(const BookISBN &) const;
+  bool operator==(const BookISBN &) const;
 };
 
 #endif

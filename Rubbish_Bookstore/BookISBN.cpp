@@ -1,6 +1,12 @@
 #include "BookISBN.hpp"
 #include "Book.hpp"
 
-bool operator<(const BookISBN& lhs, const BookISBN& rhs) {
-  return strcmp(lhs.ISBN, rhs.ISBN) < 0;
+bool BookISBN::operator<(const BookISBN &b) const {
+  return ISBN < b.ISBN;
+}
+bool BookISBN::operator>(const BookISBN &b) const {
+  return ISBN > b.ISBN;
+}
+bool BookISBN::operator==(const BookISBN &b) const {
+  return ISBN == b.ISBN;
 }

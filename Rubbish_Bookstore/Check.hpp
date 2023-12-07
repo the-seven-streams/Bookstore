@@ -8,7 +8,12 @@
 //所有的下划线记作underline，在之后的表示中将以U来简化。
 
 void CheckNLU(char *);
+void CheckVisible(char *);
 void CheckN(char *);
 void CheckEmpty(std::string);
 void CheckSize30(char *);
+void CheckSize60(char *);
+void CheckSize20(char *);
+void CheckVisibleNoQuotation(char *);
+void CheckReal(char *);
 #endif

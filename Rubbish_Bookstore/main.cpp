@@ -129,6 +129,11 @@ int main() {
         }
         exit(0);
       }
+      if(command == "select") {
+        if(current_power < 3) {
+          throw(0);
+        }//权限不够。
+      }
       throw(0); // 捕获无效指令。
     }
   catch (int) { // 针对程序中出现的所有问题进行捕获。

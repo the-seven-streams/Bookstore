@@ -60,6 +60,7 @@ void Register(char *id, char *pwd, char *name) {
   CheckSize30(name);
   CheckNLU(id);//检查内容合法性。
   CheckNLU(pwd);
+  CheckVisible(name);
   Account tmp;
   tmp.SetuserID(id);
   if(RubbishAccount::Find(tmp) == tmp) {
@@ -73,8 +74,10 @@ void Register(char *id, char *pwd, char *name) {
 }
 
 void ChangePassword(char *id, char *old_pw, char *new_pw) {
+  CheckSize30(id);
   CheckSize30(old_pw);
   CheckSize30(new_pw);
+  CheckNLU(id);
   CheckNLU(old_pw);
   CheckNLU(new_pw);
   Account tmp;
@@ -101,6 +104,8 @@ void ChangePassword(char *id, char *old_pw, char *new_pw) {
 }
 
 void DeleteAccount(char *id) {  
+  CheckSize30(id);
+  CheckNLU(id);
   Account tmp;
   tmp.SetuserID(id);
   if(!(RubbishAccount::Find(tmp) == tmp)) {
@@ -117,9 +122,13 @@ void DeleteAccount(char *id) {
 }
 
 void Addaccount(char *id, char *pw, char *pr, char *name) {
+  CheckSize30(id);
+  CheckSize30(pw);
+  CheckSize30(name);
   CheckNLU(id);
   CheckNLU(pw);
   CheckN(pr);
+  CheckVisible(name);
   int len = strlen(pr);
   if(len != 1) {
     throw(0);
