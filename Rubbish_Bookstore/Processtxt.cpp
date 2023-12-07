@@ -26,6 +26,6 @@ string ProcessKey(string &txt) {
   }
   if(txt[0] == '|') {
     txt.erase(0, 1);
-  })
+  }
   return tmp;
 }
