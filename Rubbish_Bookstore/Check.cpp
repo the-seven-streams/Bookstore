@@ -25,3 +25,17 @@ void CheckNLU(char *str) {
   }
   return;
 }
+
+void CheckEmpty(std::string txt) {
+  if(!txt.empty()) {
+    throw(0);
+  }
+  return;
+}
+
+void CheckSize30(char *str) {
+  if(strlen(str) > 30) {
+    throw(0);
+  }
+  return;
+}

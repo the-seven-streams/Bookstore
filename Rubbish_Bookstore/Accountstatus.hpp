@@ -4,5 +4,5 @@
 #ifndef ACCOUNTSTATUS_HPP
 #define ACCOUNTSTATUS_HPP
 void Logout();
-void Login();
+void Login(char *, char *);
 #endif

@@ -1,6 +1,7 @@
 #include"Accountstatus.hpp"
 #include"Account.hpp"
 #include"Rubbishaccountstore.hpp"
+#include <cstring>
 using std::string;
 
 std::stack<Account> status;
@@ -30,10 +31,10 @@ void Login(char* id, char* pwd = nullptr) {
   if(!(to_check == tmp)) {
     throw(0);//说明没有找到。
   }
-  if(pwd != nullptr) {
+  if(strlen(pwd)) {
     to_check.Right(pwd);//如果密码错误，即退出。
   } else {
-    if(current_power != 7) {
+    if(current_power <= to_check.Getpower()) {
       throw(0);//说明没有权限。
     }
   }

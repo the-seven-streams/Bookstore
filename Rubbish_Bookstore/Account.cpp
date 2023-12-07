@@ -32,11 +32,13 @@ void Account::Setroot() {
 }
 
 void Account::SetuserID(char *id) {
+  CheckSize30(id);
   strcpy(userid, id);
   return;
 }
 
 void Account::Setpassword(char *pwd) {
+  CheckSize30(pwd);
   strcpy(password, pwd);
   return;
 }
@@ -53,6 +55,9 @@ void Account::Right(char *pwd) {
 }
 
 void Register(char *id, char *pwd, char *name) {
+  CheckSize30(id);
+  CheckSize30(pwd);
+  CheckSize30(name);
   CheckNLU(id);//检查内容合法性。
   CheckNLU(pwd);
   Account tmp;
@@ -68,6 +73,10 @@ void Register(char *id, char *pwd, char *name) {
 }
 
 void ChangePassword(char *id, char *old_pw, char *new_pw) {
+  CheckSize30(old_pw);
+  CheckSize30(new_pw);
+  CheckNLU(old_pw);
+  CheckNLU(new_pw);
   Account tmp;
   tmp.SetuserID(id);
   Account to_change;
@@ -91,7 +100,7 @@ void ChangePassword(char *id, char *old_pw, char *new_pw) {
   return;
 }
 
-void DeleteAccount(char *id) {
+void DeleteAccount(char *id) {  
   Account tmp;
   tmp.SetuserID(id);
   if(!(RubbishAccount::Find(tmp) == tmp)) {
@@ -100,7 +109,10 @@ void DeleteAccount(char *id) {
   if(used.find(tmp) != used.end()) {
     throw(0);
   }//说明该账户正在被使用，无法删除。
-  RubbishAccount::Delete(tmp);
+  int ok = RubbishAccount::Delete(tmp);
+  if(!ok) {
+    throw(0);
+  }
   return;
 }
 
@@ -109,14 +121,14 @@ void Addaccount(char *id, char *pw, char *pr, char *name) {
   CheckNLU(pw);
   CheckN(pr);
   int len = strlen(pr);
-  if(len != 0) {
+  if(len != 1) {
     throw(0);
   }//说明权限输入错误。
   int num = pr[0] - '0';
   if(num >= current_power) {
     throw(0);
   }//当前权限不足。
-  if(num!=1 && num!=3 && num!=7) {
+  if(num!= 1 && num!= 3 && num!= 7) {
     throw(0);
   }//权限不正确。
   Account tmp;
@@ -125,7 +137,7 @@ void Addaccount(char *id, char *pw, char *pr, char *name) {
     throw(0);
   }//说明该账户已经被注册。
   tmp.Setpassword(pw);
-  tmp.power = pr[0] - '0';
+  tmp.power = num;
   strcpy(tmp.username, name);
   RubbishAccount::Insert(tmp);
   return;

@@ -144,6 +144,9 @@ bool ArrayFind(ElementAccount &to_find, int place, int size,
                bool &found) {
   Data.read(res2[1], place * largest * sizeof(ElementAccount) + 12, size);
   int num = lower_bound(res2 + 1, res2 + size + 1, to_find) - res2;
+  if(num > size) {
+    return 0;
+  }
     if (res2[num] == to_find) {
       found = 1;
       to_find = res2[num];

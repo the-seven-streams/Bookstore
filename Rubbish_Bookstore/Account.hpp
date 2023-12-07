@@ -32,6 +32,10 @@ public:
   friend void DeleteAccount(char *);//done.
   friend void Addaccount(char *, char *, char *, char *);//done;
 };
+void Register(char *, char *, char *); // done.
+void ChangePassword(char *, char *, char *);//done.
+void DeleteAccount(char *);//done.
+void Addaccount(char *, char *, char *, char *);//done;
 void Initital();
 // This function is to initialize the system.
 #endif
