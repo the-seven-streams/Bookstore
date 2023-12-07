@@ -2,6 +2,9 @@
 #include"Store.hpp"
 #ifndef BOOKDATA_HPP
 #define BOOKDATA_HPP
+class Book;
+extern Store<Book> book_main;
+
 class Book {
 protected:
   char ISBN[21];
@@ -12,9 +15,13 @@ protected:
   int quantity;
 public:
   Book();
-  void NewBook(char *);
+  void SetISBN(char *);
   void Modify(char *);
   void Import(char *);
   void Show();
+  virtual bool operator>(const Book &) const;
+  virtual bool operator<(const Book &) const;
+  virtual bool operator==(const Book &) const;
 };
+void NewBook(char *);
 #endif

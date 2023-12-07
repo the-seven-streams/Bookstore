@@ -3,8 +3,10 @@
 #include"Rubbishaccountstore.hpp"
 #include"Check.hpp"
 #include <cstring>
+#include"Book.hpp"
+#include"Store.hpp"
 using std::string;
-
+extern Store<Book> book_main;
 std::stack<Account> status;
 std::stack<string> selected;
 std::multiset<Account> used;
@@ -48,7 +50,7 @@ void Login(char* id, char* pwd = nullptr) {
   return;
 }
 
-void Select(char * isbn) {
+void Select(char *isbn) {
   CheckSize20(isbn);
   CheckVisible(isbn);
   selected.pop();

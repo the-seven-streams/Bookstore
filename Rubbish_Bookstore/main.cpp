@@ -3,15 +3,16 @@
 #include "Check.hpp"
 #include "Processtxt.hpp"
 #include "Rubbishaccountstore.hpp"
+#include "Book.hpp"
 #include "Store.hpp"
 #include <bits/stdc++.h>
 #include <string>
 using std::cin;
 using std::getline;
 using std::string;
-Store<int> x;
 extern int current_power;
 extern std::stack<string> selected;
+Store<Book> book_main;
 int main() {
   char *tmp;
   string txt;

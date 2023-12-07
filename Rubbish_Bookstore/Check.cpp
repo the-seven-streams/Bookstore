@@ -57,7 +57,7 @@ void CheckSize20(char *str) {
 void CheckVisible(char *str) {
   int len = strlen(str);
   for (int i = 0; i < len; ++i) {
-    if (str[i] < 32 || str[i] > 126) {
+    if (str[i] <= 32 || str[i] > 126) {
       throw(0);
     }
   }
@@ -67,7 +67,7 @@ void CheckVisible(char *str) {
 void CheckVisibleNoQuotation(char *str) {
   int len = strlen(str);
   for (int i = 0; i < len; ++i) {
-    if (str[i] < 32 || str[i] > 126) {
+    if (str[i] <= 32 || str[i] > 126) {
       if(str[i] == '\"') {
         throw(0);
       }
