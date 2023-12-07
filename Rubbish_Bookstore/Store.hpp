@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include "Book.hpp"
 #ifndef STORE_HPP
 #define STORE_HPP
 using std::cout;
@@ -112,6 +113,9 @@ private:
   MemoryRiver<Element<T>, 3> Data;
 
 public:
+  Store(string txt) : Data(txt) {
+    Data.initialise();
+  }
   Element<T> ArrayInsert(Element<T> &to_insert, int place, int size,
                          bool &flag) {
     Data.read(res2[1], place * largest * sizeof(Element<T>) + 12, size);

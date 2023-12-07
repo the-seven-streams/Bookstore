@@ -12,10 +12,10 @@ using std::getline;
 using std::string;
 extern int current_power;
 extern std::stack<string> selected;
-Store<Book> book_main;
-Store<KeyBook> book_author;
-Store<KeyBook> book_name;
-Store<KeyBook> book_keyword;
+Store<Book> book_main("book_main.txt");
+Store<KeyBook> book_author("book_author.txt");
+Store<KeyBook> book_name("book_name.txt");
+Store<KeyBook> book_keyword("book_keyword.txt");
 int main() {
   char *tmp;
   string txt;

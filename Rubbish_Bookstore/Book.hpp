@@ -1,7 +1,7 @@
 #include<bits/stdc++.h>
+#ifndef BOOK_HPP
+#define BOOK_HPP
 #include"Store.hpp"
-#ifndef BOOKDATA_HPP
-#define BOOKDATA_HPP
 class Book;
 extern Store<Book> book_main;
 
