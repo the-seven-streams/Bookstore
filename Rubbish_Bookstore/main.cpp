@@ -13,6 +13,9 @@ using std::string;
 extern int current_power;
 extern std::stack<string> selected;
 Store<Book> book_main;
+Store<KeyBook> book_author;
+Store<KeyBook> book_name;
+Store<KeyBook> book_keyword;
 int main() {
   char *tmp;
   string txt;

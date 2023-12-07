@@ -23,5 +23,14 @@ public:
   virtual bool operator<(const Book &) const;
   virtual bool operator==(const Book &) const;
 };
+
+class KeyBook : public Book { 
+private:
+  char key[61];
+public:
+  bool operator>(const KeyBook &) const;
+  bool operator<(const KeyBook &) const;
+  bool operator==(const KeyBook &) const;
+};
 void NewBook(char *);
 #endif
