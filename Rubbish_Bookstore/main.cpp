@@ -10,6 +10,7 @@ using std::getline;
 using std::string;
 
 extern int current_power;
+extern std::stack<string> selected;
 int main() {
   char *tmp;
   string txt;
@@ -133,6 +134,11 @@ int main() {
         if(current_power < 3) {
           throw(0);
         }//权限不够。
+        string ISBN = ProcessTxt(txt);
+        if(!txt.empty()) {
+          throw(0);
+        }
+        Select(const_cast<char *>(ISBN.c_str()));
       }
       throw(0); // 捕获无效指令。
     }

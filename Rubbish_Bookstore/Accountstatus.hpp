@@ -5,4 +5,5 @@
 #define ACCOUNTSTATUS_HPP
 void Logout();
 void Login(char *, char *);
+void Select(char *);
 #endif

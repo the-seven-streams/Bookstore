@@ -1,6 +1,7 @@
 #include"Accountstatus.hpp"
 #include"Account.hpp"
 #include"Rubbishaccountstore.hpp"
+#include"Check.hpp"
 #include <cstring>
 using std::string;
 
@@ -44,5 +45,13 @@ void Login(char* id, char* pwd = nullptr) {
   selected.push("");
   used.insert(to_check);
   current_power = to_check.Getpower();
+  return;
+}
+
+void Select(char * isbn) {
+  CheckSize20(isbn);
+  CheckVisible(isbn);
+  selected.pop();
+  selected.push(isbn);
   return;
 }
