@@ -11,7 +11,7 @@ using std::cin;
 using std::getline;
 using std::string;
 extern int current_power;
-extern std::stack<string> selected;
+extern std::vector<Book> selected;
 extern Book an_empty_book;
 extern KeyBook an_empty_keybook;
 Store<Book> book_main("book_main.txt");

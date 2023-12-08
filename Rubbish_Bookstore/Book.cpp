@@ -4,6 +4,8 @@
 #include <bits/stdc++.h>
 #include <cstring>
 
+extern std::vector<Book> selected;
+
 Book::Book() {
   strcpy(ISBN, "");
   strcpy(name, "");
@@ -93,5 +95,18 @@ void Book::Show() {
   cout <<'\t';
   cout << quantity;
   cout <<'\n';
+  return;
+}
+
+void Select(char *txt) {
+  Book tmp;
+  tmp.SetISBN(txt);
+  if(book_main.Find(tmp) == an_empty_book) {
+    NewBook(txt);//主库未找到数据。新增一本书。 
+  } else {
+    tmp = book_main.Find(tmp);
+    selected.pop_back();
+    selected.push_back(tmp);
+  }
   return;
 }

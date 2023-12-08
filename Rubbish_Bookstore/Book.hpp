@@ -37,5 +37,5 @@ public:
   bool operator<(const KeyBook &) const;
   bool operator==(const KeyBook &) const;
 };
-void NewBook(char *);
+void Select(char *);
 #endif

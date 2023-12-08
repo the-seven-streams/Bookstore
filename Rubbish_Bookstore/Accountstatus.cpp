@@ -8,7 +8,7 @@
 using std::string;
 extern Store<Book> book_main;
 std::stack<Account> status;
-std::stack<Book> selected;
+std::vector<Book> selected;
 std::multiset<Account> used;
 extern int current_power;
 extern Book an_empty_book;
@@ -19,7 +19,7 @@ void Logout() {
   } else {
     used.erase(used.find(status.top()));
     status.pop();
-    selected.pop();
+    selected.pop_back();
     if(status.empty()) {
       current_power = 0;
     } else {
@@ -47,6 +47,6 @@ void Login(char* id, char* pwd = nullptr) {
   status.push(to_check);
   used.insert(to_check);
   current_power = to_check.Getpower();
-  selected.push(an_empty_book);
+  selected.push_back(an_empty_book);
   return;
 }
