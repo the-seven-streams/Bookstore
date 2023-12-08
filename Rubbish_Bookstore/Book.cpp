@@ -110,3 +110,18 @@ void Select(char *txt) {
   }
   return;
 }
+
+void Showall() {
+  book_main.PrintAll();
+  return;
+}
+void ShowISBN(char *isbn) {
+  Book tmp;
+  tmp.SetISBN(isbn);
+  tmp = book_main.Find(tmp);
+  if(tmp == an_empty_book) {
+    throw(0);
+  }
+  tmp.Show();
+  return;
+}

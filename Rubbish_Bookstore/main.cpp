@@ -137,6 +137,62 @@ int main() {
         }
         exit(0);
       }
+      if(command == "select") {
+        if(current_power < 3) {
+          throw(0);
+        }
+        string ISBN = ProcessTxt(txt); // 捕获ISBN。
+        if (ISBN.empty()) {
+          throw(0);
+        }
+        CheckEmpty(txt);//检查是否有冗余参数。
+        Select(const_cast<char *>(ISBN.c_str()));
+        continue;
+      }
+      if(command == "show") {
+        if(!current_power) {
+          throw(0);
+        }
+        string addtion = ProcessTxt(txt);
+        if(txt.empty()) {
+          Showall();
+          continue;
+        }
+        if(addtion[0] != '-') {
+          throw(0);
+        }
+        addtion.erase(0, 1);//删除减号。
+        if(addtion.empty()) {
+          throw(0);
+        }//弟啊，你参数呢。
+        if(addtion[0] == 'I') {
+          if(addtion.size() < 6) {
+            throw(0);
+          }
+          addtion.erase(0,1);
+          if(addtion[0] != 'S') {
+            throw(0);
+          }
+          addtion.erase(0,1);
+          if(addtion[0] != 'B') {
+            throw(0);
+          }
+          addtion.erase(0,1);
+          if(addtion[0] != 'N') {
+            throw(0);
+          }
+          addtion.erase(0,1);
+          if(addtion[0] != '=') {
+            throw(0);
+          }
+          addtion.erase(0,1);
+          if(addtion.empty()) {
+            throw(0);
+          }
+          ShowISBN(const_cast<char *>(addtion.c_str()));
+          continue;
+        }
+      }
       throw(0);     // 捕获无效指令。
     } catch (int) { // 针对程序中出现的所有问题进行捕获。
       std::cout << "Invalid\n";

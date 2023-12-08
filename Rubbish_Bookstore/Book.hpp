@@ -42,4 +42,5 @@ void Showall();
 void ShowAuthor(char *);
 void ShowName(char *);
 void ShowKeyword(char *);
+void ShowISBN(char *);
 #endif
