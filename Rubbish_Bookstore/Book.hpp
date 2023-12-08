@@ -36,6 +36,7 @@ public:
   bool operator>(const KeyBook &) const;
   bool operator<(const KeyBook &) const;
   bool operator==(const KeyBook &) const;
+  void SetKey(char *);
 };
 void Select(char *);
 void Showall();

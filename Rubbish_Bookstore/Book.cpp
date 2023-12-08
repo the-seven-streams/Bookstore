@@ -116,6 +116,8 @@ void Showall() {
   return;
 }
 void ShowISBN(char *isbn) {
+  CheckSize20(isbn);
+  CheckVisible(isbn);
   Book tmp;
   tmp.SetISBN(isbn);
   tmp = book_main.Find(tmp);
@@ -233,4 +235,36 @@ void Processshow(string txt) {
     return;
   }
   throw(0);
+}
+
+void KeyBook::SetKey(char *txt) {
+ strcpy(key, txt);
+ return; 
+}
+
+void ShowAuthor(char *author) {
+  CheckSize60(author);
+  CheckVisibleNoQuotation(author);
+  KeyBook tmp;
+  tmp.SetKey(author);
+  book_author.FindAll(tmp);
+  return;
+}
+
+void ShowName(char *name) {
+  CheckSize60(name);
+  CheckVisibleNoQuotation(name);
+  KeyBook tmp;
+  tmp.SetKey(name);
+  book_name.FindAll(tmp);
+  return;
+}
+
+void ShowKeyword(char *keyword) {
+  CheckSize60(keyword);
+  CheckVisibleNoQuotation(keyword);
+  KeyBook tmp;
+  tmp.SetKey(keyword);
+  book_keyword.FindAll(tmp);
+  return;
 }
