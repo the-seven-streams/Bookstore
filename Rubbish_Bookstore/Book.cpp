@@ -74,4 +74,24 @@ void NewBook(char * txt) {
   book_main.Insert(tmp);//添加入主库。
   KeyBook tmp1;
   tmp1.SetISBN(txt);
+  book_author.Insert(tmp1);//添加入作者库。
+  book_keyword.Insert(tmp1);//添加入关键词库。
+  book_name.Insert(tmp1);//添加入书名库。
+  return;
+}
+
+void Book::Show() {
+  cout << ISBN;
+  cout <<'\t';
+  cout << name;
+  cout <<'\t';
+  cout << author;
+  cout <<'\t';
+  cout << keyword;
+  cout <<'\t';
+  cout << std::fixed << std::setprecision(2) << price;//设置价格精度。
+  cout <<'\t';
+  cout << quantity;
+  cout <<'\n';
+  return;
 }

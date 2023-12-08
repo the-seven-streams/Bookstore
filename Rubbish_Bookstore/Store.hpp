@@ -1,3 +1,4 @@
+#include <algorithm>
 #include <bits/stdc++.h>
 #ifndef STORE_HPP
 #define STORE_HPP
@@ -5,6 +6,8 @@
 using std::cout;
 using std::fstream;
 using std::string;
+using std::upper_bound;
+using std::lower_bound;
 
 template <class T> class Element {
 private:
@@ -322,6 +325,46 @@ public:
     }
     return flag;
   }
+bool ArrayFindAll(const Element<T> &to_find, int place, int size, bool &found) {
+  Data.read(res2[1], place * largest * sizeof(Element<T>) + 12, size);
+  int num = lower_bound(res2 + 1, res2 + size + 1, to_find) - res2;
+  for (int i = num; i <= size; i++) {
+    if (strcmp(res2[i].key, to_find.key) == 0) {
+      found = 1;
+      cout << res2[i].Getvalue() << ' ';
+    }
+    if (strcmp(res2[i].key, to_find.key) != 0) {
+      return 0;
+    }
+  }
+  return 1;
+}
+
+void FindA(Element<T> to_find) {
+  int total, start;
+  int target = IndexFind(to_find);
+  Data.get_info(total, 1);
+  Data.get_info(start, 2);
+  if(!total) {
+    cout << "\n";
+    return;
+  }
+  Element<T> tmp;
+  int flag = 1;
+  bool found = 0;
+  while (flag) {
+    Data.read(tmp, 12 + (target - 1) * sizeof(Element<T>));
+    flag = ArrayFindAll(to_find, tmp.Getplace(), tmp.Getsize(), found);
+    target = tmp.Getblock_nxt();
+    if (!target) {
+      break;
+    }
+  }
+  if (!found) {
+    cout << "\n";
+  }
+  return;
+}
 
 public:
   bool Insert(T to_insert) {
@@ -338,7 +381,7 @@ public:
       T x;
       return x;
     } else {
-      return tmp.user;
+      return tmp.element;
     }
   }
   bool Delete(T to_del) {
@@ -346,6 +389,12 @@ public:
     tmp.element = to_del;
     bool ok = Del(tmp);
     return ok;
+  }
+  void FindAll(T to_find_all) {
+    Element<T> tmp;
+    tmp.element = to_find_all;
+    FindA(tmp);
+    return;
   }
 };
 #endif
