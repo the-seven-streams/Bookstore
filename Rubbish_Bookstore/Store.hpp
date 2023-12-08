@@ -396,5 +396,22 @@ public:
     FindA(tmp);
     return;
   }
+  void PrintAll() {
+    int total, start;
+    Data.get_info(total, 1);
+    Data.get_info(start, 2);
+    if (!total) {
+      cout << "\n";
+      return;
+    }//说明没有元素。输出空行。
+    Data.read(res1[1], 12, total);
+    for(int i = start; i; i = res1[i].Getblock_nxt()) {
+      Data.read(res2[1], res1[i].Getplace() * largest * sizeof(Element<T>) + 12, res1[i].Getsize());
+      for(int j = 1; j <= res1[i].Getsize(); j++) {
+        res2[j].Show;
+    }
+  }
+  return;
+  }
 };
 #endif

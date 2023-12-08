@@ -38,4 +38,8 @@ public:
   bool operator==(const KeyBook &) const;
 };
 void Select(char *);
+void Showall();
+void ShowAuthor(char *);
+void ShowName(char *);
+void ShowKeyword(char *);
 #endif
