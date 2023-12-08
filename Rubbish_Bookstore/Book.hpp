@@ -32,6 +32,7 @@ class KeyBook : public Book {
 protected:
   char key[61];
 public:
+  friend class Store<KeyBook>;
   KeyBook();
   bool operator>(const KeyBook &) const;
   bool operator<(const KeyBook &) const;

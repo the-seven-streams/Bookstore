@@ -165,7 +165,8 @@ int main() {
         if(addtion.empty()) {
           throw(0);
         }//弟啊，你参数呢。
-        
+        Processshow(addtion);
+        continue;
       }
 
       throw(0);     // 捕获无效指令。

@@ -265,8 +265,7 @@ public:
     Data.get_info(total, 1);
     Data.get_info(start, 2);
     if (!total) {
-      cout << "null\n";
-      return 1;
+      return 0;
     }
     Element<T> tmp;
     int flag = 1;
@@ -330,11 +329,11 @@ bool ArrayFindAll(const Element<T> &to_find, int place, int size, bool &found) {
   Data.read(res2[1], place * largest * sizeof(Element<T>) + 12, size);
   int num = lower_bound(res2 + 1, res2 + size + 1, to_find) - res2;
   for (int i = num; i <= size; i++) {
-    if (strcmp(res2[i].key, to_find.key) == 0) {
+    if (strcmp(res2[i].element.key, to_find.element.key) == 0) {
       found = 1;
-      cout << res2[i].Getvalue() << ' ';
+      res2[i].element.Show();
     }
-    if (strcmp(res2[i].key, to_find.key) != 0) {
+    if (strcmp(res2[i].element.key, to_find.element.key) != 0) {
       return 0;
     }
   }
@@ -415,9 +414,5 @@ public:
   return;
   }
 };
-extern Store<Book> book_main;
-extern Store<KeyBook> book_author;
-extern Store<KeyBook> book_name;
-extern Store<KeyBook> book_keyword;
 
 #endif
