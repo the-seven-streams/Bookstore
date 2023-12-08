@@ -1,14 +1,15 @@
 #include <algorithm>
 #include <bits/stdc++.h>
+#include "Book.hpp"
 #ifndef STORE_HPP
 #define STORE_HPP
-#include "Book.hpp"
 using std::cout;
 using std::fstream;
 using std::string;
 using std::upper_bound;
 using std::lower_bound;
-
+class Book;
+class KeyBook;
 template <class T> class Element {
 private:
   int size;
@@ -408,10 +409,15 @@ public:
     for(int i = start; i; i = res1[i].Getblock_nxt()) {
       Data.read(res2[1], res1[i].Getplace() * largest * sizeof(Element<T>) + 12, res1[i].Getsize());
       for(int j = 1; j <= res1[i].Getsize(); j++) {
-        res2[j].Show;
+        res2[j].element.Show();
     }
   }
   return;
   }
 };
+extern Store<Book> book_main;
+extern Store<KeyBook> book_author;
+extern Store<KeyBook> book_name;
+extern Store<KeyBook> book_keyword;
+
 #endif

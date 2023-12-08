@@ -229,5 +229,8 @@ void Processshow(string txt) {
       throw(0);
     }
     txt.erase(0, 9);
+    ShowKeyword(const_cast<char *>(txt.c_str()));
+    return;
   }
+  throw(0);
 }
