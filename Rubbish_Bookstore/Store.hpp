@@ -1,7 +1,7 @@
 #include <bits/stdc++.h>
-#include "Book.hpp"
 #ifndef STORE_HPP
 #define STORE_HPP
+#include "Book.hpp"
 using std::cout;
 using std::fstream;
 using std::string;

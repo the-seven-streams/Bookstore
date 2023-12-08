@@ -1,9 +1,9 @@
 #include "Account.hpp"
 #include "Accountstatus.hpp"
+#include "Book.hpp"
 #include "Check.hpp"
 #include "Processtxt.hpp"
 #include "Rubbishaccountstore.hpp"
-#include "Book.hpp"
 #include "Store.hpp"
 #include <bits/stdc++.h>
 #include <string>
@@ -12,6 +12,8 @@ using std::getline;
 using std::string;
 extern int current_power;
 extern std::stack<string> selected;
+extern Book an_empty_book;
+extern KeyBook an_empty_keybook;
 Store<Book> book_main("book_main.txt");
 Store<KeyBook> book_author("book_author.txt");
 Store<KeyBook> book_name("book_name.txt");
@@ -24,7 +26,7 @@ int main() {
     try {
       getline(cin, txt);
       string command = ProcessTxt(txt); // 捕获第一条指令。
-      if(command == "") {
+      if (command == "") {
         continue;
       }
       if (command == "su") {
@@ -39,7 +41,7 @@ int main() {
         continue;
       }
       if (command == "logout") {
-        if(current_power == 0) {
+        if (current_power == 0) {
           throw(0);
         }
         CheckEmpty(txt);
@@ -66,7 +68,7 @@ int main() {
         continue;
       }
       if (command == "passwd") {
-        if(current_power == 0) {
+        if (current_power == 0) {
           throw(0);
         }
         string id = ProcessTxt(txt); // 捕获用户名。
@@ -84,10 +86,10 @@ int main() {
                        const_cast<char *>(newpassword.c_str()));
         continue;
       }
-      if(command == "useradd") {
-        if(current_power  < 3) {
+      if (command == "useradd") {
+        if (current_power < 3) {
           throw(0);
-        } 
+        }
         string id = ProcessTxt(txt); // 捕获用户名。
         if (id.empty()) {
           throw(0);
@@ -97,7 +99,7 @@ int main() {
           throw(0);
         }
         string power = ProcessTxt(txt); // 捕获权限。
-        if(power.empty()) {
+        if (power.empty()) {
           throw(0);
         }
         string name = ProcessTxt(txt); // 捕获姓名。
@@ -111,8 +113,8 @@ int main() {
                    const_cast<char *>(name.c_str()));
         continue;
       }
-      if(command == "delete") {
-        if(current_power != 7) {
+      if (command == "delete") {
+        if (current_power != 7) {
           throw(0);
         }
         string id = ProcessTxt(txt); // 捕获用户名。
@@ -123,32 +125,22 @@ int main() {
         DeleteAccount(const_cast<char *>(id.c_str()));
         continue;
       }
-      if(command == "quit") {
-        if(!txt.empty()) {
+      if (command == "quit") {
+        if (!txt.empty()) {
           throw(0);
         }
         exit(0);
       }
-      if(command == "exit") {
-        if(!txt.empty()) {
+      if (command == "exit") {
+        if (!txt.empty()) {
           throw(0);
         }
         exit(0);
       }
-      if(command == "select") {
-        if(current_power < 3) {
-          throw(0);
-        }//权限不够。
-        string ISBN = ProcessTxt(txt);
-        if(!txt.empty()) {
-          throw(0);
-        }
-        Select(const_cast<char *>(ISBN.c_str()));
-      }
-      throw(0); // 捕获无效指令。
+      throw(0);     // 捕获无效指令。
+    } catch (int) { // 针对程序中出现的所有问题进行捕获。
+      std::cout << "Invalid\n";
     }
-  catch (int) { // 针对程序中出现的所有问题进行捕获。
-    std::cout << "Invalid\n";
   }
-}
+  return 0;
 }

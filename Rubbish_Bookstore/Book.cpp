@@ -41,3 +41,6 @@ bool KeyBook::operator<(const KeyBook &b) const {
 bool KeyBook::operator==(const KeyBook &b) const {
   return strcmp(key, b.keyword) == 0;
 }
+
+Book an_empty_book;
+KeyBook an_empty_keybook;

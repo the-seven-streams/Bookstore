@@ -8,10 +8,11 @@
 using std::string;
 extern Store<Book> book_main;
 std::stack<Account> status;
-std::stack<string> selected;
+std::stack<Book> selected;
 std::multiset<Account> used;
 extern int current_power;
-
+extern Book an_empty_book;
+extern KeyBook an_empty_keybook;
 void Logout() {
   if(status.empty()) {
     throw(0);//说明没有登录。
@@ -44,16 +45,8 @@ void Login(char* id, char* pwd = nullptr) {
     }
   }
   status.push(to_check);
-  selected.push("");
   used.insert(to_check);
   current_power = to_check.Getpower();
-  return;
-}
-
-void Select(char *isbn) {
-  CheckSize20(isbn);
-  CheckVisible(isbn);
-  selected.pop();
-  selected.push(isbn);
+  selected.push(an_empty_book);
   return;
 }
