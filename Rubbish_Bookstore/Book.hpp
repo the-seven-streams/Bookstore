@@ -43,4 +43,5 @@ void ShowAuthor(char *);
 void ShowName(char *);
 void ShowKeyword(char *);
 void ShowISBN(char *);
+void Processshow(string);
 #endif

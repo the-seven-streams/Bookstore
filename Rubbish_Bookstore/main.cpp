@@ -154,45 +154,20 @@ int main() {
           throw(0);
         }
         string addtion = ProcessTxt(txt);
-        if(txt.empty()) {
+        if(addtion.empty()) {
           Showall();
           continue;
         }
         if(addtion[0] != '-') {
           throw(0);
-        }
+        }//删除必然存在的减号。
         addtion.erase(0, 1);//删除减号。
         if(addtion.empty()) {
           throw(0);
         }//弟啊，你参数呢。
-        if(addtion[0] == 'I') {
-          if(addtion.size() < 6) {
-            throw(0);
-          }
-          addtion.erase(0,1);
-          if(addtion[0] != 'S') {
-            throw(0);
-          }
-          addtion.erase(0,1);
-          if(addtion[0] != 'B') {
-            throw(0);
-          }
-          addtion.erase(0,1);
-          if(addtion[0] != 'N') {
-            throw(0);
-          }
-          addtion.erase(0,1);
-          if(addtion[0] != '=') {
-            throw(0);
-          }
-          addtion.erase(0,1);
-          if(addtion.empty()) {
-            throw(0);
-          }
-          ShowISBN(const_cast<char *>(addtion.c_str()));
-          continue;
-        }
+        
       }
+
       throw(0);     // 捕获无效指令。
     } catch (int) { // 针对程序中出现的所有问题进行捕获。
       std::cout << "Invalid\n";

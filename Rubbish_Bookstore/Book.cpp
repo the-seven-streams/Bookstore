@@ -125,3 +125,109 @@ void ShowISBN(char *isbn) {
   tmp.Show();
   return;
 }
+
+void Processshow(string txt) {
+  if(txt.size() < 6) {
+    throw(0);
+  }//txt长度至少为6.
+  if(txt[0] == 'I') {
+    if(txt[1] != 'S') {
+      throw(0);
+    }
+    if(txt[2] != 'B') {
+      throw(0);
+    }
+    if(txt[3] != 'N') {
+      throw(0);
+    }
+    if(txt[4] != '=') {
+      throw(0);
+    }
+    txt.erase(0, 5);
+    ShowISBN(const_cast<char *>(txt.c_str()));
+    return;
+  }
+  if(txt[txt.size() - 1] != '\"') {
+    throw(0);
+  }
+  txt.erase(txt.size() - 1, 1);//在剩下的所有指令中，最后一位必须是引号。
+  if(txt.size() < 7) {
+    throw(0);
+  }
+  if(txt[0] == 'n') {
+    if(txt[1] != 'a') {
+      throw(0);
+    }
+    if(txt[2] != 'm') {
+      throw(0);
+    }
+    if(txt[3] != 'e') {
+      throw(0);
+    }
+    if(txt[4] != '=') {
+      throw(0);
+    }
+    if(txt[5] != '\"') {
+      throw(0);
+    }
+    txt.erase(0, 6);
+    ShowName(const_cast<char *>(txt.c_str()));
+    return;
+  }
+  if(txt.size() < 8) {
+    throw(0);
+  }
+  if(txt[0] == 'a') {
+    if(txt[1] != 'u') {
+      throw(0);
+    }
+    if(txt[2] != 't') {
+      throw(0);
+    }
+    if(txt[3] != 'h') {
+      throw(0);
+    }
+    if(txt[4] != 'o') {
+      throw(0);
+    }
+    if(txt[5] != 'r') {
+      throw(0);
+    }
+    if(txt[6] != '=') {
+      throw(0);
+    }
+    if(txt[7] != '\"') {
+      throw(0);
+    }
+    txt.erase(0, 8);
+    ShowAuthor(const_cast<char *>(txt.c_str()));
+    return;
+  }
+  if(txt[0] == 'k') {
+    if(txt[1] != 'e') {
+      throw(0);
+    }
+    if(txt[2] != 'y') {
+      throw(0);
+    }
+    if(txt[3] != 'w') {
+      throw(0);
+    }
+    if(txt[4] != 'o') {
+      throw(0);
+    }
+    if(txt[5] != 'r') {
+      throw(0);
+    }
+    if(txt[6] != 'd') {
+      throw(0);
+    }
+    if(txt[7] != '=') {
+      throw(0);
+    }
+    if(txt[8] != '\"') {
+      throw(0);
+    }
+    txt.erase(0, 9);
+  }
+}
