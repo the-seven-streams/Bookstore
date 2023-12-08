@@ -10,7 +10,6 @@ private:
 
 public:
   Account();
-  Account(std::string);
   ~Account();
   void Setroot(); // done.
   // This function is to set the root account.

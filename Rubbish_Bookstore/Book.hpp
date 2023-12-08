@@ -3,8 +3,11 @@
 #define BOOK_HPP
 #include"Store.hpp"
 class Book;
+class KeyBook;
 extern Store<Book> book_main;
-
+extern Store<KeyBook> book_author;
+extern Store<KeyBook> book_name;
+extern Store<KeyBook> book_keyword;
 class Book {
 protected:
   char ISBN[21];
@@ -16,8 +19,9 @@ protected:
 public:
   Book();
   void SetISBN(char *);
-  void Modify(char *);
+  void Modify(char *, int);
   void Import(char *);
+  void Copy(KeyBook &);
   void Show();
   virtual bool operator>(const Book &) const;
   virtual bool operator<(const Book &) const;
@@ -25,9 +29,10 @@ public:
 };
 
 class KeyBook : public Book { 
-private:
+protected:
   char key[61];
 public:
+  KeyBook();
   bool operator>(const KeyBook &) const;
   bool operator<(const KeyBook &) const;
   bool operator==(const KeyBook &) const;
