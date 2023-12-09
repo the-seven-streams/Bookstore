@@ -124,7 +124,8 @@ void ShowISBN(char *isbn) {
   tmp.SetISBN(isbn);
   tmp = book_main.Find(tmp);
   if(tmp == an_empty_book) {
-    throw(0);
+    cout << '\n';
+    return;
   }
   tmp.Show();
   return;
@@ -149,6 +150,7 @@ void Processshow(string txt) {
     }
     txt.erase(0, 5);
     ShowISBN(const_cast<char *>(txt.c_str()));
+    
     return;
   }
   if(txt[txt.size() - 1] != '\"') {

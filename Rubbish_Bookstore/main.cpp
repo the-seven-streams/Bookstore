@@ -229,9 +229,6 @@ int main() {
         selected.back().Import(q);
         continue;
       }
-      if(command == "2") {
-        book_author.PrintAll();
-      }
       throw(0);     // 捕获无效指令。
     } catch (int) { // 针对程序中出现的所有问题进行捕获。
       std::cout << "Invalid\n";
