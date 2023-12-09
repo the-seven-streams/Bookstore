@@ -5,6 +5,7 @@
 #include <cstring>
 
 extern std::vector<Book> selected;
+extern double total_income;
 
 Book::Book() {
   strcpy(ISBN, "");
@@ -547,5 +548,26 @@ void Book::Import(int num) {
   book_main.Delete(tmp);
   book_main.Insert(tmp1);
   Update(tmp, tmp1);
+  return;
+}
+
+void Buy(char *txt, int number) {
+  CheckSize20(txt);
+  CheckVisible(txt);
+  Book tmp;
+  tmp.SetISBN(txt);
+  tmp = book_main.Find(tmp);
+  if(tmp == an_empty_book) {
+    throw(0);
+  }
+  if(tmp.quantity < number) {
+    throw(0);
+  }
+  tmp.quantity -= number;
+  total_income += tmp.price * number;
+  cout << std::fixed << std::setprecision(2) << tmp.price * number << '\n';
+  book_main.Delete(tmp);
+  book_main.Insert(tmp);
+  Update(tmp, tmp);
   return;
 }
