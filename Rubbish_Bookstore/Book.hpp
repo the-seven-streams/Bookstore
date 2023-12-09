@@ -33,7 +33,7 @@ public:
   void SetAuthor(char *);
   void SetKeyword(char *);
   friend void Update(Book, Book);
-  friend void Buy(char *, int);
+  friend double Buy(char *, int);
   virtual bool operator>(const Book &) const;
   virtual bool operator<(const Book &) const;
   virtual bool operator==(const Book &) const;

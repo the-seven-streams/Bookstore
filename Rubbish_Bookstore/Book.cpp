@@ -556,7 +556,7 @@ void Book::Import(int num) {
   return;
 }
 
-void Buy(char *txt, int number) {
+double Buy(char *txt, int number) {
   CheckSize20(txt);
   CheckVisible(txt);
   Book tmp;
@@ -568,11 +568,14 @@ void Buy(char *txt, int number) {
   if(tmp.quantity < number) {
     throw(0);
   }
+  if(number <= 0) {
+    throw(0);
+  }
   tmp.quantity -= number;
   total_income += tmp.price * number;
   cout << std::fixed << std::setprecision(2) << tmp.price * number << '\n';
   book_main.Delete(tmp);
   book_main.Insert(tmp);
   Update(tmp, tmp);
-  return;
+  return tmp.price * number;
 }
