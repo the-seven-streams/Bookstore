@@ -105,9 +105,9 @@ void Select(char *txt) {
     NewBook(txt);//主库未找到数据。新增一本书。 
   } else {
     tmp = book_main.Find(tmp);
-    selected.pop_back();
-    selected.push_back(tmp);
   }
+  selected.pop_back();
+  selected.push_back(tmp);
   return;
 }
 
@@ -235,6 +235,10 @@ void Processshow(string txt) {
     return;
   }
   throw(0);
+}
+
+char* Book::GetISBN() {
+  return ISBN;
 }
 
 void KeyBook::SetKey(char *txt) {
@@ -398,6 +402,7 @@ void Book::ModifyProcess(string txt) {//传入内容不应该有减号。
       throw(0);
     }
     txt.erase(0, 9);
+    CheckRepeat(txt);
     ModifyKeyword(const_cast<char *>(txt.c_str()));
     return;
   }

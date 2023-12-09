@@ -18,6 +18,8 @@ protected:
   int quantity;
 public:
   Book();
+  void SetName(char *);
+  char* GetISBN();
   void SetISBN(char *);
   void ModifyProcess(string);
   void ModifyISBN(char *){;};

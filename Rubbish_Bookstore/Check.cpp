@@ -1,5 +1,7 @@
 #include "Check.hpp"
-
+#include "Book.hpp"
+#include <cstring>
+extern std::vector<Book> selected;
 void CheckN(char *str) {
   int len = strlen(str);
   for (int i = 0; i < len; ++i) {
@@ -136,6 +138,9 @@ void CheckModify(std::string txt1) {
         throw(0);
       }
       addtion.erase(0, 5);
+      if(strcmp(const_cast<char *>(addtion.c_str()), selected.back().GetISBN()) == 0) {
+        throw(0);
+      }
       CheckSize20(const_cast<char *>(addtion.c_str()));
       CheckVisible(const_cast<char *>(addtion.c_str()));
       isbn = 1;
@@ -273,6 +278,22 @@ void CheckModify(std::string txt1) {
       continue;
     }
     throw(0);
+  }
+  return;
+}
+
+void CheckRepeat(std::string txt1) {
+  std::string txt = txt1;
+  std::set<std::string> s;
+  while(!txt.empty()) {
+    std::string word = ProcessKey(txt);
+    if(word.empty()) {
+      throw(0);
+    }
+    if(s.find(word) != s.end()) {
+      throw(0);
+    }
+    s.insert(word);
   }
   return;
 }

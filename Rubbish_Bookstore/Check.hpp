@@ -18,4 +18,5 @@ void CheckSize20(char *);
 void CheckVisibleNoQuotation(char *);
 void CheckReal(char *);
 void CheckModify(std::string);
+void CheckRepeat(std::string);
 #endif

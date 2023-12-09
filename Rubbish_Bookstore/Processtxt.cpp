@@ -20,12 +20,15 @@ string ProcessTxt(string &txt) {
 
 string ProcessKey(string &txt) {
   string tmp;
+  if(txt[0] == '|') {
+    txt.erase(0, 1);
+  }
   while((!txt.empty()) && txt[0] != '|') {
     tmp += txt[0];
     txt.erase(0, 1);
   }
-  if(txt[0] == '|') {
-    txt.erase(0, 1);
+  if(tmp.empty()) {
+    throw(0);
   }
   return tmp;
 }
