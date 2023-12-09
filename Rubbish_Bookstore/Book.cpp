@@ -469,3 +469,71 @@ void Update(Book old, Book newbook) {
   //插入新书。
   return;
 }
+
+void Book::SetName(char *txt) {
+  strcpy(name, txt);
+  return;
+}
+
+
+void Book::ModifyName(char *txt) {
+  CheckSize60(txt);
+  CheckVisibleNoQuotation(txt);
+  Book tmp, tmp1;
+  tmp = book_main.Find(*this);
+  tmp1 = tmp;
+  tmp1.SetName(txt);
+  //tmp是旧书籍，tmp1是新书籍。
+  book_main.Delete(tmp);
+  book_main.Insert(tmp1);
+  Update(tmp, tmp1);
+  return;
+}
+
+void Book::SetAuthor(char *txt) {
+  strcpy(author, txt);
+  return;
+}
+
+void Book::ModifyAuthor(char *txt) {
+  CheckSize60(txt);
+  CheckVisibleNoQuotation(txt);
+  Book tmp, tmp1;
+  tmp = book_main.Find(*this);
+  tmp1 = tmp;
+  tmp1.SetAuthor(txt);
+  book_main.Delete(tmp);
+  book_main.Insert(tmp1);
+  Update(tmp, tmp1);
+  return;
+}
+
+void Book::SetKeyword(char *txt) {
+  strcpy(keyword, txt);
+  return;
+}
+
+void Book::ModifyKeyword(char *txt) {
+  CheckSize60(txt);
+  CheckVisibleNoQuotation(txt);
+  Book tmp, tmp1;
+  tmp = book_main.Find(*this);
+  tmp1 = tmp;
+  tmp1.SetKeyword(txt);
+  book_main.Delete(tmp);
+  book_main.Insert(tmp1);
+  Update(tmp, tmp1);
+  return;
+}
+
+void Book::ModifyPrice(char *txt) {
+  CheckReal(txt);
+  Book tmp, tmp1;
+  tmp = book_main.Find(*this);
+  tmp1 = tmp;
+  tmp1.price = atof(txt);
+  book_main.Delete(tmp);
+  book_main.Insert(tmp1);
+  Update(tmp, tmp1);
+  return;
+}
