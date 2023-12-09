@@ -441,6 +441,10 @@ void Update(Book old, Book newbook) {
   tmp.SetKey(tmp.name);
   book_name.Delete(tmp);
   string keyword_total = tmp.keyword;
+  if(keyword_total.empty()) {
+    tmp.SetKey(tmp.keyword);
+    book_keyword.Delete(tmp);
+  }
   while(!keyword_total.empty()) {
     string tmp_keyword = ProcessKey(keyword_total);
     tmp.SetKey(const_cast<char *>(tmp_keyword.c_str()));
@@ -453,6 +457,10 @@ void Update(Book old, Book newbook) {
   tmp.SetKey(tmp.name);
   book_name.Insert(tmp);
   keyword_total = tmp.keyword;
+  if(keyword_total.empty()) {
+    tmp.SetKey(tmp.keyword);
+    book_keyword.Insert(tmp);
+  }
   while(!keyword_total.empty()) {
     string tmp_keyword = ProcessKey(keyword_total);
     tmp.SetKey(const_cast<char *>(tmp_keyword.c_str()));

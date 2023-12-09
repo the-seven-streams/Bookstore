@@ -238,7 +238,7 @@ public:
       Data.write_info(total, 2);
       Data.write_info(total, 3);
       Data.write(to_insert, 12, 1);
-      Data.write(to_insert, 12 + largest * sizeof(Element<T>));
+      Data.write(to_insert, 12 + largest * sizeof(Element<T>), 1);
       return 0;
     } // 说明没有元素。
     Element<T> tmp, tmp2;
@@ -321,6 +321,7 @@ public:
           } // 空间重用。
         }
         total--;
+        Data.write_info(total, 1);
       }
     }
     return flag;
