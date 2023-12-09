@@ -19,6 +19,10 @@ Store<Book> book_main("book_main.txt");
 Store<KeyBook> book_author("book_author.txt");
 Store<KeyBook> book_name("book_name.txt");
 Store<KeyBook> book_keyword("book_keyword.txt");
+
+double total_cost = 0;
+double total_income = 0;
+
 int main() {
   char *tmp;
   string txt;
@@ -196,6 +200,36 @@ int main() {
         }
         continue;
       }
+      if(command == "import") {
+        if(current_power < 3) {
+          throw(0);
+        }
+        if(selected.back() == an_empty_book) {
+          throw(0);
+        }//未选中书目。
+        string quantity = ProcessTxt(txt);
+        if(quantity.empty()) {
+          throw(0);
+        }
+        CheckN(const_cast<char *>(quantity.c_str()));
+        string cost = ProcessTxt(txt);
+        if(cost.empty()) {
+          throw(0);
+        }
+        CheckN(const_cast<char *>(cost.c_str()));
+        int q = atoi(const_cast<char *>(quantity.c_str()));
+        double c = atof(const_cast<char *>(cost.c_str()));
+        if(q <= 0) {
+          throw(0);
+        }
+        if(c <= 0) {
+          throw(0);
+        }
+        total_cost += c;
+        selected.back().Import(q);
+        continue;
+      }
+      if(command == "")
       throw(0);     // 捕获无效指令。
     } catch (int) { // 针对程序中出现的所有问题进行捕获。
       std::cout << "Invalid\n";

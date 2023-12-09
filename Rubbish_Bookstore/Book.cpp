@@ -537,3 +537,14 @@ void Book::ModifyPrice(char *txt) {
   Update(tmp, tmp1);
   return;
 }
+
+void Book::Import(int num) {
+  Book tmp, tmp1;
+  tmp = book_main.Find(*this);
+  tmp1 = tmp;
+  tmp1.quantity += num;
+  book_main.Delete(tmp);
+  book_main.Insert(tmp1);
+  Update(tmp, tmp1);
+  return;
+}

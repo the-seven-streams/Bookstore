@@ -27,7 +27,7 @@ public:
   void ModifyAuthor(char *);
   void ModifyKeyword(char *);
   void ModifyPrice(char *);
-  void Import(char *);
+  void Import(int);
   void Copy(KeyBook &);
   void Show();
   void SetAuthor(char *);
