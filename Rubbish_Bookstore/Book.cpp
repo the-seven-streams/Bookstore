@@ -413,3 +413,51 @@ void Book::ModifyProcess(string txt) {//传入内容不应该有减号。
   }
   throw(0);
 }
+
+void Book::ModifyISBN(char *txt) {
+  CheckSize20(txt);
+  CheckVisible(txt);
+  Book tmp, tmp1;
+  tmp = book_main.Find(*this);
+  tmp1 = tmp;
+  tmp1.SetISBN(txt);
+  //tmp是旧书籍，tmp1是新书籍。
+  book_main.Delete(tmp);
+  book_main.Insert(tmp1);
+  Update(tmp, tmp1);
+  for(auto it = selected.begin(); it != selected.end(); it++) {
+    if(*it == tmp) {
+      *it = tmp1;
+    }
+  }//更新selected中的数据。
+  return;
+}
+
+void Update(Book old, Book newbook) {
+  KeyBook tmp;
+  old.Copy(tmp);
+  tmp.SetKey(tmp.author);
+  book_author.Delete(tmp);
+  tmp.SetKey(tmp.name);
+  book_name.Delete(tmp);
+  string keyword_total = tmp.keyword;
+  while(!keyword_total.empty()) {
+    string tmp_keyword = ProcessKey(keyword_total);
+    tmp.SetKey(const_cast<char *>(tmp_keyword.c_str()));
+    book_keyword.Delete(tmp);
+  }
+  //删除旧书。
+  newbook.Copy(tmp);
+  tmp.SetKey(tmp.author);
+  book_author.Insert(tmp);
+  tmp.SetKey(tmp.name);
+  book_name.Insert(tmp);
+  keyword_total = tmp.keyword;
+  while(!keyword_total.empty()) {
+    string tmp_keyword = ProcessKey(keyword_total);
+    tmp.SetKey(const_cast<char *>(tmp_keyword.c_str()));
+    book_keyword.Insert(tmp);
+  }
+  //插入新书。
+  return;
+}

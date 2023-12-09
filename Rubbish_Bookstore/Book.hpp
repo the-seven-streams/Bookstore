@@ -22,7 +22,7 @@ public:
   char* GetISBN();
   void SetISBN(char *);
   void ModifyProcess(string);
-  void ModifyISBN(char *){;};
+  void ModifyISBN(char *);
   void ModifyName(char *){;};
   void ModifyAuthor(char *){;};
   void ModifyKeyword(char *){;};
@@ -30,6 +30,7 @@ public:
   void Import(char *);
   void Copy(KeyBook &);
   void Show();
+  friend void Update(Book, Book);
   virtual bool operator>(const Book &) const;
   virtual bool operator<(const Book &) const;
   virtual bool operator==(const Book &) const;
