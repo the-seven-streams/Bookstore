@@ -291,6 +291,11 @@ void Book::ModifyProcess(string txt) {//传入内容不应该有减号。
       throw(0);
     }
     txt.erase(0, 5);
+    Book tmp;
+    tmp.SetISBN(const_cast<char *>(txt.c_str()));
+    if(!(book_main.Find(tmp) == an_empty_book)) {
+      throw(0);
+    }//主库中已经有了这个ISBN。
     ModifyISBN(const_cast<char *>(txt.c_str()));
     return;
   }
