@@ -6,6 +6,7 @@
 #include "Rubbishaccountstore.hpp"
 #include "Store.hpp"
 #include <bits/stdc++.h>
+#include <cassert>
 #include <string>
 using std::cin;
 using std::getline;
@@ -193,6 +194,7 @@ int main() {
           }
           selected.back().ModifyProcess(const_cast<char*>(addtion.c_str()));
         }
+        continue;
       }
       throw(0);     // 捕获无效指令。
     } catch (int) { // 针对程序中出现的所有问题进行捕获。

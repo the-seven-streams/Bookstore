@@ -94,7 +94,8 @@ void CheckReal(char * str) {
   return;
 }
 
-void CheckModify(std::string txt) {
+void CheckModify(std::string txt1) {
+  std::string txt = txt1;
   if(txt.empty()) {
     throw(0);
   }
@@ -115,20 +116,20 @@ void CheckModify(std::string txt) {
     if(addtion.empty()) {
       throw(0);
     }
-     if(txt.size() < 6) {
-    throw(0);
-  }
-  if(txt[0] == 'I') {
-    if(txt[1] != 'S') {
+     if(addtion.size() < 6) {
       throw(0);
     }
-    if(txt[2] != 'B') {
+  if(addtion[0] == 'I') {
+    if(addtion[1] != 'S') {
       throw(0);
     }
-    if(txt[3] != 'N') {
+    if(addtion[2] != 'B') {
       throw(0);
     }
-    if(txt[4] != '=') {
+    if(addtion[3] != 'N') {
+      throw(0);
+    }
+    if(addtion[4] != '=') {
       throw(0);
     }
     if(isbn) {
@@ -137,23 +138,23 @@ void CheckModify(std::string txt) {
     isbn = 1;
     continue;
   }
-  if(txt.length() < 7) {
+  if(addtion.size() < 7) {
     throw(0);
   }
-  if(txt[0] == 'p') {
-    if(txt[1] != 'r') {
+  if(addtion[0] == 'p') {
+    if(addtion[1] != 'r') {
       throw(0);
     }
-    if(txt[2] != 'i') {
+    if(addtion[2] != 'i') {
       throw(0);
     }
-    if(txt[3] != 'c') {
+    if(addtion[3] != 'c') {
       throw(0);
     }
-    if(txt[4] != 'e') {
+    if(addtion[4] != 'e') {
       throw(0);
     }
-    if(txt[5] != '=') {
+    if(addtion[5] != '=') {
       throw(0);
     }
     if(price) {
@@ -162,27 +163,27 @@ void CheckModify(std::string txt) {
     price = 1;
     continue;
   }
-  if(txt[txt.size() - 1] != '\"') {
+  if(addtion[addtion.size() - 1] != '\"') {
     throw(0);
   }
-  txt.erase(txt.size() - 1, 1);//在剩下的所有指令中，最后一位必须是引号。
-  if(txt.size() < 7) {
+  addtion.erase(addtion.size() - 1, 1);//在剩下的所有指令中，最后一位必须是引号。
+  if(addtion.size() < 7) {
     throw(0);
   }
-  if(txt[0] == 'n') {
-    if(txt[1] != 'a') {
+  if(addtion[0] == 'n') {
+    if(addtion[1] != 'a') {
       throw(0);
     }
-    if(txt[2] != 'm') {
+    if(addtion[2] != 'm') {
       throw(0);
     }
-    if(txt[3] != 'e') {
+    if(addtion[3] != 'e') {
       throw(0);
     }
-    if(txt[4] != '=') {
+    if(addtion[4] != '=') {
       throw(0);
     }
-    if(txt[5] != '\"') {
+    if(addtion[5] != '\"') {
       throw(0);
     }
     if(name) {
@@ -191,29 +192,29 @@ void CheckModify(std::string txt) {
     name = 1;
     continue;
   }
-  if(txt.size() < 9) {
+  if(addtion.size() < 9) {
     throw(0);
   }
-  if(txt[0] == 'a') {
-    if(txt[1] != 'u') {
+  if(addtion[0] == 'a') {
+    if(addtion[1] != 'u') {
       throw(0);
     }
-    if(txt[2] != 't') {
+    if(addtion[2] != 't') {
       throw(0);
     }
-    if(txt[3] != 'h') {
+    if(addtion[3] != 'h') {
       throw(0);
     }
-    if(txt[4] != 'o') {
+    if(addtion[4] != 'o') {
       throw(0);
     }
-    if(txt[5] != 'r') {
+    if(addtion[5] != 'r') {
       throw(0);
     }
-    if(txt[6] != '=') {
+    if(addtion[6] != '=') {
       throw(0);
     }
-    if(txt[7] != '\"') {
+    if(addtion[7] != '\"') {
       throw(0);
     }
     if(author) {
@@ -222,41 +223,41 @@ void CheckModify(std::string txt) {
     author = 1;
     continue;
   }
-  if(txt.size() < 10) {
+  if(addtion.size() < 10) {
     throw(0);
   }
-  if(txt[0] == 'k') {
-    if(txt[1] != 'e') {
+  if(addtion[0] == 'k') {
+    if(addtion[1] != 'e') {
       throw(0);
     }
-    if(txt[2] != 'y') {
+    if(addtion[2] != 'y') {
       throw(0);
     }
-    if(txt[3] != 'w') {
+    if(addtion[3] != 'w') {
       throw(0);
     }
-    if(txt[4] != 'o') {
+    if(addtion[4] != 'o') {
       throw(0);
     }
-    if(txt[5] != 'r') {
+    if(addtion[5] != 'r') {
       throw(0);
     }
-    if(txt[6] != 'd') {
+    if(addtion[6] != 'd') {
       throw(0);
     }
-    if(txt[7] != '=') {
+    if(addtion[7] != '=') {
       throw(0);
     }
-    if(txt[8] != '\"') {
+    if(addtion[8] != '\"') {
       throw(0);
     }
     if(keyword) {
       throw(0);
     }
     keyword = 1;
-    return;
-  }
-  throw(0);
+    continue;
+    }
+    throw(0);
   }
   return;
 }
