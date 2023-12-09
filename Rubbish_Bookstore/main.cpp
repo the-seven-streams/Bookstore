@@ -168,7 +168,32 @@ int main() {
         Processshow(addtion);
         continue;
       }
-
+      if(command == "modify") {
+        if(current_power < 3) {
+          throw(0);
+        }
+        if(txt.empty()) {
+          throw(0);
+        }
+        CheckModify(txt);
+        while(!txt.empty()) {
+          string addtion = ProcessTxt(txt);
+          if(addtion.empty()) {
+            throw(0);
+          }
+          if(addtion[0] != '-') {
+            throw(0);
+          }//删除必然存在的减号。
+          addtion.erase(0, 1);//删除减号。
+          if(addtion.empty()) {
+            throw(0);
+          }//弟啊，你参数呢。
+          if(selected.back() == an_empty_book) {
+            throw(0);
+          }
+          selected.back().ModifyProcess(const_cast<char*>(addtion.c_str()));
+        }
+      }
       throw(0);     // 捕获无效指令。
     } catch (int) { // 针对程序中出现的所有问题进行捕获。
       std::cout << "Invalid\n";

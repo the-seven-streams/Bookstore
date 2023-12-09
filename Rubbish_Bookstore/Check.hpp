@@ -1,4 +1,5 @@
 #include<bits/stdc++.h>
+#include"Processtxt.hpp"
 #ifndef CHECK_HPP
 #define CHECK_HPP
 //该文件是为了检查输入内容的合法性。
@@ -16,4 +17,5 @@ void CheckSize60(char *);
 void CheckSize20(char *);
 void CheckVisibleNoQuotation(char *);
 void CheckReal(char *);
+void CheckModify(std::string);
 #endif

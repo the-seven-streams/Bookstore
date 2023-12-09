@@ -19,7 +19,12 @@ protected:
 public:
   Book();
   void SetISBN(char *);
-  void Modify(char *, int);
+  void ModifyProcess(string);
+  void ModifyISBN(char *);
+  void ModifyName(char *);
+  void ModifyAuthor(char *);
+  void ModifyKeyword(char *);
+  void ModifyPrice(char *);
   void Import(char *);
   void Copy(KeyBook &);
   void Show();
