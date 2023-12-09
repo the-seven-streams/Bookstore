@@ -29,6 +29,9 @@ void Book::Copy(KeyBook &b) {
   strcpy(b.name, name);
   strcpy(b.author, author);
   strcpy(b.keyword, keyword);
+  b.price = price;
+  b.quantity = quantity;
+  return;
 }
 
 bool Book::operator>(const Book &b) const {

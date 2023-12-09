@@ -15,11 +15,11 @@ extern int current_power;
 extern std::vector<Book> selected;
 extern Book an_empty_book;
 extern KeyBook an_empty_keybook;
+extern void Buy(char *, int);
 Store<Book> book_main("book_main.txt");
 Store<KeyBook> book_author("book_author.txt");
 Store<KeyBook> book_name("book_name.txt");
 Store<KeyBook> book_keyword("book_keyword.txt");
-
 double total_cost = 0;
 double total_income = 0;
 
@@ -227,6 +227,25 @@ int main() {
         }
         total_cost += c;
         selected.back().Import(q);
+        continue;
+      }
+      if(command == "buy") {
+        if(!current_power) {
+          throw(0);
+        }
+        string isbn = ProcessTxt(txt);
+        if(isbn.empty()) {
+          throw(0);
+        }
+        CheckSize20(const_cast<char *>(isbn.c_str()));
+        CheckVisible(const_cast<char *>(isbn.c_str()));
+        string num = ProcessTxt(txt);
+        if(num.empty()) {
+          throw(0);
+        }
+        CheckN(const_cast<char *>(num.c_str()));
+        int n = atoi(const_cast<char *>(num.c_str()));
+        Buy(const_cast<char *>(isbn.c_str()), n);
         continue;
       }
       throw(0);     // 捕获无效指令。
