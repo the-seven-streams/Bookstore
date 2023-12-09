@@ -22,11 +22,6 @@ public:
   char* GetISBN();
   void SetISBN(char *);
   void ModifyProcess(string);
-  void ModifyISBN(char *);
-  void ModifyName(char *);
-  void ModifyAuthor(char *);
-  void ModifyKeyword(char *);
-  void ModifyPrice(char *);
   void Import(int);
   void Copy(KeyBook &);
   void Show();

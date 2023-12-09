@@ -280,165 +280,221 @@ void ShowKeyword(char *keyword) {
   return;
 }
 
-void Book::ModifyProcess(string txt) {//传入内容不应该有减号。
-  if(txt.size() < 6) {
+void Book::ModifyProcess(string txt) {
+  Book tmp1 = an_empty_book;
+  Book tmp;
+  string name_txt;
+  string author_txt;
+  string keyword_txt;
+  double price_num;
+  string ISBN_txt;
+  bool name = 0;
+  bool author = 0;
+  bool ISBN = 0;
+  bool key = 0;
+  bool price = 0;
+  while(!txt.empty()) {
+    string addtion = ProcessTxt(txt);
+    if(addtion == "") {
+      throw(0);
+    }
+    if(addtion.size() < 7) {
+      throw(0);
+    }
+    if(!(addtion[0] == '-')) {
+      throw(0);
+    }
+    addtion.erase(0, 1);
+    if(addtion[0] == 'I') {
+      if(addtion[1] != 'S') {
+        throw(0);
+      }
+      if(addtion[2] != 'B') {
+        throw(0);
+      }
+      if(addtion[3] != 'N') {
+        throw(0);
+      }
+      if(addtion[4] != '=') {
+        throw(0);
+      }
+      addtion.erase(0, 5);
+      if(ISBN) {
+        throw(0);
+      }
+      ISBN = 1;
+      CheckSize20(const_cast<char *>(addtion.c_str()));
+      CheckVisible(const_cast<char *>(addtion.c_str()));
+      ISBN_txt = addtion;
+      continue;
+    }
+    if(addtion[0] == 'p') {
+      if(addtion[1] != 'r') {
+        throw(0);
+      }
+      if(addtion[2] != 'i') {
+        throw(0);
+      }
+      if(addtion[3] != 'c') {
+        throw(0);
+      }
+      if(addtion[4] != 'e') {
+        throw(0);
+      }
+      if(addtion[5] != '=') {
+        throw(0);
+      }
+      addtion.erase(0, 6);
+      if(price) {
+        throw(0);
+      }
+      price = 1;
+      CheckReal(const_cast<char *>(addtion.c_str()));
+      price_num = atof(const_cast<char *>(addtion.c_str()));
+      continue;
+    }
+    if(addtion.size() < 8) {
+      throw(0);
+    }
+    if(addtion[addtion.size() - 1] != '\"') {
+      throw(0);
+    }
+    addtion.erase(addtion.size() - 1, 1);//在剩下的所有指令中，最后一位必须是引号。
+    if(addtion[0] == 'n') {
+      if(addtion[1] != 'a') {
+        throw(0);
+      }
+      if(addtion[2] != 'm') {
+        throw(0);
+      }
+      if(addtion[3] != 'e') {
+        throw(0);
+      }
+      if(addtion[4] != '=') {
+        throw(0);
+      }
+      if(addtion[5] != '\"') {
+        throw(0);
+      }
+      addtion.erase(0, 6);
+      if(name) {
+        throw(0);
+      }
+      name = 1;
+      CheckSize60(const_cast<char *>(addtion.c_str()));
+      CheckVisibleNoQuotation(const_cast<char *>(addtion.c_str()));
+      name_txt = addtion;
+      continue;
+    }
+    if(addtion.size() < 9) {
+      throw(0);
+    }
+    if(addtion[0] == 'a') {
+      if(addtion[1] != 'u') {
+        throw(0);
+      }
+      if(addtion[2] != 't') {
+        throw(0);
+      }
+      if(addtion[3] != 'h') {
+        throw(0);
+      }
+      if(addtion[4] != 'o') {
+        throw(0);
+      }
+      if(addtion[5] != 'r') {
+        throw(0);
+      }
+      if(addtion[6] != '=') {
+        throw(0);
+      }
+      if(addtion[7] != '\"') {
+        throw(0);
+      }
+      addtion.erase(0, 8);
+      if(author) {
+        throw(0);
+      }
+      author = 1;
+      CheckSize60(const_cast<char *>(addtion.c_str()));
+      CheckVisibleNoQuotation(const_cast<char *>(addtion.c_str()));
+      author_txt = addtion;
+      continue;
+    }
+    if(addtion.size() < 10) {
+      throw(0);
+    }
+    if(addtion[0] == 'k') {
+      if(addtion[1] != 'e') {
+        throw(0);
+      }
+      if(addtion[2] != 'y') {
+        throw(0);
+      }
+      if(addtion[3] != 'w') {
+        throw(0);
+      }
+      if(addtion[4] != 'o') {
+        throw(0);
+      }
+      if(addtion[5] != 'r') {
+        throw(0);
+      }
+      if(addtion[6] != 'd') {
+        throw(0);
+      }
+      if(addtion[7] != '=') {
+        throw(0);
+      }
+      if(addtion[8] != '\"') {
+        throw(0);
+      }
+      addtion.erase(0, 9);
+      if(key) {
+        throw(0);
+      }
+      key = 1;
+      CheckSize60(const_cast<char *>(addtion.c_str()));
+      CheckVisibleNoQuotation(const_cast<char *>(addtion.c_str()));
+      keyword_txt = addtion;
+      continue;
+    }
     throw(0);
   }
-  if(txt[0] == 'I') {
-    if(txt[1] != 'S') {
-      throw(0);
-    }
-    if(txt[2] != 'B') {
-      throw(0);
-    }
-    if(txt[3] != 'N') {
-      throw(0);
-    }
-    if(txt[4] != '=') {
-      throw(0);
-    }
-    txt.erase(0, 5);
-    Book tmp;
-    tmp.SetISBN(const_cast<char *>(txt.c_str()));
-    if(!(book_main.Find(tmp) == an_empty_book)) {
-      throw(0);
-    }//主库中已经有了这个ISBN。
-    ModifyISBN(const_cast<char *>(txt.c_str()));
-    return;
-  }
-  if(txt.length() < 7) {
+  if(!name && !author && !key && !price && !ISBN) {
     throw(0);
   }
-  if(txt[0] == 'p') {
-    if(txt[1] != 'r') {
-      throw(0);
-    }
-    if(txt[2] != 'i') {
-      throw(0);
-    }
-    if(txt[3] != 'c') {
-      throw(0);
-    }
-    if(txt[4] != 'e') {
-      throw(0);
-    }
-    if(txt[5] != '=') {
-      throw(0);
-    }
-    txt.erase(0, 6);
-    ModifyPrice(const_cast<char *>(txt.c_str()));
-    return;
-  }
-  if(txt[txt.size() - 1] != '\"') {
-    throw(0);
-  }
-  txt.erase(txt.size() - 1, 1);//在剩下的所有指令中，最后一位必须是引号。
-  if(txt.size() < 7) {
-    throw(0);
-  }
-  if(txt[0] == 'n') {
-    if(txt[1] != 'a') {
-      throw(0);
-    }
-    if(txt[2] != 'm') {
-      throw(0);
-    }
-    if(txt[3] != 'e') {
-      throw(0);
-    }
-    if(txt[4] != '=') {
-      throw(0);
-    }
-    if(txt[5] != '\"') {
-      throw(0);
-    }
-    txt.erase(0, 6);
-    ModifyName(const_cast<char *>(txt.c_str()));
-    return;
-  }
-  if(txt.size() < 9) {
-    throw(0);
-  }
-  if(txt[0] == 'a') {
-    if(txt[1] != 'u') {
-      throw(0);
-    }
-    if(txt[2] != 't') {
-      throw(0);
-    }
-    if(txt[3] != 'h') {
-      throw(0);
-    }
-    if(txt[4] != 'o') {
-      throw(0);
-    }
-    if(txt[5] != 'r') {
-      throw(0);
-    }
-    if(txt[6] != '=') {
-      throw(0);
-    }
-    if(txt[7] != '\"') {
-      throw(0);
-    }
-    txt.erase(0, 8);
-    ModifyAuthor(const_cast<char *>(txt.c_str()));
-    return;
-  }
-  if(txt.size() < 10) {
-    throw(0);
-  }
-  if(txt[0] == 'k') {
-    if(txt[1] != 'e') {
-      throw(0);
-    }
-    if(txt[2] != 'y') {
-      throw(0);
-    }
-    if(txt[3] != 'w') {
-      throw(0);
-    }
-    if(txt[4] != 'o') {
-      throw(0);
-    }
-    if(txt[5] != 'r') {
-      throw(0);
-    }
-    if(txt[6] != 'd') {
-      throw(0);
-    }
-    if(txt[7] != '=') {
-      throw(0);
-    }
-    if(txt[8] != '\"') {
-      throw(0);
-    }
-    txt.erase(0, 9);
-    CheckRepeat(txt);
-    ModifyKeyword(const_cast<char *>(txt.c_str()));
-    return;
-  }
-  throw(0);
-}
-
-void Book::ModifyISBN(char *txt) {
-  CheckSize20(txt);
-  CheckVisible(txt);
-  Book tmp, tmp1;
-  tmp = book_main.Find(*this);
+  tmp = book_main.Find(*this);//旧信息
   tmp1 = tmp;
-  tmp1.SetISBN(txt);
-  //tmp是旧书籍，tmp1是新书籍。
+  if(name) {
+    tmp1.SetName(const_cast<char *>(name_txt.c_str()));
+  }
+  if(author) {
+    tmp1.SetAuthor(const_cast<char *>(author_txt.c_str()));
+  }
+  if(key) {
+    tmp1.SetKeyword(const_cast<char *>(keyword_txt.c_str()));
+  }
+  if(price) {
+    tmp1.price = price_num;
+  }
+  if(ISBN) {
+    tmp1.SetISBN(const_cast<char *>(ISBN_txt.c_str()));
+    if(!(book_main.Find(tmp1) == an_empty_book)) {
+      throw(0);
+    }//说明这个ISBN号已经被使用。
+    for(auto it = selected.begin(); it != selected.end(); ++it) {
+      if(*it == tmp) {
+        *it = tmp1;
+      }
+    }//修改原有信息。
+  }
   book_main.Delete(tmp);
   book_main.Insert(tmp1);
   Update(tmp, tmp1);
-  for(auto it = selected.begin(); it != selected.end(); it++) {
-    if(*it == tmp) {
-      *it = tmp1;
-    }
-  }//更新selected中的数据。
   return;
 }
+
 
 void Update(Book old, Book newbook) {
   KeyBook tmp;
@@ -483,67 +539,17 @@ void Book::SetName(char *txt) {
 }
 
 
-void Book::ModifyName(char *txt) {
-  CheckSize60(txt);
-  CheckVisibleNoQuotation(txt);
-  Book tmp, tmp1;
-  tmp = book_main.Find(*this);
-  tmp1 = tmp;
-  tmp1.SetName(txt);
-  //tmp是旧书籍，tmp1是新书籍。
-  book_main.Delete(tmp);
-  book_main.Insert(tmp1);
-  Update(tmp, tmp1);
-  return;
-}
-
 void Book::SetAuthor(char *txt) {
   strcpy(author, txt);
   return;
 }
 
-void Book::ModifyAuthor(char *txt) {
-  CheckSize60(txt);
-  CheckVisibleNoQuotation(txt);
-  Book tmp, tmp1;
-  tmp = book_main.Find(*this);
-  tmp1 = tmp;
-  tmp1.SetAuthor(txt);
-  book_main.Delete(tmp);
-  book_main.Insert(tmp1);
-  Update(tmp, tmp1);
-  return;
-}
 
 void Book::SetKeyword(char *txt) {
   strcpy(keyword, txt);
   return;
 }
 
-void Book::ModifyKeyword(char *txt) {
-  CheckSize60(txt);
-  CheckVisibleNoQuotation(txt);
-  Book tmp, tmp1;
-  tmp = book_main.Find(*this);
-  tmp1 = tmp;
-  tmp1.SetKeyword(txt);
-  book_main.Delete(tmp);
-  book_main.Insert(tmp1);
-  Update(tmp, tmp1);
-  return;
-}
-
-void Book::ModifyPrice(char *txt) {
-  CheckReal(txt);
-  Book tmp, tmp1;
-  tmp = book_main.Find(*this);
-  tmp1 = tmp;
-  tmp1.price = atof(txt);
-  book_main.Delete(tmp);
-  book_main.Insert(tmp1);
-  Update(tmp, tmp1);
-  return;
-}
 
 void Book::Import(int num) {
   Book tmp, tmp1;
