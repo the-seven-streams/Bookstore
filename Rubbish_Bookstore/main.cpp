@@ -216,7 +216,7 @@ int main() {
         if(cost.empty()) {
           throw(0);
         }
-        CheckN(const_cast<char *>(cost.c_str()));
+        CheckReal(const_cast<char *>(cost.c_str()));
         int q = atoi(const_cast<char *>(quantity.c_str()));
         double c = atof(const_cast<char *>(cost.c_str()));
         if(q <= 0) {
@@ -229,7 +229,9 @@ int main() {
         selected.back().Import(q);
         continue;
       }
-      if(command == "")
+      if(command == "2") {
+        book_author.PrintAll();
+      }
       throw(0);     // 捕获无效指令。
     } catch (int) { // 针对程序中出现的所有问题进行捕获。
       std::cout << "Invalid\n";

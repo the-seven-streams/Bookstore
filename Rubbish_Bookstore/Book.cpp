@@ -39,25 +39,26 @@ bool Book::operator<(const Book &b) const {
 }
 
 bool Book::operator==(const Book &b) const {
+
   return strcmp(ISBN, b.ISBN) == 0;
 }
 
 bool KeyBook::operator>(const KeyBook &b) const {
-  if(strcmp(key, b.keyword) == 0) {
+  if(strcmp(key, b.key) == 0) {
     return strcmp(ISBN, b.ISBN) > 0;
   }
-  return strcmp(key, b.keyword) > 0;
+  return strcmp(key, b.key) > 0;
 }
 
 bool KeyBook::operator<(const KeyBook &b) const {
-  if(strcmp(key, b.keyword) == 0) {
+  if(strcmp(key, b.key) == 0) {
     return strcmp(ISBN, b.ISBN) < 0;
   }
-  return strcmp(key, b.keyword) < 0;
+  return strcmp(key, b.key) < 0;
 }
 
 bool KeyBook::operator==(const KeyBook &b) const {
-  return strcmp(key, b.keyword) == 0;
+  return strcmp(key, b.key) == 0 && strcmp(ISBN, b.ISBN) == 0;
 }
 
 KeyBook::KeyBook():Book(){
