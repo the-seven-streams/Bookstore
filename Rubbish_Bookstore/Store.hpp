@@ -125,7 +125,10 @@ public:
     Data.get_info(total, 1);
     Data.get_info(start, 2);
     Data.get_info(current, 3);
-  }
+    Data.read(res1[1], 12, total);
+    return;
+  }//这一部分既是在对文件本身进行初始化，同时也是在对内存进行初始化。
+
   Element<T> ArrayInsert(Element<T> &to_insert, int place, int size,
                          bool &flag) {
     Data.read(res2[1], place * largest * sizeof(Element<T>) + 12, size);
@@ -153,7 +156,8 @@ public:
                  size - num);
     }
     return res2[1];
-  }
+  }//返回值，指示索引内容。
+
 
   bool ArrayFind(Element<T> &to_find, int place, int size, bool &found) {
     Data.read(res2[1], place * largest * sizeof(Element<T>) + 12, size);
@@ -189,7 +193,6 @@ public:
   }
 
   int IndexFind(Element<T> &x) {
-    Data.read(res1[1], 12, total);
     int last = start;
     for (int i = start; i; i = res1[i].Getblock_nxt()) {
       if (x < res1[i]) {
@@ -203,7 +206,7 @@ public:
   void SplitBlock(int num, int size) {
     int mid = size / 2;
     Element<T> origin, new_block;
-    Data.read(origin, 12 + (num - 1) * sizeof(Element<T>));
+    origin = res1[num];
     Data.read(res2[1], origin.Getplace() * largest * sizeof(Element<T>) + 12,
               size); // 读入原有数据块。
     total++;
@@ -214,12 +217,10 @@ public:
     new_block.Setsize(size - mid);
     new_block.Setblock_nxt(origin.Getblock_nxt());
     new_block.Setplace(current);
-    Data.write(new_block,
-               (total - 1) * sizeof(Element<T>) + 12); // 新的索引块
+    res1[total] = new_block;
     origin.Setsize(mid);
     origin.Setblock_nxt(total);
-    Data.write(origin,
-               (num - 1) * sizeof(Element<T>) + 12); // 修改原有索引块。
+    res1[num] = origin;
     return;
   }
 
@@ -230,13 +231,13 @@ public:
       to_insert.Setsize(1);
       start = 1;
       current = 1;
-      Data.write(to_insert, 12, 1);
+      res1[1] = to_insert;
       Data.write(to_insert, 12 + largest * sizeof(Element<T>), 1);
       return 0;
     } // 说明没有元素。
     Element<T> tmp, tmp2;
     int target = IndexFind(to_insert); // 目标链
-    Data.read(tmp, 12 + (target - 1) * sizeof(Element<T>));
+    tmp = res1[target];
     bool bad = 0;
     tmp2 = ArrayInsert(to_insert, tmp.Getplace(), tmp.Getsize(), bad);
     if (bad) {
@@ -245,7 +246,7 @@ public:
     tmp2.Setsize(tmp.Getsize() + 1);
     tmp2.Setblock_nxt(tmp.Getblock_nxt());
     tmp2.Setplace(tmp.Getplace());
-    Data.write(tmp2, 12 + (target - 1) * sizeof(Element<T>));
+    res1[target] = tmp2;
     if (tmp2.Getsize() > limit) {
       SplitBlock(target, tmp2.Getsize());
     }
@@ -261,7 +262,7 @@ public:
     int flag = 1;
     bool found = 0;
     while (flag) {
-      Data.read(tmp, 12 + (target - 1) * sizeof(Element<T>));
+      tmp = res1[target];
       flag = ArrayFind(to_find, tmp.Getplace(), tmp.Getsize(), found);
       target = tmp.Getblock_nxt();
       if (!target) {
@@ -280,12 +281,12 @@ public:
       return 0;
     }
     Element<T> tmp;
-    Data.read(tmp, 12 + (target - 1) * sizeof(Element<T>));
+    tmp = res1[target];
     bool flag = ArrayDel(to_del, tmp.Getplace(), tmp.Getsize());
     if (flag) { // 删除成功
       int size = tmp.Getsize();
       tmp.Setsize(size - 1);
-      Data.write(tmp, 12 + (target - 1) * sizeof(Element<T>));
+      res1[target] = tmp;
       if (!(size - 1)) { // 删除后为空
         if (start == target) { // 删除块为开头
           start = tmp.Getblock_nxt();
@@ -293,14 +294,13 @@ public:
           for (int i = start; i; i = res1[i].Getblock_nxt()) {
             if (res1[i].Getblock_nxt() == target) {
               res1[i].Setblock_nxt(tmp.Getblock_nxt());
-              Data.write(res1[i], 12 + (i - 1) * sizeof(Element<T>));
               break;
             }
           }
           for (int i = start; i; i = res1[i].Getblock_nxt()) {
             if (res1[i].Getblock_nxt() == total) {
               res1[i].Setblock_nxt(target);
-              Data.write(res1[total], 12 + (target - 1) * sizeof(Element<T>));
+              res1[target] = res1[total];
               break;
             }
           } // 空间重用。
@@ -335,7 +335,7 @@ void FindA(Element<T> to_find) {
   int flag = 1;
   bool found = 0;
   while (flag) {
-    Data.read(tmp, 12 + (target - 1) * sizeof(Element<T>));
+    tmp = res1[target];
     flag = ArrayFindAll(to_find, tmp.Getplace(), tmp.Getsize(), found);
     target = tmp.Getblock_nxt();
     if (!target) {
@@ -383,7 +383,6 @@ public:
       cout << "\n";
       return;
     }//说明没有元素。输出空行。
-    Data.read(res1[1], 12, total);
     for(int i = start; i; i = res1[i].Getblock_nxt()) {
       Data.read(res2[1], res1[i].Getplace() * largest * sizeof(Element<T>) + 12, res1[i].Getsize());
       for(int j = 1; j <= res1[i].Getsize(); j++) {
@@ -396,6 +395,7 @@ public:
     Data.write_info(total, 1);
     Data.write_info(start, 2);
     Data.write_info(current, 3);
+    Data.write(res1[1], 12, total);
     return;
   }
 };
