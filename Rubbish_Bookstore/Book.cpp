@@ -143,7 +143,6 @@ void Processshow(string txt) {
     }
     txt.erase(0, 5);
     ShowISBN(const_cast<char *>(txt.c_str()));
-    
     return;
   }
   if(txt[txt.size() - 1] != '\"') {
@@ -163,7 +162,7 @@ void Processshow(string txt) {
     ShowName(const_cast<char *>(txt.c_str()));
     return;
   }
-  if(txt.size() < 8) {
+  if(txt.size() < 9) {
     throw(0);
   }
   if(txt[0] == 'a') {
@@ -176,9 +175,12 @@ void Processshow(string txt) {
     ShowAuthor(const_cast<char *>(txt.c_str()));
     return;
   }
+  if(txt.size() < 10) {
+    throw(0);
+  }
   if(txt[0] == 'k') {
     string res;
-    res = txt.substr(0 ,9);
+    res = txt.substr(0 , 9);
     if(res != "keyword=\""){
       throw(0);
     }
@@ -219,6 +221,11 @@ void ShowName(char *name) {
 void ShowKeyword(char *keyword) {
   CheckSize60(keyword);
   CheckVisibleNoQuotation(keyword);
+  for(int i = 0; i < strlen(keyword); ++i) {
+    if(keyword[i] == '|') {
+      throw(0);
+    }
+  }
   KeyBook tmp;
   tmp.SetKey(keyword);
   book_keyword.FindAll(tmp);

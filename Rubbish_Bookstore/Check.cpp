@@ -56,6 +56,12 @@ void CheckSize20(char *str) {
   return;
 }
 
+void CheckSize10(char *str) {
+  if (strlen(str) > 10) {
+    throw(0);
+  }
+  return;
+}
 void CheckVisible(char *str) {
   int len = strlen(str);
   for (int i = 0; i < len; ++i) {

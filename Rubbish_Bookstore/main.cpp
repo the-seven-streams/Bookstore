@@ -227,6 +227,7 @@ int main() {
           throw(0);
         } // 未选中书目。
         string quantity = ProcessTxt(txt);
+        CheckSize10(const_cast<char *>(quantity.c_str()));
         if (quantity.empty()) {
           throw(0);
         }
@@ -263,6 +264,7 @@ int main() {
         if (num.empty()) {
           throw(0);
         }
+        CheckSize10(const_cast<char *>(num.c_str()));
         CheckN(const_cast<char *>(num.c_str()));
         int n = atoi(const_cast<char *>(num.c_str()));
         double value = Buy(const_cast<char *>(isbn.c_str()), n);
