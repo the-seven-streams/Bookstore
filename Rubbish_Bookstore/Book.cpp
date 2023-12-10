@@ -136,16 +136,9 @@ void Processshow(string txt) {
     throw(0);
   }//txt长度至少为6.
   if(txt[0] == 'I') {
-    if(txt[1] != 'S') {
-      throw(0);
-    }
-    if(txt[2] != 'B') {
-      throw(0);
-    }
-    if(txt[3] != 'N') {
-      throw(0);
-    }
-    if(txt[4] != '=') {
+    string res;
+    res = txt.substr(0, 5);
+    if(res != "ISBN="){
       throw(0);
     }
     txt.erase(0, 5);
@@ -161,19 +154,9 @@ void Processshow(string txt) {
     throw(0);
   }
   if(txt[0] == 'n') {
-    if(txt[1] != 'a') {
-      throw(0);
-    }
-    if(txt[2] != 'm') {
-      throw(0);
-    }
-    if(txt[3] != 'e') {
-      throw(0);
-    }
-    if(txt[4] != '=') {
-      throw(0);
-    }
-    if(txt[5] != '\"') {
+    string res;
+    res = txt.substr(0, 6);
+    if(res != "name=\""){
       throw(0);
     }
     txt.erase(0, 6);
@@ -184,25 +167,9 @@ void Processshow(string txt) {
     throw(0);
   }
   if(txt[0] == 'a') {
-    if(txt[1] != 'u') {
-      throw(0);
-    }
-    if(txt[2] != 't') {
-      throw(0);
-    }
-    if(txt[3] != 'h') {
-      throw(0);
-    }
-    if(txt[4] != 'o') {
-      throw(0);
-    }
-    if(txt[5] != 'r') {
-      throw(0);
-    }
-    if(txt[6] != '=') {
-      throw(0);
-    }
-    if(txt[7] != '\"') {
+    string res;
+    res = txt.substr(0, 8);
+    if(res != "author=\""){
       throw(0);
     }
     txt.erase(0, 8);
@@ -210,28 +177,9 @@ void Processshow(string txt) {
     return;
   }
   if(txt[0] == 'k') {
-    if(txt[1] != 'e') {
-      throw(0);
-    }
-    if(txt[2] != 'y') {
-      throw(0);
-    }
-    if(txt[3] != 'w') {
-      throw(0);
-    }
-    if(txt[4] != 'o') {
-      throw(0);
-    }
-    if(txt[5] != 'r') {
-      throw(0);
-    }
-    if(txt[6] != 'd') {
-      throw(0);
-    }
-    if(txt[7] != '=') {
-      throw(0);
-    }
-    if(txt[8] != '\"') {
+    string res;
+    res = txt.substr(0 ,9);
+    if(res != "keyword=\""){
       throw(0);
     }
     txt.erase(0, 9);
@@ -303,18 +251,11 @@ void Book::ModifyProcess(string txt) {
     }
     addtion.erase(0, 1);
     if(addtion[0] == 'I') {
-      if(addtion[1] != 'S') {
+     string res1;
+     res1 = addtion.substr(0,5);
+     if(res1 != "ISBN="){
         throw(0);
-      }
-      if(addtion[2] != 'B') {
-        throw(0);
-      }
-      if(addtion[3] != 'N') {
-        throw(0);
-      }
-      if(addtion[4] != '=') {
-        throw(0);
-      }
+     }
       addtion.erase(0, 5);
       if(ISBN) {
         throw(0);
@@ -326,19 +267,9 @@ void Book::ModifyProcess(string txt) {
       continue;
     }
     if(addtion[0] == 'p') {
-      if(addtion[1] != 'r') {
-        throw(0);
-      }
-      if(addtion[2] != 'i') {
-        throw(0);
-      }
-      if(addtion[3] != 'c') {
-        throw(0);
-      }
-      if(addtion[4] != 'e') {
-        throw(0);
-      }
-      if(addtion[5] != '=') {
+      string res;
+      res = addtion.substr(0, 6);
+      if(res != "price="){
         throw(0);
       }
       addtion.erase(0, 6);
@@ -358,19 +289,8 @@ void Book::ModifyProcess(string txt) {
     }
     addtion.erase(addtion.size() - 1, 1);//在剩下的所有指令中，最后一位必须是引号。
     if(addtion[0] == 'n') {
-      if(addtion[1] != 'a') {
-        throw(0);
-      }
-      if(addtion[2] != 'm') {
-        throw(0);
-      }
-      if(addtion[3] != 'e') {
-        throw(0);
-      }
-      if(addtion[4] != '=') {
-        throw(0);
-      }
-      if(addtion[5] != '\"') {
+      string res = addtion.substr(0,6);
+      if(res != "name=\""){
         throw(0);
       }
       addtion.erase(0, 6);
@@ -387,25 +307,8 @@ void Book::ModifyProcess(string txt) {
       throw(0);
     }
     if(addtion[0] == 'a') {
-      if(addtion[1] != 'u') {
-        throw(0);
-      }
-      if(addtion[2] != 't') {
-        throw(0);
-      }
-      if(addtion[3] != 'h') {
-        throw(0);
-      }
-      if(addtion[4] != 'o') {
-        throw(0);
-      }
-      if(addtion[5] != 'r') {
-        throw(0);
-      }
-      if(addtion[6] != '=') {
-        throw(0);
-      }
-      if(addtion[7] != '\"') {
+      string res = addtion.substr(0,8);
+      if(res != "author=\""){
         throw(0);
       }
       addtion.erase(0, 8);
@@ -422,28 +325,8 @@ void Book::ModifyProcess(string txt) {
       throw(0);
     }
     if(addtion[0] == 'k') {
-      if(addtion[1] != 'e') {
-        throw(0);
-      }
-      if(addtion[2] != 'y') {
-        throw(0);
-      }
-      if(addtion[3] != 'w') {
-        throw(0);
-      }
-      if(addtion[4] != 'o') {
-        throw(0);
-      }
-      if(addtion[5] != 'r') {
-        throw(0);
-      }
-      if(addtion[6] != 'd') {
-        throw(0);
-      }
-      if(addtion[7] != '=') {
-        throw(0);
-      }
-      if(addtion[8] != '\"') {
+      string res = addtion.substr(0,9);
+      if(res != "keyword=\""){
         throw(0);
       }
       addtion.erase(0, 9);
