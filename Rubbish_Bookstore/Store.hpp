@@ -115,10 +115,16 @@ private:
   static const int limit = 480;
   Element<T> res1[500], res2[500];
   MemoryRiver<Element<T>, 3> Data;
-
+  int total = 0;
+  int start = 0;
+  int current = 0;
 public:
   Store(string txt) : Data(txt) {
     Data.initialise();
+    Data.get_info(total, 1);
+    Data.get_info(start, 2);
+    Data.get_info(current, 3);
+    Data.write(res1[1], 12, total);
   }
   Element<T> ArrayInsert(Element<T> &to_insert, int place, int size,
                          bool &flag) {

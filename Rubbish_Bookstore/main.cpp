@@ -135,12 +135,20 @@ int main() {
         if (!txt.empty()) {
           throw(0);
         }
+        book_main.UpdateIndex();
+        book_author.UpdateIndex();
+        book_name.UpdateIndex();
+        book_keyword.UpdateIndex();
         exit(0);
       }
       if (command == "exit") {
         if (!txt.empty()) {
           throw(0);
         }
+        book_main.UpdateIndex();
+        book_author.UpdateIndex();
+        book_name.UpdateIndex();
+        book_keyword.UpdateIndex();
         exit(0);
       }
       if (command == "select") {
@@ -203,9 +211,9 @@ int main() {
         if (txt.empty()) {
           throw(0);
         }
-        if(selected.back() == an_empty_book) {
+        if (selected.back() == an_empty_book) {
           throw(0);
-        }// 未选中书目。
+        } // 未选中书目。
         selected.back().ModifyProcess(txt);
         continue;
       }
@@ -265,5 +273,9 @@ int main() {
       std::cout << "Invalid\n";
     }
   }
+  book_main.UpdateIndex();
+  book_author.UpdateIndex();
+  book_name.UpdateIndex();
+  book_keyword.UpdateIndex();
   return 0;
 }
