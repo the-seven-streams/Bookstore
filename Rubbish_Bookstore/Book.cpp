@@ -271,6 +271,9 @@ void Book::ModifyProcess(string txt) {
       CheckSize20(const_cast<char *>(addtion.c_str()));
       CheckVisible(const_cast<char *>(addtion.c_str()));
       ISBN_txt = addtion;
+      if(ISBN_txt == tmp1.GetISBN()) {
+        throw(0);
+      }
       continue;
     }
     if(addtion[0] == 'p') {

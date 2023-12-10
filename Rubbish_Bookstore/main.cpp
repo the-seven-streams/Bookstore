@@ -245,6 +245,7 @@ int main() {
         if (c <= 0) {
           throw(0);
         }
+        CheckEmpty(txt);
         selected.back().Import(q);
         total_cost += c;
         AddDeal(-c);
@@ -268,6 +269,7 @@ int main() {
         CheckN(const_cast<char *>(num.c_str()));
         int n = atoi(const_cast<char *>(num.c_str()));
         double value = Buy(const_cast<char *>(isbn.c_str()), n);
+        CheckEmpty(txt);
         total_income += value;
         AddDeal(value);
         continue;
