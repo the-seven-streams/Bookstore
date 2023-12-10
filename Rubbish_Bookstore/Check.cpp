@@ -9,9 +9,9 @@ void CheckN(char *str) {
       throw(0);
     }
   }
-  if(len == 10) {
+  if (len == 10) {
     long long sum = 0;
-    for(int i = 0; i < 10; ++i) {
+    for (int i = 0; i < 10; ++i) {
       sum *= 10;
       sum += (str[i] - '0');
     }
@@ -97,7 +97,7 @@ void CheckVisibleNoQuotation(char *str) {
 void CheckReal(char *str) {
   int len = strlen(str);
   int dot = 0;
-  if(str[0] == '.') {
+  if (str[0] == '.') {
     throw(0);
   }
   for (int i = 0; i < len; ++i) {
@@ -115,16 +115,15 @@ void CheckReal(char *str) {
   return;
 }
 
-
 void CheckRepeat(std::string txt1) {
   std::string txt = txt1;
   std::set<std::string> s;
-  while(!txt.empty()) {
+  while (!txt.empty()) {
     std::string word = ProcessKey(txt);
-    if(word.empty()) {
+    if (word.empty()) {
       throw(0);
     }
-    if(s.find(word) != s.end()) {
+    if (s.find(word) != s.end()) {
       throw(0);
     }
     s.insert(word);

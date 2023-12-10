@@ -1,16 +1,16 @@
-#include"Processtxt.hpp"
+#include "Processtxt.hpp"
 using std::string;
 
 string ProcessTxt(string &txt) {
-  while(txt[0] == ' ') {
+  while (txt[0] == ' ') {
     txt.erase(0, 1);
   }
-  while(txt[txt.size() - 1] == ' ') {
+  while (txt[txt.size() - 1] == ' ') {
     txt.erase(txt.size() - 1, 1);
   }
   string tmp;
   int i = 0;
-  while((!txt.empty()) && txt[0] != ' ') {
+  while ((!txt.empty()) && txt[0] != ' ') {
     tmp += txt[0];
     txt.erase(0, 1);
     i++;
@@ -20,14 +20,14 @@ string ProcessTxt(string &txt) {
 
 string ProcessKey(string &txt) {
   string tmp;
-  if(txt[0] == '|') {
+  if (txt[0] == '|') {
     txt.erase(0, 1);
   }
-  while((!txt.empty()) && txt[0] != '|') {
+  while ((!txt.empty()) && txt[0] != '|') {
     tmp += txt[0];
     txt.erase(0, 1);
   }
-  if(tmp.empty()) {
+  if (tmp.empty()) {
     throw(0);
   }
   return tmp;
