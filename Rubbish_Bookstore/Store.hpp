@@ -115,23 +115,16 @@ private:
   static const int limit = 480;
   Element<T> res1[500], res2[500];
   MemoryRiver<Element<T>, 3> Data;
-  int total = 0;
   int start = 0;
+  int total = 0;
   int current = 0;
+
 public:
   Store(string txt) : Data(txt) {
     Data.initialise();
     Data.get_info(total, 1);
     Data.get_info(start, 2);
     Data.get_info(current, 3);
-    Data.write(res1[1], 12, total);
-  }
-  void UpdateIndex() {
-    Data.write(res1[1], 12, total);
-    Data.write_info(total, 1);
-    Data.write_info(start, 2);
-    Data.write_info(current, 3);
-    return;
   }
   Element<T> ArrayInsert(Element<T> &to_insert, int place, int size,
                          bool &flag) {
@@ -196,9 +189,6 @@ public:
   }
 
   int IndexFind(Element<T> &x) {
-    int start, total;
-    Data.get_info(start, 2);
-    Data.get_info(total, 1);
     Data.read(res1[1], 12, total);
     int last = start;
     for (int i = start; i; i = res1[i].Getblock_nxt()) {
@@ -216,13 +206,8 @@ public:
     Data.read(origin, 12 + (num - 1) * sizeof(Element<T>));
     Data.read(res2[1], origin.Getplace() * largest * sizeof(Element<T>) + 12,
               size); // 读入原有数据块。
-    int total, current;
-    Data.get_info(total, 1);
-    Data.get_info(current, 3);
     total++;
     current++;
-    Data.write_info(total, 1);
-    Data.write_info(current, 3); // 修改总数据。
     Data.write(res2[mid + 1], current * largest * sizeof(Element<T>) + 12,
                size - mid); // 写入新的数据块。
     new_block = res2[mid + 1];
@@ -239,17 +224,12 @@ public:
   }
 
   bool Ins(Element<T> to_insert) {
-    int total, start, current;
-    Data.get_info(total, 1);
-    Data.get_info(start, 2);
-    Data.get_info(current, 3);
     if (total == 0) {
       total++;
       to_insert.Setplace(1);
       to_insert.Setsize(1);
-      Data.write_info(total, 1);
-      Data.write_info(total, 2);
-      Data.write_info(total, 3);
+      start = 1;
+      current = 1;
       Data.write(to_insert, 12, 1);
       Data.write(to_insert, 12 + largest * sizeof(Element<T>), 1);
       return 0;
@@ -273,10 +253,7 @@ public:
   }
 
   bool Fin(Element<T> &to_find) {
-    int total, start;
     int target = IndexFind(to_find);
-    Data.get_info(total, 1);
-    Data.get_info(start, 2);
     if (!total) {
       return 0;
     }
@@ -298,10 +275,7 @@ public:
   }
 
   bool Del(Element<T> to_del) {
-    int total, start;
     int target = IndexFind(to_del);
-    Data.get_info(total, 1);
-    Data.get_info(start, 2);
     if (total == 0) {
       return 0;
     }
@@ -313,10 +287,8 @@ public:
       tmp.Setsize(size - 1);
       Data.write(tmp, 12 + (target - 1) * sizeof(Element<T>));
       if (!(size - 1)) { // 删除后为空
-        Data.write_info(total, 1);
         if (start == target) { // 删除块为开头
           start = tmp.Getblock_nxt();
-          Data.write_info(start, 2);
         } else {
           for (int i = start; i; i = res1[i].Getblock_nxt()) {
             if (res1[i].Getblock_nxt() == target) {
@@ -334,7 +306,6 @@ public:
           } // 空间重用。
         }
         total--;
-        Data.write_info(total, 1);
       }
     }
     return flag;
@@ -355,10 +326,7 @@ bool ArrayFindAll(const Element<T> &to_find, int place, int size, bool &found) {
 }
 
 void FindA(Element<T> to_find) {
-  int total, start;
   int target = IndexFind(to_find);
-  Data.get_info(total, 1);
-  Data.get_info(start, 2);
   if(!total) {
     cout << "\n";
     return;
@@ -411,9 +379,6 @@ public:
     return;
   }
   void PrintAll() {
-    int total, start;
-    Data.get_info(total, 1);
-    Data.get_info(start, 2);
     if (!total) {
       cout << "\n";
       return;
@@ -426,6 +391,12 @@ public:
     }
   }
   return;
+  }
+  void UpdateIndex() {
+    Data.write_info(total, 1);
+    Data.write_info(start, 2);
+    Data.write_info(current, 3);
+    return;
   }
 };
 

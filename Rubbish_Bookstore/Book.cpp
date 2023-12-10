@@ -75,9 +75,6 @@ KeyBook an_empty_keybook;
 void NewBook(char * txt) {
   Book tmp;
   tmp.SetISBN(txt);
-  if(!(book_main.Find(tmp) == an_empty_book)) {
-    throw(0);
-  }
   book_main.Insert(tmp);//添加入主库。
   KeyBook tmp1;
   tmp1.SetISBN(txt);
