@@ -15,7 +15,7 @@ protected:
   char author[61];
   char keyword[61];
   double price;
-  int quantity;
+  long long quantity;
 public:
   Book();
   void SetName(char *);
