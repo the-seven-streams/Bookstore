@@ -126,6 +126,13 @@ public:
     Data.get_info(current, 3);
     Data.write(res1[1], 12, total);
   }
+  void UpdateIndex() {
+    Data.write(res1[1], 12, total);
+    Data.write_info(total, 1);
+    Data.write_info(start, 2);
+    Data.write_info(current, 3);
+    return;
+  }
   Element<T> ArrayInsert(Element<T> &to_insert, int place, int size,
                          bool &flag) {
     Data.read(res2[1], place * largest * sizeof(Element<T>) + 12, size);
