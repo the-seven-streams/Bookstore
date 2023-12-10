@@ -1,6 +1,7 @@
 #include <bits/stdc++.h>
 #ifndef ACCOUNT_HPP
 #define ACCOUNT_HPP
+#include "Store.hpp"
 class Account {
 private:
   char userid[31];

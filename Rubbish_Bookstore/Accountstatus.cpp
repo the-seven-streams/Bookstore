@@ -1,12 +1,12 @@
 #include"Accountstatus.hpp"
 #include"Account.hpp"
-#include"Rubbishaccountstore.hpp"
 #include"Check.hpp"
 #include <cstring>
 #include"Book.hpp"
 #include"Store.hpp"
 using std::string;
 extern Store<Book> book_main;
+extern Store<Account> account;
 std::stack<Account> status;
 std::vector<Book> selected;
 std::multiset<Account> used;
@@ -33,7 +33,7 @@ void Login(char* id, char* pwd = nullptr) {
   Account tmp;
   tmp.SetuserID(id);
   Account to_check;
-  to_check = RubbishAccount::Find(tmp);
+  to_check = account.Find(tmp);
   if(!(to_check == tmp)) {
     throw(0);//说明没有找到。
   }

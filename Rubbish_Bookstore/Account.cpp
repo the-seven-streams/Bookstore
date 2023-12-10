@@ -1,5 +1,4 @@
 #include"Account.hpp"
-#include"Rubbishaccountstore.hpp"
 #include<bits/stdc++.h>
 #include <cstring>
 #include"Check.hpp"
@@ -8,6 +7,7 @@ using std::string;
 
 extern std::stack<Account> status;
 extern std::multiset<Account> used;
+Store<Account> account("account.txt");
 int current_power = 0;
 
 Account::Account() {
@@ -63,13 +63,13 @@ void Register(char *id, char *pwd, char *name) {
   CheckVisible(name);
   Account tmp;
   tmp.SetuserID(id);
-  if(RubbishAccount::Find(tmp) == tmp) {
+  if(account.Find(tmp) == tmp) {
     throw(0);
   }//说明该账户已经被注册。
   tmp.Setpassword(pwd);
   tmp.power = 1;
   strcpy(tmp.username, name);
-  RubbishAccount::Insert(tmp);
+  account.Insert(tmp);
   return;
 }
 
@@ -83,7 +83,7 @@ void ChangePassword(char *id, char *old_pw, char *new_pw) {
   Account tmp;
   tmp.SetuserID(id);
   Account to_change;
-  to_change = RubbishAccount::Find(tmp);
+  to_change = account.Find(tmp);
   if(!(to_change == tmp)) {
     throw(0);
   }//说明没有找到，无法修改密码。
@@ -92,13 +92,13 @@ void ChangePassword(char *id, char *old_pw, char *new_pw) {
       throw(0);//没有权限。不可以执行该操作。
     }
     to_change.Setpassword(old_pw);//修改密码。
-    RubbishAccount::Delete(to_change);
-    RubbishAccount::Insert(to_change);
+    account.Delete(to_change);
+    account.Insert(to_change);
   }else {
     to_change.Right(old_pw);//如果密码错误，即退出。
     to_change.Setpassword(new_pw);//修改密码。
-    RubbishAccount::Delete(to_change);
-    RubbishAccount::Insert(to_change);
+    account.Delete(to_change);
+    account.Insert(to_change);
   }
   return;
 }
@@ -108,13 +108,13 @@ void DeleteAccount(char *id) {
   CheckNLU(id);
   Account tmp;
   tmp.SetuserID(id);
-  if(!(RubbishAccount::Find(tmp) == tmp)) {
+  if(!(account.Find(tmp) == tmp)) {
     throw(0);
   }//说明没有找到，无法删除。
   if(used.find(tmp) != used.end()) {
     throw(0);
   }//说明该账户正在被使用，无法删除。
-  int ok = RubbishAccount::Delete(tmp);
+  int ok = account.Delete(tmp);
   if(!ok) {
     throw(0);
   }
@@ -142,13 +142,13 @@ void Addaccount(char *id, char *pw, char *pr, char *name) {
   }//权限不正确。
   Account tmp;
   tmp.SetuserID(id);
-  if(RubbishAccount::Find(tmp) == tmp) {
+  if(account.Find(tmp) == tmp) {
     throw(0);
   }//说明该账户已经被注册。
   tmp.Setpassword(pw);
   tmp.power = num;
   strcpy(tmp.username, name);
-  RubbishAccount::Insert(tmp);
+  account.Insert(tmp);
   return;
 }
 
@@ -156,7 +156,10 @@ void Addaccount(char *id, char *pw, char *pr, char *name) {
 void Initital() {
   Account root;
   root.Setroot();  
-  RubbishAccount::Insert(root);
+  if(account.Find(root) == root) {
+    return;
+  }//说明已经初始化过了。
+  account.Insert(root);
   return;
 }
 

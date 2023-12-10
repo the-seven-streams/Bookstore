@@ -4,7 +4,6 @@
 #include "Check.hpp"
 #include "Finance.hpp"
 #include "Processtxt.hpp"
-#include "Rubbishaccountstore.hpp"
 #include "Store.hpp"
 #include <bits/stdc++.h>
 #include <cassert>
@@ -21,6 +20,7 @@ Store<Book> book_main("book_main.txt");
 Store<KeyBook> book_author("book_author.txt");
 Store<KeyBook> book_name("book_name.txt");
 Store<KeyBook> book_keyword("book_keyword.txt");
+extern Store<Account> account;
 double total_cost = 0;
 double total_income = 0;
 
@@ -28,7 +28,7 @@ int main() {
   char *tmp;
   string txt;
   Initital();
-  while (1) {
+  while (!cin.eof()) {
     try {
       getline(cin, txt);
       string command = ProcessTxt(txt); // 捕获第一条指令。
@@ -139,6 +139,7 @@ int main() {
         book_author.UpdateIndex();
         book_name.UpdateIndex();
         book_keyword.UpdateIndex();
+        account.UpdateIndex();
         exit(0);
       }
       if (command == "exit") {
@@ -149,6 +150,7 @@ int main() {
         book_author.UpdateIndex();
         book_name.UpdateIndex();
         book_keyword.UpdateIndex();
+        account.UpdateIndex();
         exit(0);
       }
       if (command == "select") {
@@ -277,5 +279,6 @@ int main() {
   book_author.UpdateIndex();
   book_name.UpdateIndex();
   book_keyword.UpdateIndex();
+  account.UpdateIndex();
   return 0;
 }

@@ -9,6 +9,5 @@ Rubbish_Bookstore/Book.cpp
 Rubbish_Bookstore/Processtxt.cpp
 Rubbish_Bookstore/Check.cpp
 Rubbish_Bookstore/Accountstatus.cpp 
-Rubbish_Bookstore/Account.cpp
-Rubbish_Bookstore/Rubbishaccountstore.cpp)
+Rubbish_Bookstore/Account.cpp)
 

@@ -1,6 +1,7 @@
 #include <algorithm>
 #include <bits/stdc++.h>
 #include "Book.hpp"
+#include "Account.hpp"
 #ifndef STORE_HPP
 #define STORE_HPP
 using std::cout;
@@ -111,9 +112,9 @@ public:
 }; // 第一个数据记录了索引块的总个数。
 template <class T> class Store {
 private:
-  static const int largest = 500;
-  static const int limit = 480;
-  Element<T> res1[500], res2[500];
+  static const int largest = 600;
+  static const int limit = 300;
+  Element<T> res1[600], res2[600];
   MemoryRiver<Element<T>, 3> Data;
   int start = 0;
   int total = 0;
@@ -252,12 +253,11 @@ public:
     }
     return 0;
   }
-
   bool Fin(Element<T> &to_find) {
-    int target = IndexFind(to_find);
     if (!total) {
       return 0;
     }
+    int target = IndexFind(to_find);
     Element<T> tmp;
     int flag = 1;
     bool found = 0;
