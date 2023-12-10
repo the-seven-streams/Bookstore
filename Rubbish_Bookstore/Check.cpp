@@ -9,6 +9,16 @@ void CheckN(char *str) {
       throw(0);
     }
   }
+  if(len == 10) {
+    long long sum = 0;
+    for(int i = 0; i < 10; ++i) {
+      sum *= 10;
+      sum += (str[i] - '0');
+    }
+    if (sum > 2147483647) {
+      throw(0);
+    }
+  }
   return;
 }
 
@@ -115,6 +125,13 @@ void CheckRepeat(std::string txt1) {
       throw(0);
     }
     s.insert(word);
+  }
+  return;
+}
+
+void CheckSize13(char *str) {
+  if (strlen(str) > 13) {
+    throw(0);
   }
   return;
 }

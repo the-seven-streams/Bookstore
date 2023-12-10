@@ -236,6 +236,7 @@ int main() {
         if (cost.empty()) {
           throw(0);
         }
+        CheckSize13(const_cast<char *>(cost.c_str()));
         CheckReal(const_cast<char *>(cost.c_str()));
         int q = atoi(const_cast<char *>(quantity.c_str()));
         double c = atof(const_cast<char *>(cost.c_str()));

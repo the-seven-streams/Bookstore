@@ -288,6 +288,7 @@ void Book::ModifyProcess(string txt) {
       }
       price = 1;
       CheckReal(const_cast<char *>(addtion.c_str()));
+      CheckSize13(const_cast<char *>(addtion.c_str()));
       price_num = atof(const_cast<char *>(addtion.c_str()));
       continue;
     }

@@ -16,6 +16,7 @@ void CheckSize30(char *);
 void CheckSize60(char *);
 void CheckSize20(char *);
 void CheckSize10(char *);
+void CheckSize13(char *);
 void CheckVisibleNoQuotation(char *);
 void CheckReal(char *);
 void CheckRepeat(std::string);
