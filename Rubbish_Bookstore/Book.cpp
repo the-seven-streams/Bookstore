@@ -452,6 +452,7 @@ void Book::ModifyProcess(string txt) {
       }
       key = 1;
       CheckSize60(const_cast<char *>(addtion.c_str()));
+      CheckRepeat(addtion);
       CheckVisibleNoQuotation(const_cast<char *>(addtion.c_str()));
       keyword_txt = addtion;
       continue;
