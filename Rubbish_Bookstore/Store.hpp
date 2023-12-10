@@ -11,44 +11,44 @@ using std::upper_bound;
 using std::lower_bound;
 class Book;
 class KeyBook;
-template <class T> class Element {
+template <class T> class Element {//块状链表元素类。
 private:
-  int size;
-  int block_place;
-  int block_nxt;
+  int size;//块大小
+  int block_place;//块位置
+  int block_nxt;//下一个索引块
 
 public:
-  T element;
+  T element;//存储的真正内容。
   Element() {
     size = 0;
     block_place = 0;
     block_nxt = 0;
   }
-  void Setsize(int x) {
+  void Setsize(int x) {//设置块大小。
     size = x;
     return;
   }
-  int Getsize() { return size; }
-  int Getplace() { return block_place; }
-  void Setplace(int x) {
+  int Getsize() { return size; }//获取块大小。
+  int Getplace() { return block_place; }//获取块位置。
+  void Setplace(int x) {//设置块位置。
     block_place = x;
     return;
   }
-  int Getblock_nxt() { return block_nxt; }
-  void Setblock_nxt(int x) {
+  int Getblock_nxt() { return block_nxt; }//获取下一个索引块。
+  void Setblock_nxt(int x) {//设置下一个索引块。
     block_nxt = x;
     return;
   }
   bool operator<(const Element &a) const { return element < a.element; }
   bool operator>(const Element &a) const { return element > a.element; }
-  bool operator==(const Element &a) const { return element == a.element; }
+  bool operator==(const Element &a) const { return element == a.element; }//Element类的大小关系与T的大小关系相同。
 };
 
 template <class W, int info_len = 2> class MemoryRiver {
 private:
   fstream file;
-  string file_name;
-  int sizeofT = sizeof(W);
+  string file_name;//文件名。
+  int sizeofT = sizeof(W);//W的大小。
 
 public:
   MemoryRiver() {}
@@ -58,7 +58,7 @@ public:
     return;
   }
 
-  void initialise() {
+  void initialise() {//如果文件不存在，则会进行初始化操作，建立文件并初始化参数。
     if (access(file_name.c_str(), F_OK) == 0) {
       return;
     }
@@ -109,16 +109,16 @@ public:
     return;
   }
 
-}; // 第一个数据记录了索引块的总个数。
+};
 template <class T> class Store {
 private:
-  static const int largest = 600;
-  static const int limit = 300;
+  static const int largest = 600;//常量。指示最多有多少索引块。
+  static const int limit = 300;//常量，指示列块指标。
   Element<T> res1[600], res2[600];
   MemoryRiver<Element<T>, 3> Data;
-  int start = 0;
-  int total = 0;
-  int current = 0;
+  int start = 0;//索引块开头位置。
+  int total = 0;//索引块总数。
+  int current = 0;//当前数据块书写位置。
 
 public:
   Store(string txt) : Data(txt) {
@@ -131,7 +131,7 @@ public:
   }//这一部分既是在对文件本身进行初始化，同时也是在对内存进行初始化。
 
   Element<T> ArrayInsert(Element<T> &to_insert, int place, int size,
-                         bool &flag) {
+                         bool &flag) {//在数据块中按大小进行插入操作。
     Data.read(res2[1], place * largest * sizeof(Element<T>) + 12, size);
     // 读出原有数据块。
     int num = lower_bound(res2 + 1, res2 + size + 1, to_insert) - res2 -
@@ -160,7 +160,7 @@ public:
   }//返回值，指示索引内容。
 
 
-  bool ArrayFind(Element<T> &to_find, int place, int size, bool &found) {
+  bool ArrayFind(Element<T> &to_find, int place, int size, bool &found) {//在数据块中按大小进行查找操作。
     Data.read(res2[1], place * largest * sizeof(Element<T>) + 12, size);
     int num = lower_bound(res2 + 1, res2 + size + 1, to_find) - res2;
     if (num > size) {
@@ -175,7 +175,7 @@ public:
     }
   }
 
-  bool ArrayDel(Element<T> &to_del, int place, int size) {
+  bool ArrayDel(Element<T> &to_del, int place, int size) {//在数据块中按大小进行删除操作。
     Data.read(res2[1], place * largest * sizeof(Element<T>) + 12, size);
     int num = lower_bound(res2 + 1, res2 + size + 1, to_del) - res2 - 1;
     if (!(to_del == res2[num + 1])) {
@@ -193,7 +193,7 @@ public:
     return 1;
   }
 
-  int IndexFind(Element<T> &x) {
+  int IndexFind(Element<T> &x) {//找到目标元素所在的数据块。
     int last = start;
     for (int i = start; i; i = res1[i].Getblock_nxt()) {
       if (x < res1[i]) {
@@ -204,7 +204,7 @@ public:
     return last;
   } // 这个函数的目的是找到目标块。
 
-  void SplitBlock(int num, int size) {
+  void SplitBlock(int num, int size) {//分裂数据块。
     int mid = size / 2;
     Element<T> origin, new_block;
     origin = res1[num];
@@ -225,7 +225,7 @@ public:
     return;
   }
 
-  bool Ins(Element<T> to_insert) {
+  bool Ins(Element<T> to_insert) {//插入元素。
     if (total == 0) {
       total++;
       to_insert.Setplace(1);
@@ -253,7 +253,7 @@ public:
     }
     return 0;
   }
-  bool Fin(Element<T> &to_find) {
+  bool Fin(Element<T> &to_find) {//查找元素。
     if (!total) {
       return 0;
     }
@@ -275,7 +275,7 @@ public:
     return 1; // 1表示找到了
   }
 
-  bool Del(Element<T> to_del) {
+  bool Del(Element<T> to_del) {//删除元素。
     int target = IndexFind(to_del);
     if (total == 0) {
       return 0;
@@ -310,7 +310,7 @@ public:
     }
     return flag;
   }
-bool ArrayFindAll(const Element<T> &to_find, int place, int size, bool &found) {
+bool ArrayFindAll(const Element<T> &to_find, int place, int size, bool &found) {//在数据块中按大小进行查找操作。打印所有符合要求的元素。
   Data.read(res2[1], place * largest * sizeof(Element<T>) + 12, size);
   int num = lower_bound(res2 + 1, res2 + size + 1, to_find) - res2;
   for (int i = num; i <= size; i++) {
@@ -325,7 +325,7 @@ bool ArrayFindAll(const Element<T> &to_find, int place, int size, bool &found) {
   return 1;
 }
 
-void FindA(Element<T> to_find) {
+void FindA(Element<T> to_find) {//查找元素。打印所有符合要求的元素。
   int target = IndexFind(to_find);
   if(!total) {
     cout << "\n";
@@ -349,13 +349,13 @@ void FindA(Element<T> to_find) {
 }
 
 public:
-  bool Insert(T to_insert) {
+  bool Insert(T to_insert) {//插入元素。
     Element<T> tmp;
     tmp.element = to_insert;
     bool ok = (Ins(tmp) ^ 1);
     return ok;
   }
-  T Find(T to_find) {
+  T Find(T to_find) {//查找元素。
     Element<T> tmp;
     tmp.element = to_find;
     bool found = Fin(tmp);
@@ -366,19 +366,19 @@ public:
       return tmp.element;
     }
   }
-  bool Delete(T to_del) {
+  bool Delete(T to_del) {//删除元素。
     Element<T> tmp;
     tmp.element = to_del;
     bool ok = Del(tmp);
     return ok;
   }
-  void FindAll(T to_find_all) {
+  void FindAll(T to_find_all) {//查找元素。打印所有符合要求的元素。
     Element<T> tmp;
     tmp.element = to_find_all;
     FindA(tmp);
     return;
   }
-  void PrintAll() {
+  void PrintAll() {//打印所有元素。
     if (!total) {
       cout << "\n";
       return;
@@ -391,7 +391,7 @@ public:
   }
   return;
   }
-  void UpdateIndex() {
+  void UpdateIndex() {//更新索引。
     Data.write_info(total, 1);
     Data.write_info(start, 2);
     Data.write_info(current, 3);
