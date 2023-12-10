@@ -12,30 +12,28 @@ private:
 public:
   Account();
   ~Account();
-  void Setroot(); // done.
-  // This function is to set the root account.
-  void SetuserID(char *); // done.
-  // This function is to set the user id.
-  void Setpassword(char *); // done.
-  // This function is to set the password.
-  int Getpower(); // done.
-  // This function is to get the power of the account.
-  void Right(char *); // done.
-  // This function is to check whether the password is right.
+  void Setroot(); //该函数用于初始化。能够设置root账户。
+  void SetuserID(char *); //该函数用于设置用户id。
+  void Setpassword(char *); //该函数用于设置密码。
+  int Getpower(); //该函数用于获取权限。
+  void Right(char *); //该函数用于检查密码正确性。
   bool operator<(const Account &) const;
   bool operator>(const Account &) const;
-  bool operator==(const Account &) const;
+  bool operator==(const Account &) const;//账户之间的大小关系定义为用户id的字典序。
 
-  friend void Register(char *, char *, char *); // done.
-  // This function is to register a new account.
-  friend void ChangePassword(char *, char *, char *);//done.
-  friend void DeleteAccount(char *);//done.
-  friend void Addaccount(char *, char *, char *, char *);//done;
+  friend void Register(char *, char *, char *);
+  //实现注册功能。第一个参数为用户id，第二个参数为密码，第三个参数为用户名。
+  friend void ChangePassword(char *, char *, char *);
+  //实现修改密码功能。第一个参数为用户id，第二个参数为旧密码，第三个参数为新密码。
+  //如果只有两个参数，那么第三个参数可缺省。
+  friend void DeleteAccount(char *);
+  //实现删除账户功能。第一个参数为用户id。
+  friend void Addaccount(char *, char *, char *, char *);
+  //实现添加账户功能。第一个参数为用户id，第二个参数为密码，第三个参数为权限，第四个参数为用户名。
 };
-void Register(char *, char *, char *); // done.
-void ChangePassword(char *, char *, char *);//done.
-void DeleteAccount(char *);//done.
-void Addaccount(char *, char *, char *, char *);//done;
-void Initital();
-// This function is to initialize the system.
+void Register(char *, char *, char *);
+void ChangePassword(char *, char *, char *);
+void DeleteAccount(char *);
+void Addaccount(char *, char *, char *, char *);
+void Initital();//该函数用于初始化系统。即创建root账户。
 #endif
