@@ -169,3 +169,5 @@ bool Account::operator>(const Account &b) const {
 bool Account::operator==(const Account &b) const {
   return strcmp(userid, b.userid) == 0;
 }
+
+char *Account::GetID() { return userid; }

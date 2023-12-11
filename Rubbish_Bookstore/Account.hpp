@@ -17,6 +17,7 @@ public:
   void Setpassword(char *); // 该函数用于设置密码。
   int Getpower();           // 该函数用于获取权限。
   void Right(char *);       // 该函数用于检查密码正确性。
+  char *GetID();            // 该函数用于获取用户id。
   bool operator<(const Account &) const;
   bool operator>(const Account &) const;
   bool

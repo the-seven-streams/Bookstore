@@ -1,21 +1,25 @@
 #include<bits/stdc++.h>
 #ifndef Log_hpp
 #define Log_hpp
-#include"Accout.hpp"
+#include"Account.hpp"
 #include"Store.hpp"
 struct Operation{
   Account user;
-  char command[10];
-  char ISBN[20];
-  char id[30];
+  char command[20];
+  char ISBN[21];
+  char id[31];
   bool author;
   bool ISBN_;
   bool name;
   bool keyword;
   bool price;
   double value;
-  void Print();
-  void PrintEmployee();
-  void PrintFinance();
+  int quantity;
+  char addtion[61];
 };
+void Initial(Operation &);
+void Print(Operation &);
+void Log();
+void ReportFinance();
+void ReportEmployee();
 #endif
