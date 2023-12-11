@@ -344,6 +344,31 @@ int main() {
         AddLog(recorder);
         continue;
       }
+      if(command == "log") {
+        if(current_power < 7) {
+          throw(0);
+        }
+        CheckEmpty(txt);
+        Log();
+        continue;
+      }
+      if(command == "report") {
+        if(current_power < 7) {
+          throw(0);
+        }
+        string addtion = ProcessTxt(txt);
+        if(addtion == "finance") {
+          CheckEmpty(txt);
+          ReportFinance();
+          continue;
+        }
+        if(addtion == "employee") {
+          CheckEmpty(txt);
+          ReportEmployee();
+          continue;
+        }
+        throw(0);
+      }
       throw(0);     // 捕获无效指令。
     } catch (int) { // 针对程序中出现的所有问题进行捕获。
       std::cout << "Invalid\n";
