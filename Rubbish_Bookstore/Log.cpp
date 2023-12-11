@@ -2,7 +2,7 @@
 #include <cstring>
 #include <iomanip>
 #include <iostream>
-MemoryRiver<Operation, 1> logdata("Log.txt");
+MemoryRiver<Operation, 1> logdata("log.txt");
 
 void InitialOp(Operation &op) {
   op.author = false;

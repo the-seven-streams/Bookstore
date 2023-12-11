@@ -17,10 +17,10 @@ struct Operation{
   int quantity;
   char addtion[61];
 };
-void InitialOp(Operation &);
-void Print(Operation &);
-void Log();
-void ReportFinance();
-void ReportEmployee();
-void AddLog(Operation &);
+void InitialOp(Operation &);//初始化记录。
+void Print(Operation &);//将记录的内容打印。
+void Log();//输出所有日志。
+void ReportFinance();//输出财务报告。
+void ReportEmployee();//输出员工工作情况。
+void AddLog(Operation &);//添加日志。
 #endif
