@@ -31,7 +31,7 @@ void Print(Operation &op) {
     return;
   }
   if((strcmp(op.command, "select") == 0)||(strcmp(op.command, "modify") == 0)) {
-    cout << "The Target Book is " << op.ISBN << ".";//说明操作对象。
+    cout << "The Target Book is " << op.ISBN << ".\n";//说明操作对象。
     if(strcmp(op.command, "modify") == 0) {
       cout << "The Target Book is modified with";
       if(op.author) {
@@ -65,11 +65,11 @@ void Print(Operation &op) {
     return;
   }
   if(strcmp(op.command, "buy") == 0) {
-    cout << op.quantity << " book(s) " << op.ISBN << " is sold with " << op.value << ".\n";
+    cout << op.quantity << " book(s) " << op.ISBN << " (are) sold with " << op.value << ".\n";
     return;
   }
   if(strcmp(op.command, "import") == 0) {
-    cout << op.quantity << " book(s) " << op.ISBN << " is imported with " << op.value << ".\n";
+    cout << op.quantity << " book(s) " << op.ISBN << " is(are) imported with " << op.value << ".\n";
     return;
   }
   return;
