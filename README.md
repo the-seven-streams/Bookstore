@@ -1,2 +1,2 @@
 # Bookstore
-**Bookstore**,启动！
+**Bookstore**,再会！
