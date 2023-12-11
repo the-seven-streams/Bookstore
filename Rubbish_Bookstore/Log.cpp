@@ -80,7 +80,7 @@ void Log() {
   int total;
   logdata.get_info(total, 1);//获取日志总数。
   Operation *op = new Operation[total];
-  logdata.read(op[0], 4);
+  logdata.read(op[0], 4, total);
   for(int i = 0; i < total; i++) {
     Print(op[i]);
   }
@@ -93,7 +93,7 @@ void ReportFinance() {
   int total;
   logdata.get_info(total, 1);//获取日志总数。
   Operation *op = new Operation[total];
-  logdata.read(op[0], 4);
+  logdata.read(op[0], 4, total);
   double buy = 0, import = 0;
   for(int i = 0; i < total; i++) {
     if(strcmp(op[i].command, "buy") == 0) {
@@ -116,7 +116,7 @@ void ReportEmployee() {
   int total;
   logdata.get_info(total, 1);//获取日志总数。
   Operation *op = new Operation[total];
-  logdata.read(op[0], 4);
+  logdata.read(op[0], 4, total);
   for(int i = 0; i < total; i++) {
     if(op[i].user.Getpower() < 3) {
       continue;

@@ -303,6 +303,7 @@ void Book::ModifyProcess(string txt) {
       name = 1;
       CheckSize60(const_cast<char *>(addtion.c_str()));
       CheckVisibleNoQuotation(const_cast<char *>(addtion.c_str()));
+      recorder.name = 1;
       name_txt = addtion;
       continue;
     }

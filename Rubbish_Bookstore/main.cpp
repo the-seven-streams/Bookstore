@@ -44,7 +44,9 @@ int main() {
         continue;
       }
       if (command == "su") {
-        recorder.user = status.top();
+        if(!status.empty()) {
+          recorder.user = status.top();
+        }
         string id = ProcessTxt(txt); // 捕获用户名。
         if (id.empty()) {
           throw(0);
@@ -202,6 +204,7 @@ int main() {
         CheckEmpty(txt); // 检查是否有冗余参数。
         Select(const_cast<char *>(ISBN.c_str()));
         recorder.user = status.top();
+
         strcpy(recorder.command, "select");
         strcpy(recorder.ISBN, ISBN.c_str());
         AddLog(recorder);
