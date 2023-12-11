@@ -8,6 +8,7 @@
 #include "Store.hpp"
 #include <bits/stdc++.h>
 #include <cassert>
+#include <cstring>
 #include <string>
 using std::cin;
 using std::getline;
@@ -268,7 +269,11 @@ int main() {
         if (selected.back() == an_empty_book) {
           throw(0);
         } // 未选中书目。
+        strcpy(recorder.ISBN, selected.back().GetISBN());
         selected.back().ModifyProcess(txt);
+        recorder.user = status.top();
+        strcpy(recorder.command, "modify");
+        AddLog(recorder);
         continue;
       }
       if (command == "import") {
@@ -302,6 +307,12 @@ int main() {
         selected.back().Import(q);
         total_cost += c;
         AddDeal(-c);
+        recorder.user = status.top();
+        strcpy(recorder.command, "import");
+        recorder.quantity = q;
+        recorder.value = c;
+        strcpy(recorder.ISBN, selected.back().GetISBN());
+        AddLog(recorder);
         continue;
       }
       if (command == "buy") {
@@ -325,6 +336,12 @@ int main() {
         CheckEmpty(txt);
         total_income += value;
         AddDeal(value);
+        recorder.user = status.top();
+        strcpy(recorder.command, "buy");
+        recorder.quantity = n;
+        recorder.value = value;
+        strcpy(recorder.ISBN, isbn.c_str());
+        AddLog(recorder);
         continue;
       }
       throw(0);     // 捕获无效指令。

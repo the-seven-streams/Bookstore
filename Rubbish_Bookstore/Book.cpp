@@ -4,10 +4,10 @@
 #include <bits/stdc++.h>
 #include <cmath>
 #include <cstring>
-
+#include "Log.hpp"
 extern std::vector<Book> selected;
 extern double total_income;
-
+extern Operation recorder;
 Book::Book() {
   strcpy(ISBN, "");
   strcpy(name, "");
@@ -259,6 +259,7 @@ void Book::ModifyProcess(string txt) {
       ISBN = 1;
       CheckSize20(const_cast<char *>(addtion.c_str()));
       CheckVisible(const_cast<char *>(addtion.c_str()));
+      recorder.ISBN_ = 1;
       ISBN_txt = addtion;
       if (ISBN_txt == tmp1.GetISBN()) {
         throw(0);
@@ -279,6 +280,7 @@ void Book::ModifyProcess(string txt) {
       CheckReal(const_cast<char *>(addtion.c_str()));
       CheckSize13(const_cast<char *>(addtion.c_str()));
       price_num = atof(const_cast<char *>(addtion.c_str()));
+      recorder.price = 1;
       continue;
     }
     if (addtion.size() < 8) {
@@ -320,6 +322,7 @@ void Book::ModifyProcess(string txt) {
       CheckSize60(const_cast<char *>(addtion.c_str()));
       CheckVisibleNoQuotation(const_cast<char *>(addtion.c_str()));
       author_txt = addtion;
+      recorder.author = 1;
       continue;
     }
     if (addtion.size() < 10) {
