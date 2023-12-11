@@ -2,6 +2,7 @@
 #include "Check.hpp"
 #include "Store.hpp"
 #include <bits/stdc++.h>
+#include <cmath>
 #include <cstring>
 
 extern std::vector<Book> selected;
@@ -83,7 +84,7 @@ void Book::Show() {
   cout << '\t';
   cout << keyword;
   cout << '\t';
-  cout << std::fixed << std::setprecision(2) << price; // 设置价格精度。
+  cout << std::fixed << std::setprecision(2) << price + 0.00000000001; // 设置价格精度。
   cout << '\t';
   cout << quantity;
   cout << '\n';
@@ -456,7 +457,8 @@ double Buy(char *txt, int number) {
   }
   tmp.quantity -= number;
   total_income += tmp.price * number;
-  cout << std::fixed << std::setprecision(2) << tmp.price * number << '\n';
+  cout << std::fixed << std::setprecision(2) << tmp.price * number + 0.00000000001
+  << '\n';
   book_main.Delete(tmp);
   book_main.Insert(tmp);
   Update(tmp, tmp);

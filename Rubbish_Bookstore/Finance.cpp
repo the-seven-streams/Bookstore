@@ -46,8 +46,8 @@ void ShowFinance(int n) {
     finance_total.read(cost, sizeof(double), 1);
   }
   std::cout << "+ ";
-  std::cout << std::fixed << std::setprecision(2) << income << " ";
+  std::cout << std::fixed << std::setprecision(2) << income + 0.0000000000001 << " ";
   std::cout << "- ";
-  std::cout << std::fixed << std::setprecision(2) << fabs(cost) << std::endl;
+  std::cout << std::fixed << std::setprecision(2) << fabs(cost) + 0.0000000000001 << std::endl;
   return;
 }
