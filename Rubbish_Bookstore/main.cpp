@@ -4,6 +4,7 @@
 #include "Check.hpp"
 #include "Finance.hpp"
 #include "Processtxt.hpp"
+#include "Log.hpp"
 #include "Store.hpp"
 #include <bits/stdc++.h>
 #include <cassert>
@@ -15,27 +16,34 @@ extern int current_power;
 extern std::vector<Book> selected;
 extern Book an_empty_book;
 extern KeyBook an_empty_keybook;
+extern std::stack<Account> status;
 extern double Buy(char *, int);
 Store<Book> book_main("book_main.txt");
 Store<KeyBook> book_author("book_author.txt");
 Store<KeyBook> book_name("book_name.txt");
 Store<KeyBook> book_keyword("book_keyword.txt");
 extern Store<Account> account;
+extern MemoryRiver<Operation, 1> logdata;
 double total_cost = 0;
 double total_income = 0;
+Operation recorder;
 
 int main() {
   char *tmp;
   string txt;
+  string res;
   Initital();
   while (!cin.eof()) {
     try {
-      getline(cin, txt);
+      InitialOp(recorder);
+      getline(cin, res);
+      txt = res;
       string command = ProcessTxt(txt); // 捕获第一条指令。
       if (command == "") {
         continue;
       }
       if (command == "su") {
+        recorder.user = status.top();
         string id = ProcessTxt(txt); // 捕获用户名。
         if (id.empty()) {
           throw(0);
@@ -44,14 +52,23 @@ int main() {
         CheckEmpty(txt);
         Login(const_cast<char *>(id.c_str()),
               const_cast<char *>(password.c_str()));
+        strcpy(recorder.command, "su");
+        strcpy(recorder.id, id.c_str()); 
+        AddLog(recorder);
         continue;
       }
       if (command == "logout") {
+        if(status.empty()) {
+          throw(0);
+        }
+        recorder.user = status.top();
         if (current_power == 0) {
           throw(0);
         }
         CheckEmpty(txt);
         Logout();
+        strcpy(recorder.command, "logout");
+        AddLog(recorder);
         continue;
       }
       if (command == "register") {
@@ -71,6 +88,14 @@ int main() {
         Register(const_cast<char *>(id.c_str()),
                  const_cast<char *>(password.c_str()),
                  const_cast<char *>(name.c_str()));
+        if(!status.empty()) {
+          recorder.user = status.top();
+        } else {
+          recorder.user = Account();
+        }
+        strcpy(recorder.command, "register");
+        strcpy(recorder.id, id.c_str());
+        AddLog(recorder);
         continue;
       }
       if (command == "passwd") {
@@ -90,6 +115,10 @@ int main() {
         ChangePassword(const_cast<char *>(id.c_str()),
                        const_cast<char *>(oldpassword.c_str()),
                        const_cast<char *>(newpassword.c_str()));
+        recorder.user = status.top();
+        strcpy(recorder.command, "passwd");
+        strcpy(recorder.id, id.c_str());
+        AddLog(recorder);
         continue;
       }
       if (command == "useradd") {
@@ -117,6 +146,10 @@ int main() {
                    const_cast<char *>(password.c_str()),
                    const_cast<char *>(power.c_str()),
                    const_cast<char *>(name.c_str()));
+        recorder.user = status.top();
+        strcpy(recorder.command, "useradd");
+        strcpy(recorder.id, id.c_str());
+        AddLog(recorder);
         continue;
       }
       if (command == "delete") {
@@ -129,6 +162,10 @@ int main() {
         }
         CheckEmpty(txt);
         DeleteAccount(const_cast<char *>(id.c_str()));
+        recorder.user = status.top();
+        strcpy(recorder.command, "delete");
+        strcpy(recorder.id, id.c_str());
+        AddLog(recorder);
         continue;
       }
       if (command == "quit") {
@@ -163,6 +200,10 @@ int main() {
         }
         CheckEmpty(txt); // 检查是否有冗余参数。
         Select(const_cast<char *>(ISBN.c_str()));
+        recorder.user = status.top();
+        strcpy(recorder.command, "select");
+        strcpy(recorder.ISBN, ISBN.c_str());
+        AddLog(recorder);
         continue;
       }
       if (command == "show") {
@@ -190,10 +231,17 @@ int main() {
             continue;
           }
           ShowFinance(num);
+          recorder.user = status.top();
+          strcpy(recorder.command, "showfinance");
+          AddLog(recorder);
           continue;
         }
         if (addtion.empty()) {
           Showall();
+          recorder.user = status.top();
+          strcpy(recorder.command, "show");
+          strcpy(recorder.addtion, "");
+          AddLog(recorder);
           continue;
         }
         if (addtion[0] != '-') {
@@ -204,6 +252,10 @@ int main() {
           throw(0);
         } // 弟啊，你参数呢。
         Processshow(addtion);
+        recorder.user = status.top();
+        strcpy(recorder.command, "show");
+        strcpy(recorder.addtion, addtion.c_str());
+        AddLog(recorder);
         continue;
       }
       if (command == "modify") {

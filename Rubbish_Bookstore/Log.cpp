@@ -4,7 +4,7 @@
 #include <iostream>
 MemoryRiver<Operation, 1> logdata("Log.txt");
 
-void Initial(Operation &op) {
+void InitialOp(Operation &op) {
   op.author = false;
   op.ISBN_ = false;
   op.name = false;
@@ -58,22 +58,11 @@ void Print(Operation &op) {
       cout  << "All Books are shown.\n";
       return;
     }
-    if(op.author) {
-      cout << "Books with author " << op.addtion << " are shown.\n";
-      return;
-    }
-    if(op.ISBN_) {
-      cout << "Books with ISBN " << op.addtion << " are shown.\n";
-      return;
-    }
-    if(op.name) {
-      cout << "Books with name " << op.addtion << " are shown.\n";
-      return;
-    }
-    if(op.keyword) {
-      cout << "Books with keyword " << op.addtion << " are shown.\n";
-      return;
-    }
+    cout << "Books with " << op.addtion << " are shown.\n";
+  }
+  if(strcmp(op.command, "showfinance") == 0) {
+    cout << "Finance is shown.\n";
+    return;
   }
   if(strcmp(op.command, "buy") == 0) {
     cout << op.quantity << " book(s) " << op.ISBN << " is sold with " << op.value << ".\n";
@@ -135,5 +124,14 @@ void ReportEmployee() {
     Print(op[i]);
   }
   delete[] op;
+  return;
+}
+
+void AddLog(Operation &op) {
+  int total;
+  logdata.get_info(total, 1);//获取日志总数。
+  logdata.write(op, 4 + total * sizeof(Operation));
+  total++;
+  logdata.write_info(total, 1);
   return;
 }

@@ -17,9 +17,10 @@ struct Operation{
   int quantity;
   char addtion[61];
 };
-void Initial(Operation &);
+void InitialOp(Operation &);
 void Print(Operation &);
 void Log();
 void ReportFinance();
 void ReportEmployee();
+void AddLog(Operation &);
 #endif
