@@ -32,7 +32,7 @@ public:
       char *); // 该函数用于设置关键词。输入值即为关键词。（=后的内容，除引号）
   friend void Update(Book, Book); // 该函数用于将主库中的图书信息更新到其他库中。
   // 第一个参数为旧信息，第二个参数为新信息。
-  friend double
+  friend long double
   Buy(char *,
       int); // 该函数用于购买图书。第一个参数为ISBN，第二个参数为购买数量。
   virtual bool operator>(const Book &) const;

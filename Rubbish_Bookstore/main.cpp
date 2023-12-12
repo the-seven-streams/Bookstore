@@ -18,15 +18,15 @@ extern std::vector<Book> selected;
 extern Book an_empty_book;
 extern KeyBook an_empty_keybook;
 extern std::stack<Account> status;
-extern double Buy(char *, int);
+extern long double Buy(char *, int);
 Store<Book> book_main("book_main.txt");
 Store<KeyBook> book_author("book_author.txt");
 Store<KeyBook> book_name("book_name.txt");
 Store<KeyBook> book_keyword("book_keyword.txt");
 extern Store<Account> account;
 extern MemoryRiver<Operation, 1> logdata;
-double total_cost = 0;
-double total_income = 0;
+long double total_cost = 0;
+long double total_income = 0;
 Operation recorder;
 
 int main() {
@@ -40,12 +40,6 @@ int main() {
       getline(cin, res);
       txt = res;
       string command = ProcessTxt(txt); // 捕获第一条指令。
-      while(command == "\n" || command == "\r" || command == "\t") {
-        if(txt.empty()) {
-          continue;
-        }
-        command = ProcessTxt(txt);
-      }
       if (command == "") {
         continue;
       }
@@ -305,7 +299,7 @@ int main() {
         CheckSize13(const_cast<char *>(cost.c_str()));
         CheckReal(const_cast<char *>(cost.c_str()));
         int q = atoi(const_cast<char *>(quantity.c_str()));
-        double c = atof(const_cast<char *>(cost.c_str()));
+        long double c = std::stold(cost);
         if (q <= 0) {
           throw(0);
         }
@@ -341,7 +335,7 @@ int main() {
         CheckSize10(const_cast<char *>(num.c_str()));
         CheckN(const_cast<char *>(num.c_str()));
         int n = atoi(const_cast<char *>(num.c_str()));
-        double value = Buy(const_cast<char *>(isbn.c_str()), n);
+        long double value = Buy(const_cast<char *>(isbn.c_str()), n);
         CheckEmpty(txt);
         total_income += value;
         AddDeal(value);

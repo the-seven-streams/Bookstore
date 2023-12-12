@@ -6,7 +6,7 @@
 #include <cstring>
 #include "Log.hpp"
 extern std::vector<Book> selected;
-extern double total_income;
+extern long double total_income;
 extern Operation recorder;
 Book::Book() {
   strcpy(ISBN, "");
@@ -84,7 +84,7 @@ void Book::Show() {
   cout << '\t';
   cout << keyword;
   cout << '\t';
-  cout << std::fixed << std::setprecision(2) << price + 0.00000000001; // 设置价格精度。
+  cout << std::fixed << std::setprecision(2) << price; // 设置价格精度。
   cout << '\t';
   cout << quantity;
   cout << '\n';
@@ -279,7 +279,7 @@ void Book::ModifyProcess(string txt) {
       price = 1;
       CheckReal(const_cast<char *>(addtion.c_str()));
       CheckSize13(const_cast<char *>(addtion.c_str()));
-      price_num = atof(const_cast<char *>(addtion.c_str()));
+      price_num = std::stold(addtion);
       recorder.price = 1;
       continue;
     }
@@ -444,7 +444,7 @@ void Book::Import(int num) {
   return;
 }
 
-double Buy(char *txt, int number) {
+long double Buy(char *txt, int number) {
   CheckSize20(txt);
   CheckVisible(txt);
   Book tmp;
@@ -461,7 +461,7 @@ double Buy(char *txt, int number) {
   }
   tmp.quantity -= number;
   total_income += tmp.price * number;
-  cout << std::fixed << std::setprecision(2) << tmp.price * number + 0.00000000001
+  cout << std::fixed << std::setprecision(2) << tmp.price * number
   << '\n';
   book_main.Delete(tmp);
   book_main.Insert(tmp);

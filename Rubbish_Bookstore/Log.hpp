@@ -13,7 +13,7 @@ struct Operation {
   bool name;
   bool keyword;
   bool price;
-  double value;
+  long double value;
   int quantity;
   char addtion[61];
 };

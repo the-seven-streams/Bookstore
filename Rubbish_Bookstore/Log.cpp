@@ -94,7 +94,7 @@ void ReportFinance() {
   logdata.get_info(total, 1);//获取日志总数。
   Operation *op = new Operation[total];
   logdata.read(op[0], 4, total);
-  double buy = 0, import = 0;
+  long double buy = 0, import = 0;
   for(int i = 0; i < total; i++) {
     if(strcmp(op[i].command, "buy") == 0) {
       buy += op[i].value;
