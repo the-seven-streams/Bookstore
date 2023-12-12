@@ -4,6 +4,12 @@
 extern std::vector<Book> selected;
 void CheckN(char *str) {
   int len = strlen(str);
+  if(len == 0) {
+    throw(0);
+  }
+  if(str[0] == '0') {
+    throw(0);
+  }
   for (int i = 0; i < len; ++i) {
     if (str[i] < '0' || str[i] > '9') {
       throw(0);
