@@ -94,6 +94,9 @@ void ChangePassword(char *id, char *old_pw, char *new_pw) {
     account.Insert(to_change);
   } else {
     to_change.Right(old_pw);       // 如果密码错误，即退出。
+    if(strcmp(old_pw, new_pw) == 0) {
+      throw(0);
+    } // 说明新旧密码相同。
     to_change.Setpassword(new_pw); // 修改密码。
     account.Delete(to_change);
     account.Insert(to_change);
