@@ -7,8 +7,10 @@ void CheckN(char *str) {
   if(len == 0) {
     throw(0);
   }
-  if(str[0] == '0') {
-    throw(0);
+  if(len > 1) {
+    if(str[0] == '0') {
+      throw(0);
+    }
   }
   for (int i = 0; i < len; ++i) {
     if (str[i] < '0' || str[i] > '9') {
