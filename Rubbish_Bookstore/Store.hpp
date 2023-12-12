@@ -114,9 +114,9 @@ public:
 };
 template <class T> class Store {
 private:
-  static const int largest = 600; // 常量。指示最多有多少索引块。
-  static const int limit = 300;   // 常量，指示裂块指标。
-  Element<T> res1[600], res2[600];
+  static const int largest = 1000; // 常量。指示最多有多少索引块。
+  static const int limit = 980;   // 常量，指示裂块指标。
+  Element<T> res1[1005], res2[1005];
   MemoryRiver<Element<T>, 3> Data;
   int start = 0;   // 索引块开头位置。
   int total = 0;   // 索引块总数。
