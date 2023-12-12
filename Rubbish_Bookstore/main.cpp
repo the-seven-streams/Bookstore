@@ -40,6 +40,9 @@ int main() {
       getline(cin, res);
       txt = res;
       string command = ProcessTxt(txt); // 捕获第一条指令。
+      if (command == "") {
+        continue;
+      }
       if (command == "su") {
         if(!status.empty()) {
           recorder.user = status.top();
