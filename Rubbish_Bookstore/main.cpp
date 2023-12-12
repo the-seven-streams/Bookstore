@@ -41,7 +41,7 @@ int main() {
       fflush(stdin);
       txt = res;
       for(int i = 0; i < res.size(); i++) {
-        if(res[i] > 126 || res[i] < 31) {
+        if(res[i] > 126 || res[i] <= 31) {
           throw(0);
         }
       }
