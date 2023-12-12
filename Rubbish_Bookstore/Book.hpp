@@ -14,7 +14,7 @@ protected:
   char name[61];
   char author[61];
   char keyword[61];
-  double price;
+  long double price;
   long long quantity;
 
 public:

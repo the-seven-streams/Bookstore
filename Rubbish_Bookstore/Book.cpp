@@ -227,7 +227,7 @@ void Book::ModifyProcess(string txt) {
   string name_txt;
   string author_txt;
   string keyword_txt;
-  double price_num;
+  long double price_num;
   string ISBN_txt;
   bool name = 0;
   bool author = 0;
