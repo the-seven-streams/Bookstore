@@ -120,6 +120,7 @@ void DeleteAccount(char *id) {
     throw(0);
   }
   return;
+  
 }
 
 void Addaccount(char *id, char *pw, char *pr, char *name) {
