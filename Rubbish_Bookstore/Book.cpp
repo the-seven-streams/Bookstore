@@ -127,6 +127,7 @@ void Processshow(string txt) {
     throw(0);
   } // txt长度至少为6.
   if (txt[0] == 'I') {
+        assert(0);
     string res;
     res = txt.substr(0, 5);
     if (res != "ISBN=") {
