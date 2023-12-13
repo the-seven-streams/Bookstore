@@ -45,7 +45,6 @@ int main() {
         continue;
       }
       if (command == "su") {
-        assert(0);
         if(!status.empty()) {
           recorder.user = status.top();
         }
@@ -196,6 +195,7 @@ int main() {
         exit(0);
       }
       if (command == "select") {
+        assert(0);
         if (current_power < 3) {
           throw(0);
         }
