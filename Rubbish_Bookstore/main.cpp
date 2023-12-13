@@ -103,6 +103,7 @@ int main() {
         continue;
       }
       if (command == "passwd") {
+        assert(0);
         if (current_power == 0) {
           throw(0);
         }
@@ -323,7 +324,6 @@ int main() {
         continue;
       }
       if (command == "buy") {
-        assert(0);
         if (!current_power) {
           throw(0);
         }
