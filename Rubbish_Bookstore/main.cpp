@@ -126,6 +126,7 @@ int main() {
         continue;
       }
       if (command == "useradd") {
+        assert(0);
         if (current_power < 3) {
           throw(0);
         }
@@ -203,6 +204,8 @@ int main() {
           throw(0);
         }
         CheckEmpty(txt); // 检查是否有冗余参数。
+        CheckSize20(const_cast<char *>(ISBN.c_str()));
+        CheckVisible(const_cast<char *>(ISBN.c_str()));
         Select(const_cast<char *>(ISBN.c_str()));
         recorder.user = status.top();
 
