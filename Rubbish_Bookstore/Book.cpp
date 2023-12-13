@@ -122,7 +122,7 @@ void ShowISBN(char *isbn) {
   return;
 }
 
-void Processshow(string txt) {
+void Processshow(string &txt) {
   if (txt.size() < 6) {
     throw(0);
   } // txt长度至少为6.

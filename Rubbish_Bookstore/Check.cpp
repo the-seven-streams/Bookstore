@@ -103,9 +103,6 @@ void CheckReal(char *str) {
   if(len == 0) {
     throw(0);
   }
-  if(str[0] == '.') {
-    throw(0);
-  }
   for (int i = 0; i < len; ++i) {
     if (str[i] < '0' || str[i] > '9') {
       if (str[i] == '.') {
