@@ -45,6 +45,7 @@ int main() {
         continue;
       }
       if (command == "su") {
+        assert(0);
         if(!status.empty()) {
           recorder.user = status.top();
         }
@@ -62,7 +63,6 @@ int main() {
         continue;
       }
       if (command == "logout") {
-        assert(0);
         if(status.empty()) {
           throw(0);
         }
