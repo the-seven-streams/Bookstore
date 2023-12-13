@@ -122,14 +122,15 @@ void ShowISBN(char *isbn) {
   return;
 }
 
-void Processshow(string txt) {
+void Processshow(string res) {
+  string txt = res;
   if (txt.size() < 6) {
     throw(0);
   } // txt长度至少为6.
   if (txt[0] == 'I') {
     string res;
     res = txt.substr(0, 5);
-    if (res != "ISBN=") {
+    if (strcmp(const_cast<char *>(res.c_str()), "ISBN=") != 0) {
       throw(0);
     }
     txt.erase(0, 5);
@@ -146,7 +147,7 @@ void Processshow(string txt) {
   if (txt[0] == 'n') {
     string res;
     res = txt.substr(0, 6);
-    if (res != "name=\"") {
+    if (strcmp(const_cast<char *>(res.c_str()), "name=\"") != 0) {
       throw(0);
     }
     txt.erase(0, 6);
@@ -159,7 +160,7 @@ void Processshow(string txt) {
   if (txt[0] == 'a') {
     string res;
     res = txt.substr(0, 8);
-    if (res != "author=\"") {
+    if (strcmp(const_cast<char *>(res.c_str()), "author=\"") != 0) {
       throw(0);
     }
     txt.erase(0, 8);
@@ -172,7 +173,7 @@ void Processshow(string txt) {
   if (txt[0] == 'k') {
     string res;
     res = txt.substr(0, 9);
-    if (res != "keyword=\"") {
+    if (strcmp(const_cast<char *>(res.c_str()), "keyword=\"") != 0) {
       throw(0);
     }
     txt.erase(0, 9);
