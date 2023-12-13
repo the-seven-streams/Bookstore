@@ -284,7 +284,6 @@ int main() {
         continue;
       }
       if (command == "import") {
-        assert(0);
         if (current_power < 3) {
           throw(0);
         }
@@ -324,6 +323,7 @@ int main() {
         continue;
       }
       if (command == "buy") {
+        assert(0);
         if (!current_power) {
           throw(0);
         }
