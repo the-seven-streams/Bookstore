@@ -100,10 +100,11 @@ void CheckVisibleNoQuotation(char *str) {
 void CheckReal(char *str) {
   int len = strlen(str);
   int dot = 0;
-  if(len >= 2) {
-    if (str[0] == '0' && str[1] != '.') {
-      throw(0);
-    }
+  if(len == 0) {
+    throw(0);
+  }
+  if(str[0] == '.') {
+    throw(0);
   }
   for (int i = 0; i < len; ++i) {
     if (str[i] < '0' || str[i] > '9') {
