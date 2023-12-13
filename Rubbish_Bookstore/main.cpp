@@ -62,6 +62,7 @@ int main() {
         continue;
       }
       if (command == "logout") {
+        assert(0);
         if(status.empty()) {
           throw(0);
         }
@@ -76,7 +77,6 @@ int main() {
         continue;
       }
       if (command == "register") {
-        assert(0);
         string id = ProcessTxt(txt); // 捕获用户名。
         if (id.empty()) {
           throw(0);
