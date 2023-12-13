@@ -86,7 +86,7 @@ void CheckVisible(char *str) {
   return;
 }
 
-void CheckVisibleNoQuotation(char *str) {
+void CheckVisibleNoQuotation(char * str) {
   int len = strlen(str);
   for(int i = 0; i < len; ++i) {
     if(str[i] < '!' || str[i] > '~') {
