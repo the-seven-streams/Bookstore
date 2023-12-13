@@ -10,6 +10,7 @@
 #include <cassert>
 #include <cstring>
 #include <istream>
+#include <regex>
 #include <string>
 using std::cin;
 using std::getline;
@@ -39,6 +40,11 @@ int main() {
     try {
       InitialOp(recorder);//日志初始化。
       getline(cin, res);
+      std::regex  reg("[!-~]");
+      bool check = std::regex_match(res, reg);
+      if(!check) {
+        throw(0);
+      }
       txt = res;
       string command = ProcessTxt(txt); // 捕获第一条指令。
       if (command == "") {

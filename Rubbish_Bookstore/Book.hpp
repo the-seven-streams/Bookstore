@@ -60,5 +60,5 @@ void ShowName(char *); // 该函数用于打印指定书名的所有图书信息
 void ShowKeyword(
     char *); // 该函数用于打印指定关键词的所有图书信息。输入值为关键词。
 void ShowISBN(char *); // 该函数用于打印指定ISBN的图书信息。输入值为ISBN。
-void Processshow(string &); // 该函数用于处理show命令。输入值为show后的所有内容。
+void Processshow(string); // 该函数用于处理show命令。输入值为show后的内容除去减号。
 #endif
