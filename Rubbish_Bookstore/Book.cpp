@@ -157,7 +157,6 @@ void Processshow(string txt) {
     throw(0);
   }
   if (txt[0] == 'a') {
-    assert(0);
     string res;
     res = txt.substr(0, 8);
     if (res != "author=\"") {

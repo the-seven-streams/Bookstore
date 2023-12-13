@@ -13,6 +13,9 @@ string ProcessTxt(string &txt) {
     tmp += txt[0];
     txt.erase(0, 1);
   }
+  while((!txt.empty()) && txt[0] == ' ') {
+    txt.erase(0, 1);
+  }
   return tmp;
 }
 
