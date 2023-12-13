@@ -76,6 +76,7 @@ int main() {
         continue;
       }
       if (command == "register") {
+        assert(0);
         string id = ProcessTxt(txt); // 捕获用户名。
         if (id.empty()) {
           throw(0);
@@ -103,7 +104,6 @@ int main() {
         continue;
       }
       if (command == "passwd") {
-        assert(0);
         if (current_power == 0) {
           throw(0);
         }
