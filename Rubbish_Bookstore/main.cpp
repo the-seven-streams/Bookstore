@@ -157,7 +157,6 @@ int main() {
         continue;
       }
       if (command == "delete") {
-        assert(0);
         if (current_power != 7) {
           throw(0);
         }
@@ -220,6 +219,7 @@ int main() {
         }
         string addtion = ProcessTxt(txt);
         if (addtion == "finance") {
+            assert(0);
           if (current_power < 7) {
             throw(0);
           }
