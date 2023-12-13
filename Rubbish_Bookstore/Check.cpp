@@ -97,8 +97,8 @@ void CheckVisibleNoQuotation(char *str) {
     if (str[i] == '\"') {
       throw(0);
     }
-    return;
   }
+  return;
 }
 void CheckReal(char *str) {
   int len = strlen(str);
