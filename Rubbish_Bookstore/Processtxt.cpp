@@ -8,12 +8,10 @@ string ProcessTxt(string &txt) {
   while (txt[txt.size() - 1] == ' ') {
     txt.erase(txt.size() - 1, 1);
   }
-  string tmp;
-  int i = 0;
+  string tmp="";
   while ((!txt.empty()) && txt[0] != ' ') {
     tmp += txt[0];
     txt.erase(0, 1);
-    i++;
   }
   return tmp;
 }

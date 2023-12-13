@@ -48,6 +48,6 @@ void ShowFinance(int n) {
   std::cout << "+ ";
   std::cout << std::fixed << std::setprecision(2) << income << " ";
   std::cout << "- ";
-  std::cout << std::fixed << std::setprecision(2) << -(cost) << std::endl;
+  std::cout << std::fixed << std::setprecision(2) << fabs(cost) << std::endl;
   return;
 }
