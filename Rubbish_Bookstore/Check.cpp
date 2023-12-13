@@ -1,6 +1,7 @@
 #include "Check.hpp"
 #include "Book.hpp"
 #include <cstring>
+#include <regex>
 extern std::vector<Book> selected;
 void CheckN(char *str) {
   int len = strlen(str);
@@ -87,10 +88,12 @@ void CheckVisible(char *str) {
 
 void CheckVisibleNoQuotation(char *str) {
   int len = strlen(str);
-  for (int i = 0; i < len; ++i) {
-    if (str[i] <= 32 || str[i] > 126) {
+  for(int i = 0; i < len; ++i) {
+    if(str[i] < '!' || str[i] > '~') {
       throw(0);
     }
+  }
+  for (int i = 0; i < len; ++i) {
     if (str[i] == '\"') {
       throw(0);
     }
