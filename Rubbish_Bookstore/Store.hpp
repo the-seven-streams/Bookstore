@@ -331,11 +331,11 @@ public:
   }
 
   void FindA(Element<T> to_find) { // 查找元素。打印所有符合要求的元素。
-    int target = IndexFind(to_find);
     if (!total) {
       cout << "\n";
       return;
     }
+    int target = IndexFind(to_find);
     Element<T> tmp;
     int flag = 1;
     bool found = 0;
