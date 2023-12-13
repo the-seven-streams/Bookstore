@@ -126,7 +126,6 @@ int main() {
         continue;
       }
       if (command == "useradd") {
-        assert(0);
         if (current_power < 3) {
           throw(0);
         }
@@ -158,6 +157,7 @@ int main() {
         continue;
       }
       if (command == "delete") {
+        assert(0);
         if (current_power != 7) {
           throw(0);
         }
