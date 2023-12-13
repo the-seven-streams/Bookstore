@@ -217,11 +217,6 @@ int main() {
         if (!current_power) {
           throw(0);
         }
-        for(int i = 0; i < txt.size(); ++i) {
-          if(txt[i] <= 31 || txt[i] == 127) {
-            throw(0);
-          }
-        }
         string addtion = ProcessTxt(txt);
         if (addtion == "finance") {
           if (current_power < 7) {
