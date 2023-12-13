@@ -245,7 +245,6 @@ int main() {
         }
         CheckEmpty(txt);
         if (addtion.empty()) {
-          assert(0);
           Showall();
           recorder.user = status.top();
           strcpy(recorder.command, "show");
@@ -260,6 +259,7 @@ int main() {
         if (addtion.empty()) {
           throw(0);
         } // 弟啊，你参数呢。
+        assert(0);
         Processshow(addtion);
         recorder.user = status.top();
         strcpy(recorder.command, "show");
