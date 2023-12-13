@@ -214,12 +214,12 @@ int main() {
         continue;
       }
       if (command == "show") {
+          assert(0);
         if (!current_power) {
           throw(0);
         }
         string addtion = ProcessTxt(txt);
         if (addtion == "finance") {
-            assert(0);
           if (current_power < 7) {
             throw(0);
           }
