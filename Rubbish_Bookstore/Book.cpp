@@ -6,7 +6,7 @@
 #include <cstring>
 #include "Log.hpp"
 extern std::vector<Book> selected;
-extern long double total_income;
+extern double total_income;
 extern Operation recorder;
 Book::Book() {
   strcpy(ISBN, "");
@@ -227,7 +227,7 @@ void Book::ModifyProcess(string txt) {
   string name_txt;
   string author_txt;
   string keyword_txt;
-  long double price_num;
+  double price_num;
   string ISBN_txt;
   bool name = 0;
   bool author = 0;
@@ -444,7 +444,7 @@ void Book::Import(int num) {
   return;
 }
 
-long double Buy(char *txt, int number) {
+double Buy(char *txt, int number) {
   CheckSize20(txt);
   CheckVisible(txt);
   Book tmp;
