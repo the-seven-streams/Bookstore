@@ -9,6 +9,7 @@
 #include <bits/stdc++.h>
 #include <cassert>
 #include <cstring>
+#include <istream>
 #include <string>
 using std::cin;
 using std::getline;
@@ -38,13 +39,8 @@ int main() {
     try {
       InitialOp(recorder);
       getline(cin, res);
-      fflush(stdin);
       txt = res;
-      for(int i = 0; i < res.size(); i++) {
-        if(res[i] > 126 || res[i] <= 31) {
-          throw(0);
-        }
-      }
+
       string command = ProcessTxt(txt); // 捕获第一条指令。
       if (command == "") {
         continue;
@@ -246,6 +242,7 @@ int main() {
           AddLog(recorder);
           continue;
         }
+        CheckEmpty(txt);
         if (addtion.empty()) {
           Showall();
           recorder.user = status.top();
