@@ -276,7 +276,6 @@ void Book::ModifyProcess(string txt) {
       if (price) {
         throw(0);
       }
-      
       price = 1;
       CheckReal(const_cast<char *>(addtion.c_str()));
       CheckSize13(const_cast<char *>(addtion.c_str()));
