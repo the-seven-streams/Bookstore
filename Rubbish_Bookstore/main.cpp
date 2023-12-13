@@ -267,7 +267,6 @@ int main() {
         continue;
       }
       if (command == "modify") {
-        assert(0);
         if (current_power < 3) {
           throw(0);
         }
@@ -285,6 +284,7 @@ int main() {
         continue;
       }
       if (command == "import") {
+        assert(0);
         if (current_power < 3) {
           throw(0);
         }
