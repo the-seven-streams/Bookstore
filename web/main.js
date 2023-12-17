@@ -19,7 +19,6 @@ io.sockets.on("connection", function(socket) {
     run.stdout.on('data', function(data) {
       var txt;
       txt = data.toString();
-      console.log(txt);
       io.emit('serverData', txt);//发送数据给客户端
       run.stdout.removeAllListeners('data');
     })

@@ -11,8 +11,12 @@
       text.value = "";
       var socket = io.connect();
       socket.on('serverData', function (data) {
-        alert(data);
-        text.value += data;
+        if(data == 'Invalid\n') {
+          alert("操作失败！");
+        } else {
+          alert("操作成功！");
+          text.value += data;
+        }
       });
     }
   </script>
@@ -90,6 +94,14 @@
       socket.emit('clientdata', res);
     }
   </script>
+  <input type="button" , name="show" , value="搜索全部书籍" , onclick="showall()">
+  <script>
+    function showall() {
+      var res = "show";
+      var socket = io.connect();
+      socket.emit('clientdata', res);
+    }
+  </script>
   <input type="button" , name="showISBN" , value="搜索ISBN" , onclick="show()">
   <script>
     function show() {
@@ -154,9 +166,10 @@
   <input type="button" , name="finace" , value="显示收支" , onclick="showfinance()">
   <script>
     function showfinance() {
-      var res = "show finace";
+      var res = "show finance ";
+      txt1 = prompt("请输入欲查看的操作笔数。留空查看全部交易收支情况。");
       var socket = io.connect();
-      socket.emit('clientdata', res);
+      socket.emit('clientdata', res + txt1);
     }
   </script>
   <input type="button" , name="log" , value="显示日志" , onclick="log()">
