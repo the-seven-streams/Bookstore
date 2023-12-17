@@ -11,6 +11,17 @@
       txt.value = "";
     }
   </script>
+  <script>
+    var socket = io.connect();
+    socket.on('serverdata', function(data) {
+      if(data == "Invalid\n") {
+        alert("操作失败！");
+      } else {
+        var text = document.getElementById("output");
+        text.value += data;
+      }
+    });
+  </script>
 </head>
 
 <body>
@@ -24,26 +35,158 @@
       }
     </style>
   </h1>
-  <input type="button" , name="register" , value="注册", onclick=
-  "addtext()">
+  <input type="button" , name="register" , value="注册", onclick="register()">
   <script>
-    function addtext() {
-      var text = document.getElementById("output");
-      text.value += "hello\n";
+    function register() {
+      txt1 = prompt("请输入用户名");
+      txt2 = prompt("请输入密码");
+      txt3 = prompt("请输入用户昵称");
+      var res = "register " + txt1 + " " + txt2 + " " + txt3;
+      var socket= io.connect();
+      socket.emit('clientdata', res);
     }
   </script>
-  <input type="button" , name="login" , value="登录">
-  <input type="button" , name="logout" , value="登出">
-  <input type="button" , name="passwd" , value="修改密码">
-  <input type="button" , name="add" , value="添加账户">
-  <input type="button" , name="delete" , value="删除账户">
-  <input type="button" , name="search" , value="搜索">
-  <input type="button" , name="modify" , value="修改书籍信息">
-  <input type="button" , name="add" , value="选中书籍">
-  <input type="button" , name="finace" , value="显示收支">
-  <input type="button" , name="log" , value="显示日志">
-  <input type="button" , name="employee" , value="员工报表">
-  <input type="button" , name="finace_report" , value="财政报表">
+  <input type="button" , name="login" , value="登录", onclick="login()">
+  <script>
+    function login() {
+      txt1 = prompt("请输入用户名");
+      txt2 = prompt("请输入密码");
+      var res = "su " + txt1 + " " + txt2;
+      var socket= io.connect();
+      socket.emit('clientdata', res);
+    }
+  </script>
+  <input type="button" , name="logout" , value="登出", onclick="logout()">
+  <script>
+    function logout() {
+      var res = "logout";
+      var socket= io.connect();
+      socket.emit('clientdata', res);
+    }
+  </script>
+  <input type="button" , name="passwd" , value="修改密码", onclick="passwd()">
+  <script>
+    function logout() {
+      txt1 = prompt("请输入用户名");
+      txt2 = prompt("请输入旧密码(高权限可省略)");
+      txt3 = prompt("请输入新密码");
+      var res = "passwd " + txt1 + " " + txt2 + " " + txt3;
+      var socket= io.connect();
+      socket.emit('clientdata', res);
+    }
+  </script>
+  <input type="button" , name="add" , value="添加账户", onclick="useradd()">
+  <script>
+    function useradd() {
+    txt1 = prompt("请输入用户名");
+    txt2 = prompt("请输入密码");
+    txt3 = prompt("请输入用户权限(顾客输入1，店员输入3)");
+    txt4 = prompt("请输入用户昵称");
+    var res = "useradd " + txt1 + " " + txt2 + " " + txt3 + " " + txt4;
+    var socket= io.connect();
+    socket.emit('clientdata', res);
+    }
+  </script>
+  <input type="button" , name="delete" , value="删除账户", onclick="del()">
+  <script>
+    function del() {
+      txt1 = prompt("请输入用户名");
+      var res = "delete " + txt1;
+      var socket= io.connect();
+      socket.emit('clientdata', res);
+    }
+  </script>
+  <input type="button" , name="showISBN" , value="搜索ISBN", onclick="show()">
+  <script>
+    function show() {
+      txt1 = prompt("请输入书籍ISBN");
+      var res = "show -ISBN=" + txt1;
+      var socket= io.connect();
+      socket.emit('clientdata', res);
+    }
+  </script>
+  <input type="button" , name="showname" , value="搜索书名", onclick="showname()">
+  <script>
+    function showname() {
+      txt1 = prompt("请输入书籍书名");
+      var res = "show -name=\"" + txt1 + '\"';
+      var socket= io.connect();
+      socket.emit('clientdata', res);
+    }
+  </script>
+  <input type="button" , name="showauthor" , value="搜索作者", onclick="showauthor()">
+  <script>
+    function showauthor() {
+      txt1 = prompt("请输入书籍作者");
+      var res = "show -author=\"" + txt1 + '\"';
+      var socket= io.connect();
+      socket.emit('clientdata', res);
+    }
+  </script>
+  <input type="button" , name="showkeyword" , value="搜索关键字", onclick="showkeyword()">
+  <script>
+    function showkeyword() {
+      txt1 = prompt("请输入书籍关键字");
+      var res = "show -keyword=\"" + txt1 + '\"';
+      var socket= io.connect();
+      socket.emit('clientdata', res);
+    }
+  </script>
+  <input type="button" , name="modify" , value="修改书籍信息", onclick="modify()">
+  <script>
+    function modify() {
+      txt1 = prompt("请输入书籍ISBN");
+      txt2 = prompt("请输入书籍书名");
+      txt3 = prompt("请输入书籍作者");
+      txt4 = prompt("请输入书籍关键字");
+      var res = "modify -ISBN=" + txt1 
+      + " -name=\"" + txt2 + "\" -author=\"" 
+      + txt3 + "\" -keyword=\"" + txt4 + "\"";
+      var socket= io.connect();
+      socket.emit('clientdata', res);
+    }
+  </script>
+  <input type="button" , name="add" , value="选中书籍", onclick="selcet()">
+  <script>
+    function selcet() {
+      txt1 = prompt("请输入书籍ISBN");
+      var res = "select " + txt1;
+      var socket= io.connect();
+      socket.emit('clientdata', res);
+    }
+  </script>
+  <input type="button" , name="finace" , value="显示收支", onclick="showfinance()">
+  <script>
+    function showfinance() {
+      var res = "show finace";
+      var socket= io.connect();
+      socket.emit('clientdata', res);
+    }
+  </script>
+  <input type="button" , name="log" , value="显示日志", onclick="log()">
+  <script>
+    function log() {
+      var res = "log";
+      var socket= io.connect();
+      socket.emit('clientdata', res);
+    }
+  </script>
+  <input type="button" , name="employee" , value="员工报表", onclick="employee()">
+  <script>
+    function employee() {
+      var res = "report employee";
+      var socket= io.connect();
+      socket.emit('clientdata', res);
+    }
+  </script>
+  <input type="button" , name="finace_report" , value="财政报表", onclick="finance()">
+  <script>
+    function finance() {
+      var res = "report finance";
+      var socket= io.connect();
+      socket.emit('clientdata', res);
+    }
+  </script>
   <input type="button" , name="reset" , value="清除输出", onclick="cleartext()">
   <script>
     function cleartext() {
