@@ -23,7 +23,7 @@
         document.getElementById('submit').onclick = function() {
           var txt1 = document.getElementById('username').value;
           var txt2 = document.getElementById('password').value;
-          var str = txt1 + ' ' + txt2;
+          var str = 'su ' + txt1 + ' ' + txt2;
           socket.emit('Login', str);
         };
       };

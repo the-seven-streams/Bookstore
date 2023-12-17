@@ -15,7 +15,8 @@
         document.getElementById('submit').onclick = function() {
           var txt1 = document.getElementById('username').value;
           var txt2 = document.getElementById('password').value;
-          var str = txt1 + ' ' + txt2;
+          var txt3 = document.getElementById('nick').value;
+          var str = 'register ' + txt1 + ' ' + txt2 + ' ' + txt3;
           socket.emit('Register', str);
         };
       };
@@ -44,6 +45,11 @@
         <tr>
           <td>密码：</td>
           <td><input type="password" name="password" value="" /required></td>
+        </tr>
+        <tr>
+          <td>昵称：</td>
+          <td><input type="text" name="nick" value="" /required></td>
+          </td>
         </tr>
         <tr>
           <td colspan="2" align="center">
