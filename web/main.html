@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Bookstore</title>
+  <script src="socket.io/socket.io.js"></script>
+  <script>
+    window.onload = function() {
+      var txt = document.getElementById("output");
+      txt.value = "";
+    }
+  </script>
+</head>
+
+<body>
+  <h1>Garbage的会员制书店
+    <style>
+      h1 {
+        text-align: center;
+        font-family: "仿宋", Times, serif;
+        font-size: 50px;
+        color: #df3939;
+      }
+    </style>
+  </h1>
+  <input type="button" , name="register" , value="注册", onclick=
+  "addtext()">
+  <script>
+    function addtext() {
+      var text = document.getElementById("output");
+      text.value += "hello\n";
+    }
+  </script>
+  <input type="button" , name="login" , value="登录">
+  <input type="button" , name="logout" , value="登出">
+  <input type="button" , name="passwd" , value="修改密码">
+  <input type="button" , name="add" , value="添加账户">
+  <input type="button" , name="delete" , value="删除账户">
+  <input type="button" , name="search" , value="搜索">
+  <input type="button" , name="modify" , value="修改书籍信息">
+  <input type="button" , name="add" , value="选中书籍">
+  <input type="button" , name="finace" , value="显示收支">
+  <input type="button" , name="log" , value="显示日志">
+  <input type="button" , name="employee" , value="员工报表">
+  <input type="button" , name="finace_report" , value="财政报表">
+  <input type="button" , name="reset" , value="清除输出", onclick="cleartext()">
+  <script>
+    function cleartext() {
+      var text = document.getElementById("output");
+      text.value = "";
+    }
+  </script>
+  <div class="output">
+    <textarea id="output" rows="2000" cols="200">
+    </textarea>
+</body>
+
+</html>
