@@ -1,6 +1,25 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
   <head>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      window.onload = function() {
+        var socket = io.connect();
+        socket.on('Invalid' = function() {
+          alert('注册失败！');
+        });
+        socket.on('1' = function() {
+          alert('注册成功！');
+          window.location.href = 'Login.html';
+        });
+        document.getElementById('submit').onclick = function() {
+          var txt1 = document.getElementById('username').value;
+          var txt2 = document.getElementById('password').value;
+          var str = txt1 + ' ' + txt2;
+          socket.emit('Register', str);
+        };
+      };
+    </script>
     <meta charset="utf-8">
     <meta name="author" content="玉川">
     <meta name="description" content="Bookstore">
