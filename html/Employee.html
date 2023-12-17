@@ -1,6 +1,28 @@
 <!DOCTYPE html>
 <html lang="zh-CN">
   <head>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+      window.onload = function() {
+        var socket = io.connect();
+        Document.getElementById('logout').onclick = function() {
+          var txt = logout;
+          socket.emit('Logout', txt);
+          socket.on('0', function() {
+            window.location.href = 'Bookstore.html';
+          });
+          socket.on('1', function() {
+            window.location.href = 'Custome.html';
+          });
+          socket.on('3', function() {
+            window.location.href = 'Employee.html';
+          });
+          socket.on('7', function() {
+            window.location.href = 'Owner.html';
+          });
+        };
+      };
+    </script>
     <meta charset="utf-8">
     <title>员工界面</title>
     <meta name="author" content="玉川">
@@ -91,5 +113,6 @@
       </style>
     </h2>
   </a>
+  <input type="button" name="logout" value="退出登录">
 </body>
 </html>
