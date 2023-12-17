@@ -20,6 +20,12 @@
           alert('登录成功！');
           window.location.href = 'Owner.html';
         });
+        document.getElementById('submit').onclick = function() {
+          var txt1 = document.getElementById('username').value;
+          var txt2 = document.getElementById('password').value;
+          var str = txt1 + ' ' + txt2;
+          socket.emit('Login', str);
+        };
       };
     </script>
     <meta charset="utf-8">
