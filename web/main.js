@@ -17,10 +17,10 @@ io.sockets.on("connection", function(socket) {
   socket.on('clientdata', function(clientdata) {
     run.stdin.write(clientdata + '\n');//接收客户端数据
     run.stdout.on('data', function(data) {
+      run.stdout.removeAllListeners('data');
       var txt;
       txt = data.toString();
       io.emit('serverData', txt);//发送数据给客户端
-      run.stdout.removeAllListeners('data');
     })
   })
 });

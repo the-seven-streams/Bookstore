@@ -10,6 +10,7 @@
 #include <cassert>
 #include <cctype>
 #include <cstring>
+#include <iostream>
 #include <istream>
 #include <regex>
 #include <string>
@@ -66,6 +67,7 @@ int main() {
         strcpy(recorder.command, "su");
         strcpy(recorder.id, id.c_str()); 
         AddLog(recorder);
+        std::cout << "Login successfully!\n";
         continue;
       }
       if (command == "logout") {
@@ -80,6 +82,7 @@ int main() {
         Logout();
         strcpy(recorder.command, "logout");
         AddLog(recorder);
+        std::cout << "Logout successfully!\n";
         continue;
       }
       if (command == "register") {
@@ -107,6 +110,7 @@ int main() {
         strcpy(recorder.command, "register");
         strcpy(recorder.id, id.c_str());
         AddLog(recorder);
+        std::cout << "Register successfully!\n";
         continue;
       }
       if (command == "passwd") {
@@ -130,6 +134,7 @@ int main() {
         strcpy(recorder.command, "passwd");
         strcpy(recorder.id, id.c_str());
         AddLog(recorder);
+        std::cout << "Change password successfully!\n";
         continue;
       }
       if (command == "useradd") {
@@ -161,6 +166,7 @@ int main() {
         strcpy(recorder.command, "useradd");
         strcpy(recorder.id, id.c_str());
         AddLog(recorder);
+        std::cout << "Add account successfully!\n";
         continue;
       }
       if (command == "delete") {
@@ -177,6 +183,7 @@ int main() {
         strcpy(recorder.command, "delete");
         strcpy(recorder.id, id.c_str());
         AddLog(recorder);
+        std::cout << "Delete account successfully!\n";
         continue;
       }
       if (command == "quit") {
@@ -218,6 +225,7 @@ int main() {
         strcpy(recorder.command, "select");
         strcpy(recorder.ISBN, ISBN.c_str());
         AddLog(recorder);
+        std::cout << "Select successfully!\n";
         continue;
       }
       if (command == "show") {
@@ -288,6 +296,7 @@ int main() {
         recorder.user = status.top();
         strcpy(recorder.command, "modify");
         AddLog(recorder);
+        std::cout << "Modify successfully!\n";
         continue;
       }
       if (command == "import") {
@@ -327,6 +336,7 @@ int main() {
         recorder.value = c;
         strcpy(recorder.ISBN, selected.back().GetISBN());
         AddLog(recorder);
+        std::cout << "Import successfully!\n";
         continue;
       }
       if (command == "buy") {
