@@ -10,14 +10,9 @@
       var text = document.getElementById("output");
       text.value = "";
       var socket = io.connect();
-      socket.on('serverdata', function(txt) {
-        alert("操作成功！");
-        if (txt == "Invalid\n") {
-          alert("操作失败！");
-        } else {
-          var text = document.getElementById("output");
-          text.value += txt;
-        }
+      socket.on('serverData', function (data) {
+        alert(data);
+        text.value += data;
       });
     }
   </script>
