@@ -2,7 +2,7 @@ var http = require("http");
 var fs = require("fs");
 var {spawn} = require('child_process');
 var socketio = require("socket.io");
-var run = spawn('./code');//初始化
+var run;
 var server = http.createServer(function(request, response) {
   fs.readFile("main.html", function(error, data) {
     response.writeHead(200, {"Content-Type": "text/html"});
@@ -10,16 +10,21 @@ var server = http.createServer(function(request, response) {
   });
 }).listen(52273, function() {
   console.log("START");  
-  run = spawn('./code');//初始化
+  run = spawn('./code.exe');//初始化
 });
 var io = socketio.listen(server);
 io.sockets.on("connection", function(socket) {
-  console.log("CONNECTED!")
-  run.stdout.on('Data', function(Data) {
-    socket.emit('serverdata', {text: Data.toString()});//向客户端发送数据
+  socket.on('clientdata', function(clientdata) {
+    var txt;
+    run.stdin.write(clientdata + '\n');//接收客户端数据
+    run.stdout.on('data', function(data) {
+      txt = data.toString();
+      console.log(txt);
+      socket.emit('serverdata', txt);//发送数据给客户端
+      run.stdout.removeAllListeners('data');
+    })
   })
-  socket.on('clientdata', function(data) {
-    console.log('RECEIVED DATA');
-    run.stdin.write(data);//接收客户端数据
-  })
+});
+io.sockets.on('serverdata', function(data) {
+  console.log(data);
 });
