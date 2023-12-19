@@ -115,7 +115,7 @@ void ShowISBN(char *isbn) {
   tmp.SetISBN(isbn);
   tmp = book_main.Find(tmp);
   if (tmp == an_empty_book) {
-    cout << '\n';
+    cout << "No Books are found.\n";
     return;
   }
   tmp.Show();

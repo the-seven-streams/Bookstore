@@ -332,7 +332,7 @@ public:
 
   void FindA(Element<T> to_find) { // 查找元素。打印所有符合要求的元素。
     if (!total) {
-      cout << "\n";
+      cout << "No Books are found.\n";
       return;
     }
     int target = IndexFind(to_find);
@@ -385,7 +385,7 @@ public:
   }
   void PrintAll() { // 打印所有元素。
     if (!total) {
-      cout << "\n";
+      cout << "No Books are found.\n";
       return;
     } // 说明没有元素。输出空行。
     for (int i = start; i; i = res1[i].Getblock_nxt()) {

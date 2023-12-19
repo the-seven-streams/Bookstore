@@ -11,7 +11,7 @@
       text.value = "";
       var socket = io.connect();
       socket.on('serverData', function (data) {
-        if(data == 'Invalid\n') {
+        if (data == 'Invalid\n') {
           alert("操作失败！");
         } else {
           alert("操作成功！");
@@ -144,21 +144,53 @@
       txt1 = prompt("请输入书籍ISBN");
       txt2 = prompt("请输入书籍书名");
       txt3 = prompt("请输入书籍作者");
-      txt4 = prompt("请输入书籍关键字");
+      txt4 = prompt("请输入书籍关键字，请以\"|\"分隔不同关键词。");
       txt5 = prompt("请输入书籍价格");
-      var res = "modify -ISBN=" + txt1
-        + " -name=\"" + txt2 + "\" -author=\""
-        + txt3 + "\" -keyword=\"" + txt4 + "\""
-        + " -price=" + txt5;
+      var res = "modify";
+      if (txt1 != null) {
+        res += " -ISBN=" + txt1;
+      }
+      if (txt2 != null) {
+        res += " -name=\"" + txt2 + "\"";
+      }
+      if (txt3 != null) {
+        res += " -author=\"" + txt3 + "\"";
+      }
+      if (txt4 != null) {
+        res += " -keyword=\"" + txt4 + "\"";
+      }
+      if (txt5 != null) {
+        res += " -price=" + txt5;
+      }
       var socket = io.connect();
       socket.emit('clientdata', res);
     }
   </script>
-  <input type="button" , name="add" , value="选中书籍" , onclick="selcet()">
+  <input type="button" , name="select" , value="选中书籍" , onclick="select_()">
   <script>
-    function selcet() {
+    function select_() {
       txt1 = prompt("请输入书籍ISBN");
       var res = "select " + txt1;
+      var socket = io.connect();
+      socket.emit('clientdata', res);
+    }
+  </script>
+  <input type="button" , name="import" , value="书籍进货" , onclick="import_()">
+  <script>
+    function import_() {
+      txt1 = prompt("请输入进货数量");
+      txt2 = prompt("请输入进货价格");
+      var res = "import " + txt1 + " " + txt2;
+      var socket = io.connect();
+      socket.emit('clientdata', res);
+    }
+  </script> 
+  <input type="button" , name="buy" , value="购买书籍" , onclick="buy()">
+  <script>
+    function buy() {
+      txt1 = prompt("请输入购买书籍的ISBN");
+      txt2 = prompt("请输入购买数量");
+      var res = "buy " + txt1 + " " + txt2;
       var socket = io.connect();
       socket.emit('clientdata', res);
     }
