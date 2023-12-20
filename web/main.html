@@ -169,9 +169,7 @@
   <input type="button" , name="select" , value="选中书籍" , onclick="select_()">
   <script>
     function select_() {
-      txt1 = prompt("请输入书籍ISBN");
-      var res = "select " + txt1;
-      var socket = io.connect();
+      var res = "select " + ISBN;
       socket.emit('clientdata', res);
     }
   </script>
@@ -235,6 +233,13 @@
       text.value = "";
     }
   </script>
+  <input type="text" , name="txt1" , id="txt1" , width="60">
+  <input type="password" , name="txt2" , id="txt2" , width="60">
+  <input type="password" , name="txt3" , id="txt3" , width="60">
+  <input type="text" , name="txt4" , id="txt4" , width="60">
+  <input type="text" , name="txt5" , id="txt5" , width="60">
+  <input type="text" , name="txt6" , id="txt6" , width="60">
+  <input type="text" , name="txt7" , id="txt7" , width="60">
   <div class="output">
     <textarea id="output" rows="2000" cols="200">
     </textarea>
