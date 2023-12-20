@@ -76,7 +76,7 @@ void Print(Operation &op) {
 }
 
 void Log() {
-  cout << "**********Log Report**********\n";
+  cout << "***************Log Report***************\n";
   int total;
   logdata.get_info(total, 1);//获取日志总数。
   Operation *op = new Operation[total];
@@ -89,7 +89,7 @@ void Log() {
 }
 
 void ReportFinance() {
-  cout << "**********Finance Report**********\n";
+  cout << "***************Finance Report***************\n";
   int total;
   logdata.get_info(total, 1);//获取日志总数。
   Operation *op = new Operation[total];
@@ -112,7 +112,7 @@ void ReportFinance() {
 }
 
 void ReportEmployee() {
-  cout << "**********Employee Report**********\n";
+  cout << "***************Employee Report***************\n";
   int total;
   logdata.get_info(total, 1);//获取日志总数。
   Operation *op = new Operation[total];
