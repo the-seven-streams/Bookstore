@@ -17,6 +17,32 @@
           alert("操作成功！");
           text.value += data;
         }
+        var txt1 = document.getElementById("txt1");
+        var txt2 = document.getElementById("txt2");
+        var txt3 = document.getElementById("txt3");
+        var txt4 = document.getElementById("txt4");
+        var txt5 = document.getElementById("txt5");
+        var txt6 = document.getElementById("txt6");
+        var txt7 = document.getElementById("txt7");
+        var txt8 = document.getElementById("txt8");
+        var txt9 = document.getElementById("txt9");
+        var txt10 = document.getElementById("txt10");
+        var txt11 = document.getElementById("txt11");
+        var txt12 = document.getElementById("txt12");
+        var txt13 = document.getElementById("txt13");
+        txt1.value = "";
+        txt2.value = "";
+        txt3.value = "";
+        txt4.value = "";
+        txt5.value = "";
+        txt6.value = "";
+        txt7.value = "";
+        txt8.value = "";
+        txt9.value = "";
+        txt10.value = "";
+        txt11.value = "";
+        txt12.value = "";
+        txt13.value = "";
       });
     }
   </script>
@@ -36,20 +62,15 @@
   <input type="button" , name="register" , value="注册" , onclick="register()">
   <script>
     function register() {
-      txt1 = prompt("请输入用户名");
-      txt2 = prompt("请输入密码");
-      txt3 = prompt("请输入用户昵称");
-      var res = "register " + txt1 + " " + txt2 + " " + txt3;
+      var res = "register " + txt1 + " " + txt2 + " " + txt4;
       var socket = io.connect();
       socket.emit('clientdata', res);
-    }
+    };
   </script>
   <input type="button" , name="login" , value="登录" , onclick="login()">
   <script>
     function login() {
-      txt1 = prompt("请输入用户名");
-      txt2 = prompt("请输入密码");
-      var res = "su " + txt1 + " " + txt2;
+      var res = "su " + txt1 + " " + txt3;
       var socket = io.connect();
       socket.emit('clientdata', res);
     }
@@ -65,24 +86,41 @@
   <input type="button" , name="passwd" , value="修改密码" , onclick="passwd()">
   <script>
     function passwd() {
-      txt1 = prompt("请输入用户名");
-      txt2 = prompt("请输入旧密码(高权限可省略)");
-      txt3 = prompt("请输入新密码");
       var res = "passwd " + txt1 + " " + txt2 + " " + txt3;
       var socket = io.connect();
       socket.emit('clientdata', res);
-    }
+      removeEventListener("submit", function () { });
+    };
   </script>
   <input type="button" , name="add" , value="添加账户" , onclick="useradd()">
   <script>
     function useradd() {
-      txt1 = prompt("请输入用户名");
-      txt2 = prompt("请输入密码");
-      txt3 = prompt("请输入用户权限(顾客输入1，店员输入3)");
-      txt4 = prompt("请输入用户昵称");
-      var res = "useradd " + txt1 + " " + txt2 + " " + txt3 + " " + txt4;
-      var socket = io.connect();
-      socket.emit('clientdata', res);
+      txt1.backgroundColor = "#ffffff";
+      txt3.backgroundColor = "#ffffff";
+      txt4.backgroundColor = "#ffffff";
+      txt12.backgroundColor = "#ffffff";
+      txt1.readOnly = false;
+      txt3.readOnly = false;
+      txt4.readOnly = false;
+      txt12.readOnly = false;
+      addEventListener("submit", function () {
+        var res = "useradd " + txt1 + " " + txt3 + " " + txt12 + " " + txt4;
+        var socket = io.connect();
+        socket.emit('clientdata', res);
+      });
+      removeEventListener("submit", function () { });
+      txt1.readOnly = true;
+      txt3.readOnly = true;
+      txt4.readOnly = true;
+      txt12.readOnly = true;
+      txt1.style.backgroundColor = "#f0f0f0";
+      txt3.style.backgroundColor = "#f0f0f0";
+      txt4.style.backgroundColor = "#f0f0f0";
+      txt12.style.backgroundColor = "#f0f0f0";
+      txt1.value = "";
+      txt3.value = "";
+      txt4.value = "";
+      txt12.value = "";
     }
   </script>
   <input type="button" , name="delete" , value="删除账户" , onclick="del()">
@@ -182,7 +220,7 @@
       var socket = io.connect();
       socket.emit('clientdata', res);
     }
-  </script> 
+  </script>
   <input type="button" , name="buy" , value="购买书籍" , onclick="buy()">
   <script>
     function buy() {
@@ -226,20 +264,27 @@
       socket.emit('clientdata', res);
     }
   </script>
-  <input type="button" , name="reset" , value="清除输出" , onclick="cleartext()">
+  <input type="button" , name="reset" , value="清空输出" , onclick="cleartext()">
   <script>
     function cleartext() {
       var text = document.getElementById("output");
       text.value = "";
     }
   </script>
-  <input type="text" , name="txt1" , id="txt1" , width="60">
-  <input type="password" , name="txt2" , id="txt2" , width="60">
-  <input type="password" , name="txt3" , id="txt3" , width="60">
-  <input type="text" , name="txt4" , id="txt4" , width="60">
-  <input type="text" , name="txt5" , id="txt5" , width="60">
-  <input type="text" , name="txt6" , id="txt6" , width="60">
-  <input type="text" , name="txt7" , id="txt7" , width="60">
+  <input type="text" , name="txt1" , id="txt1" , width="60" , placeholder="请输入账户名">
+  <input type="password" , name="txt2" , id="txt2" , width="60" , placeholder="请输入旧密码">
+  <input type="password" , name="txt3" , id="txt3" , width="60" , placeholder="请输入新密码">
+  <input type="text" , name="txt4" , id="txt4" , width="60" , placeholder="请输入用户昵称">
+  <input type="text" , name="txt5" , id="txt5" , width="60" , placeholder="请输入书籍ISBN">
+  <input type="text" , name="txt6" , id="txt6" , width="60" , placeholder="请输入书籍名称">
+  <input type="text" , name="txt7" , id="txt7" , width="60" , placeholder="请输入书籍作者">
+  <input type="text" , name="txt8" , id="txt8" , width="60" , placeholder="请输入书籍关键字">
+  <input type="text" , name="txt9" , id="txt9" , width="60" , placeholder="请输入书籍价格">
+  <input type="text" , name="txt10" , id="txt10" , width="60" , placeholder="请输入进货数量">
+  <input type="text" , name="txt11" , id="txt11" , width="60" , placeholder="请输入进货价格">
+  <input type="text" , name="txt12" , id="txt12" , width="60" , placeholder="请输入用户权限">
+  <input type="text" , name="txt13" , id="txt13" , width="60" , placeholder="请输入待查看交易笔数">
+  </script>
   <div class="output">
     <textarea id="output" rows="2000" cols="200">
     </textarea>
