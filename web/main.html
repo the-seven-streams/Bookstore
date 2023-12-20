@@ -62,7 +62,7 @@
   <input type="button" , name="register" , value="注册" , onclick="register()">
   <script>
     function register() {
-      var res = "register " + txt1 + " " + txt2 + " " + txt4;
+      var res = "register " + txt1.value + " " + txt2.value + " " + txt4.value;
       var socket = io.connect();
       socket.emit('clientdata', res);
     };
@@ -70,7 +70,7 @@
   <input type="button" , name="login" , value="登录" , onclick="login()">
   <script>
     function login() {
-      var res = "su " + txt1 + " " + txt3;
+      var res = "su " + txt1.value + " " + txt3.value;
       var socket = io.connect();
       socket.emit('clientdata', res);
     }
@@ -86,7 +86,7 @@
   <input type="button" , name="passwd" , value="修改密码" , onclick="passwd()">
   <script>
     function passwd() {
-      var res = "passwd " + txt1 + " " + txt2 + " " + txt3;
+      var res = "passwd " + txt1.value + " " + txt2.value + " " + txt3.value;
       var socket = io.connect();
       socket.emit('clientdata', res);
       removeEventListener("submit", function () { });
@@ -96,7 +96,8 @@
   <script>
     function useradd() {
       addEventListener("submit", function () {
-        var res = "useradd " + txt1 + " " + txt3 + " " + txt12 + " " + txt4;
+        var res = "useradd " + txt1.value + " " + txt3.value + " " + txt12.value
+         + " " + txt4.value;
         var socket = io.connect();
         socket.emit('clientdata', res);
       });
@@ -105,7 +106,7 @@
   <input type="button" , name="delete" , value="删除账户" , onclick="del()">
   <script>
     function del() {
-      var res = "delete " + txt1;
+      var res = "delete " + txt1.value;
       var socket = io.connect();
       socket.emit('clientdata', res);
     }
@@ -121,7 +122,7 @@
   <input type="button" , name="showISBN" , value="搜索ISBN" , onclick="show()">
   <script>
     function show() {
-      var res = "show -ISBN=" + txt5;
+      var res = "show -ISBN=" + txt5.value;
       var socket = io.connect();
       socket.emit('clientdata', res);
     }
@@ -129,8 +130,7 @@
   <input type="button" , name="showname" , value="搜索书名" , onclick="showname()">
   <script>
     function showname() {
-      txt1 = prompt("请输入书籍书名");
-      var res = "show -name=\"" + txt6 + '\"';
+      var res = "show -name=\"" + txt6.value + '\"';
       var socket = io.connect();
       socket.emit('clientdata', res);
     }
@@ -138,7 +138,7 @@
   <input type="button" , name="showauthor" , value="搜索作者" , onclick="showauthor()">
   <script>
     function showauthor() {
-      var res = "show -author=\"" + txt7 + '\"';
+      var res = "show -author=\"" + txt7.value + '\"';
       var socket = io.connect();
       socket.emit('clientdata', res);
     }
@@ -146,7 +146,7 @@
   <input type="button" , name="showkeyword" , value="搜索关键字" , onclick="showkeyword()">
   <script>
     function showkeyword() {
-      var res = "show -keyword=\"" + txt8 + '\"';
+      var res = "show -keyword=\"" + txt8.value + '\"';
       var socket = io.connect();
       socket.emit('clientdata', res);
     }
@@ -155,20 +155,20 @@
   <script>
     function modify() {
       var res = "modify";
-      if (txt1 != "") {
-        res += " -ISBN=" + txt5;
+      if (txt5.value != "") {
+        res += " -ISBN=" + txt5.value;
       }
-      if (txt2 != "") {
-        res += " -name=\"" + txt6 + "\"";
+      if (txt6.value != "") {
+        res += " -name=\"" + txt6.value + "\"";
       }
-      if (txt3 != "") {
-        res += " -author=\"" + txt7 + "\"";
+      if (txt7.value != "") {
+        res += " -author=\"" + txt7.value + "\"";
       }
-      if (txt4 != "") {
-        res += " -keyword=\"" + txt8 + "\"";
+      if (txt8.value != "") {
+        res += " -keyword=\"" + txt8.value + "\"";
       }
-      if (txt5 != "") {
-        res += " -price=" + txt9;
+      if (txt9.value != "") {
+        res += " -price=" + txt9.value;
       }
       var socket = io.connect();
       socket.emit('clientdata', res);
@@ -177,14 +177,15 @@
   <input type="button" , name="select" , value="选中书籍" , onclick="select_()">
   <script>
     function select_() {
-      var res = "select " + txt5;
+      var res = "select " + txt5.value;
+      var socket = io.connect();
       socket.emit('clientdata', res);
     }
   </script>
   <input type="button" , name="import" , value="书籍进货" , onclick="import_()">
   <script>
     function import_() {
-      var res = "import " + txt10 + " " + txt11;
+      var res = "import " + txt10.value + " " + txt11.value;
       var socket = io.connect();
       socket.emit('clientdata', res);
     }
@@ -192,7 +193,7 @@
   <input type="button" , name="buy" , value="购买书籍" , onclick="buy()">
   <script>
     function buy() {
-      var res = "buy " + txt5 + " " + txt10;
+      var res = "buy " + txt5.value + " " + txt10.value;
       var socket = io.connect();
       socket.emit('clientdata', res);
     }
@@ -202,7 +203,7 @@
     function showfinance() {
       var res = "show finance ";
       var socket = io.connect();
-      socket.emit('clientdata', res + txt13);
+      socket.emit('clientdata', res + txt13.value);
     }
   </script>
   <input type="button" , name="log" , value="显示日志" , onclick="log()">
@@ -237,7 +238,7 @@
     }
   </script>
   <input type="text" , name="txt1" , id="txt1" , width="60" , placeholder="请输入账户名">
-  <input type="password" , name="txt2" , id="txt2" , width="60" , placeholder="请输入旧密码">
+  <input type="password" , name="txt2" , id="txt2" , width="60" , placeholder="请输入现有密码">
   <input type="password" , name="txt3" , id="txt3" , width="60" , placeholder="请输入新密码">
   <input type="text" , name="txt4" , id="txt4" , width="60" , placeholder="请输入用户昵称">
   <input type="text" , name="txt5" , id="txt5" , width="60" , placeholder="请输入书籍ISBN">
