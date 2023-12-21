@@ -1,6 +1,6 @@
 <!DOCTYPE html>
 <html>
-
+  
 <head>
   <meta charset="utf-8">
   <title>Bookstore</title>
@@ -70,7 +70,7 @@
   <input type="button" , name="login" , value="登录" , onclick="login()">
   <script>
     function login() {
-      var res = "su " + txt1.value + " " + txt3.value;
+      var res = "su " + txt1.value + " " + txt2.value;
       var socket = io.connect();
       socket.emit('clientdata', res);
     }
@@ -237,6 +237,7 @@
       text.value = "";
     }
   </script>
+  <br>
   <input type="text" , name="txt1" , id="txt1" , width="60" , placeholder="请输入账户名">
   <input type="password" , name="txt2" , id="txt2" , width="60" , placeholder="请输入密码">
   <input type="password" , name="txt3" , id="txt3" , width="60" , placeholder="请输入新密码">
