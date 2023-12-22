@@ -7,12 +7,23 @@
   <script src="socket.io/socket.io.js"></script>
   <script>
     window.onload = function () {
+      var total = 0;
       var text = document.getElementById("output");
       text.value = "";
       var socket = io.connect();
       socket.on('serverData', function (data) {
         if (data == 'Invalid\n') {
-          alert("操作失败！");
+          total++;
+          if(total <= 2) {
+            alert("操作失败！");
+          } else {
+            var res="";
+            for(var i = 0; i < total; i++) {
+              res+="杀"
+            }
+            res+="!";
+            alert(res);
+          }
         } else {
           alert("操作成功！");
           text.value += data;
