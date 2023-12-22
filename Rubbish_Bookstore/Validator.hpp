@@ -1,4 +1,5 @@
 #include <bits/stdc++.h>
+#include <cstdarg>
 #include <cstdio>
 #include <initializer_list>
 #include <regex>
@@ -13,6 +14,7 @@ public:
   Check<T> operator()(T in) {
     element = in;
     flag = 0;
+    return *this;
   }
   Check<T> toBe(T in) {
     if (!flag) {
@@ -50,21 +52,21 @@ public:
     }
     return *this;
   }
-  Check<T> Not() { flag ^= 1; }
+  Check<T> Not() { flag ^= 1; return *this;}
   Check<T> Or() { return *this; }
   Check<T> And() { return *this; }
   Check<T> But() { return *this; }
   Check<T> consistedOf(T tar) {
     if(!flag) {
-      for(int i = 0; i < tar.size(); i++) {
-        if(element.find(tar[i]) == -1) {
+      for(int i = 0; i < element.size(); i++) {
+        if(tar.find(element[i]) == -1) {
           throw(0);
         }
       }
     } else {
       bool not_found = 0;
-      for(int i = 0; i < tar.size(); i++) {
-        if(element.find(tar[i]) == -1) {
+      for(int i = 0; i < element.size(); i++) {
+        if(tar.find(element[i]) == -1) {
           not_found = 1;
           break;
         }
@@ -77,26 +79,34 @@ public:
   }
   Check<T> toMatch(T tar) {
     std::regex exp(tar);
-    if(!(std::regex_match(exp, element) ^ flag)) {
+    if(!(std::regex_match(element, exp) ^ flag)) {
       throw(0);
     }
     return *this;
   }
-  Check<T> toBeOneOf(std::initializer_list<T> total) {
-    bool found = 0;
-    for(int i = 0; i < total.size(); i++) {
-      if(total[i] == element) {
-        found = 1;
-        break;
+  template<typename ... Args>
+  Check<T> toBeOneOf(T arg, Args... args) {
+    if(arg == element) {
+      if(!flag) {
+        return *this;
+      } else {
+        throw(0);
       }
     }
-    if(!(found ^ flag)) {
-      throw(0);
-    }
+    toBeOneOf(args...);
     return *this;
   }
+  Check<T> toBeOneOf() {
+    if(flag) {
+      return *this;
+    } else {
+      throw(0);
+    }
+  }
   template <class U> Check<T> toBe() {
-    static_assert(dynamic_cast<U>(element));
+    T *res = new T(element);
+    static_assert(dynamic_cast<U*>(res));
+    delete res;
     return *this;
   }
 };
