@@ -160,6 +160,11 @@ void CheckVisibleNoQuotationOrHan(char *str) {
         trans += byte4;
         trans -= 128;
       }
+      if(trans == 0x0087 || trans == 0x2014 || trans == 0xFF08 || trans == 0xFF09 ||
+      trans == 0xFF1A) {
+        i += (how_many - 1);
+        continue;
+      }
       if (trans >= 0x4E00 && trans <= 0x9FFF) {
         i += (how_many - 1);
         continue;
