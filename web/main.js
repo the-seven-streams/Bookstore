@@ -8,7 +8,7 @@ var server = http.createServer(function(request, response) {
     response.writeHead(200, {"Content-Type": "text/html"});
     response.end(data);
   });
-}).listen(52273,'0.0.0.0', function() {
+}).listen(5273,'0.0.0.0', function() {
   console.log("START");  
   run = spawn('./code');//初始化
 });
