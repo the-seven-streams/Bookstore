@@ -5,7 +5,7 @@
 extern std::vector<Book> selected;
 void CheckN(char *str) {
   int len = strlen(str);
-  if(len == 0) {
+  if (len == 0) {
     throw(0);
   }
   for (int i = 0; i < len; ++i) {
@@ -86,10 +86,10 @@ void CheckVisible(char *str) {
   return;
 }
 
-void CheckVisibleNoQuotation(char * str) {
+void CheckVisibleNoQuotation(char *str) {
   int len = strlen(str);
-  for(int i = 0; i < len; ++i) {
-    if(str[i] < '!' || str[i] > '~') {
+  for (int i = 0; i < len; ++i) {
+    if (str[i] < '!' || str[i] > '~') {
       throw(0);
     }
   }
@@ -100,10 +100,60 @@ void CheckVisibleNoQuotation(char * str) {
   }
   return;
 }
+
+void CheckVisibleNoQuotationOrHan(char *str) {
+  int len = strlen(str);
+  for (int i = 0; i < len; i++) {
+    if (str[i] < '!' || str[i] > '~') {
+      int trans = static_cast<int>(str[i]);
+      if (trans >= 0x4E00 && trans <= 0x9FFF) {
+        continue;
+      }
+      if (trans >= 0x3400 && trans <= 0x4DBF) {
+        continue;
+      }
+      if (trans >= 0x20000 && trans <= 0x2A6DF) {
+        continue;
+      }
+      if (trans >= 0x2A700 && trans <= 0x2B73F) {
+        continue;
+      }
+      if(trans >=0x2B740 && trans <= 0x2B81F) {
+        continue;
+      }
+      if(trans >=0x2B820 && trans <= 0x2CEAF) {
+        continue;
+      }
+      if(trans>=0x2CEB0 && trans<=0x2EBEF) {
+        continue;
+      }
+      if(trans>=0x30000 && trans<=0x3134F) {
+        continue;
+      }
+      if(trans>=0x31350 && trans<= 0x323AF) {
+        continue;
+      }
+      if(trans>=0xF900 && trans<=0xFAFF) {
+        continue;
+      }
+      if(trans>=0x2F800 && trans<=0x2FA1F) {
+        continue;
+      }
+      throw(0);
+    }
+  }
+  for (int i = 0; i < len; ++i) {
+    if (str[i] == '\"') {
+      throw(0);
+    }
+  }
+  return;
+}
+
 void CheckReal(char *str) {
   int len = strlen(str);
   int dot = 0;
-  if(len == 0) {
+  if (len == 0) {
     throw(0);
   }
   for (int i = 0; i < len; ++i) {

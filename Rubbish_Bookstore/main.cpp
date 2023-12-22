@@ -42,12 +42,6 @@ int main() {
     try {
       InitialOp(recorder);//日志初始化。
       getline(cin, res);
-      for(int i = 0; i < res.size(); ++i) {
-        if(!isascii(res[i])) {
-          throw(0);
-        }
-      }
-      txt = res;
       string command = ProcessTxt(txt); // 捕获第一条指令。
       if (command == "") {
         continue;
