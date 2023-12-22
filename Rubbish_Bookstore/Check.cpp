@@ -105,38 +105,103 @@ void CheckVisibleNoQuotationOrHan(char *str) {
   int len = strlen(str);
   for (int i = 0; i < len; i++) {
     if (str[i] < '!' || str[i] > '~') {
-      int trans = static_cast<int>(str[i]);
+      long long byte1 = static_cast<unsigned char>(str[i]);
+      long long trans = byte1;
+      int how_many = 0;
+      for (int i = 8; i; i--) {
+        if (byte1 & (1 << (i - 1))) {
+          how_many++;
+        } else {
+          break;
+        }
+      }
+      if (how_many == 0) {
+        how_many = 1;
+        trans = byte1;
+      }
+      if (how_many == 2) {
+        if (i + 1 >= len) {
+          throw(0);
+        }
+        long long byte2 = static_cast<unsigned char>(str[i + 1]);
+        trans -= 192;
+        trans <<= 6;
+        trans += byte2;
+        trans -= 128;
+      }
+      if (how_many == 3) {
+        if (i + 2 >= len) {
+          throw(0);
+        }
+        long long byte2 = static_cast<unsigned char>(str[i + 1]);
+        trans -= 224;
+        trans <<= 6;
+        trans += byte2;
+        trans -= 128;
+        trans <<= 6;
+        long long byte3 = static_cast<unsigned char>(str[i + 2]);
+        trans -= 128;
+        trans += byte3;
+      }
+      if (how_many == 4) {
+        if (i + 3 >= len) {
+          throw(0);
+        }
+        long long byte2 = static_cast<unsigned char>(str[i + 1]);
+        trans -= 240;
+        trans <<= 6;
+        trans += byte2;
+        trans -= 128;
+        trans <<= 6;
+        long long byte3 = static_cast<unsigned char>(str[i + 2]);
+        trans -= 128;
+        trans <<= 6;
+        long long byte4 = static_cast<unsigned char>(str[i + 3]);
+        trans += byte4;
+        trans -= 128;
+      }
       if (trans >= 0x4E00 && trans <= 0x9FFF) {
+        i += (how_many - 1);
         continue;
       }
       if (trans >= 0x3400 && trans <= 0x4DBF) {
+        i += (how_many - 1);
         continue;
       }
       if (trans >= 0x20000 && trans <= 0x2A6DF) {
+        i += (how_many - 1);
         continue;
       }
       if (trans >= 0x2A700 && trans <= 0x2B73F) {
+        i += (how_many - 1);
         continue;
       }
-      if(trans >=0x2B740 && trans <= 0x2B81F) {
+      if (trans >= 0x2B740 && trans <= 0x2B81F) {
+        i += (how_many - 1);
         continue;
       }
-      if(trans >=0x2B820 && trans <= 0x2CEAF) {
+      if (trans >= 0x2B820 && trans <= 0x2CEAF) {
+        i += (how_many - 1);
         continue;
       }
-      if(trans>=0x2CEB0 && trans<=0x2EBEF) {
+      if (trans >= 0x2CEB0 && trans <= 0x2EBEF) {
+        i += (how_many - 1);
         continue;
       }
-      if(trans>=0x30000 && trans<=0x3134F) {
+      if (trans >= 0x30000 && trans <= 0x3134F) {
+        i += (how_many - 1);
         continue;
       }
-      if(trans>=0x31350 && trans<= 0x323AF) {
+      if (trans >= 0x31350 && trans <= 0x323AF) {
+        i += (how_many - 1);
         continue;
       }
-      if(trans>=0xF900 && trans<=0xFAFF) {
+      if (trans >= 0xF900 && trans <= 0xFAFF) {
+        i += (how_many - 1);
         continue;
       }
-      if(trans>=0x2F800 && trans<=0x2FA1F) {
+      if (trans >= 0x2F800 && trans <= 0x2FA1F) {
+        i += (how_many - 1);
         continue;
       }
       throw(0);

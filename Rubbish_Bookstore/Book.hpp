@@ -11,9 +11,9 @@ extern Store<KeyBook> book_keyword;
 class Book {
 protected:
   char ISBN[21];
-  char name[61];
-  char author[61];
-  char keyword[61];
+  char name[181];
+  char author[181];
+  char keyword[181];
   double price;
   long long quantity;
 
