@@ -105,7 +105,7 @@ public:
   }
   template <class U> Check<T> toBe() {
     T *res = new T(element);
-    static_assert(dynamic_cast<U*>(res));
+    assert((dynamic_cast<U*>(res)));
     delete res;
     return *this;
   }
