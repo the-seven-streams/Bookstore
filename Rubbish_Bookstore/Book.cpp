@@ -191,7 +191,6 @@ void KeyBook::SetKey(char *txt) {
 }
 
 void ShowAuthor(char *author) {
-  CheckSize60(author);
   CheckVisibleNoQuotationOrHan(author);
   KeyBook tmp;
   tmp.SetKey(author);
@@ -200,7 +199,6 @@ void ShowAuthor(char *author) {
 }
 
 void ShowName(char *name) {
-  CheckSize60(name);
   CheckVisibleNoQuotationOrHan(name);
   KeyBook tmp;
   tmp.SetKey(name);
@@ -209,7 +207,6 @@ void ShowName(char *name) {
 }
 
 void ShowKeyword(char *keyword) {
-  CheckSize60(keyword);
   CheckVisibleNoQuotationOrHan(keyword);
   for (int i = 0; i < strlen(keyword); ++i) {
     if (keyword[i] == '|') {
@@ -302,7 +299,6 @@ void Book::ModifyProcess(string txt) {
         throw(0);
       }
       name = 1;
-      CheckSize60(const_cast<char *>(addtion.c_str()));
       CheckVisibleNoQuotationOrHan(const_cast<char *>(addtion.c_str()));
       recorder.name = 1;
       name_txt = addtion;
@@ -321,7 +317,6 @@ void Book::ModifyProcess(string txt) {
         throw(0);
       }
       author = 1;
-      CheckSize60(const_cast<char *>(addtion.c_str()));
       CheckVisibleNoQuotationOrHan(const_cast<char *>(addtion.c_str()));
       author_txt = addtion;
       recorder.author = 1;
@@ -340,7 +335,6 @@ void Book::ModifyProcess(string txt) {
         throw(0);
       }
       key = 1;
-      CheckSize60(const_cast<char *>(addtion.c_str()));
       CheckRepeat(addtion);
       CheckVisibleNoQuotationOrHan(const_cast<char *>(addtion.c_str()));
       keyword_txt = addtion;

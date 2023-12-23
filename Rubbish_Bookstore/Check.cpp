@@ -103,7 +103,8 @@ void CheckVisibleNoQuotation(char *str) {
 
 void CheckVisibleNoQuotationOrHan(char *str) {
   int len = strlen(str);
-  for (int i = 0; i < len; i++) {
+  int total = 0;
+  for (int i = 0; i < len; i++, total++) {
     if (str[i] < '!' || str[i] > '~') {
       long long byte1 = static_cast<unsigned char>(str[i]);
       long long trans = byte1;
@@ -216,6 +217,9 @@ void CheckVisibleNoQuotationOrHan(char *str) {
     if (str[i] == '\"') {
       throw(0);
     }
+  }
+  if(total > 60) {
+    throw(0);
   }
   return;
 }
