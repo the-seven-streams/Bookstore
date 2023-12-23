@@ -23,4 +23,5 @@ void CheckVisibleNoQuotation(
 void CheckReal(char *); // 该函数用于检查输入内容是否为非负实数。
 void CheckRepeat(std::string); // 该函数用于检查输入内容是否重复。
 void CheckVisibleNoQuotationOrHan(char *);
+//该函数用于检查输入内容是否为可见ASCII字符，或者是汉字。但是不包含ASCII中的双引号。
 #endif
